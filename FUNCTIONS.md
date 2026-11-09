@@ -139,7 +139,7 @@ Entry point: AgentConsole skill modal (draft toggles, Apply to session, ws.meta 
 Tier **T1** · depth 2/breadth 2/reach 2 · score 11.95 · **INAPP**
 Entry point: AgentConsole docs popover (Custom docs / Foundry bundles, live counts, ws.meta agentDocs)
 
-### FN-FDE-009 — Model catalog picker: Palantir|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)
+### FN-FDE-009 — Model catalog picker: Hosted|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)
 Tier **T1** · depth 3/breadth 4/reach 2 · score 13.4 · **INAPP**
 Entry point: Providers catalog tabs + detail pane (Class/Cost/Speed, ctx/TPM/RPM)
 

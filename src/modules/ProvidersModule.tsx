@@ -25,7 +25,7 @@ export default function ProvidersModule() {
   const [testMessage, setTestMessage] = useState('')
   const [savedFlash, setSavedFlash] = useState(false)
   // FN-FDE-009 catalog
-  const [catalogTab, setCatalogTab] = useState<CatalogTab>('palantir')
+  const [catalogTab, setCatalogTab] = useState<CatalogTab>('hosted')
 
   useEffect(() => { hasSecret(settings.providerId).then(setKeyHas) }, [settings.providerId])
 

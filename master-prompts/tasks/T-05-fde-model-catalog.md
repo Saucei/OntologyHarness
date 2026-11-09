@@ -2,10 +2,10 @@
 
 **Layer:** L0/L1 · **Functions:** FN-FDE-009, FN-FDE-010 · **Host:** ProvidersModule
 **Architecture:** `master-prompts/ARCHITECTURE_LAYERS.md` · **Plugins:** `ARCHITECTURE_PLUGINS.md`
-**Harness prerequisites:** `HARNESS_CHANGE_MAP.md` — model catalog API (Palantir/Registered/More) — L0 only · **Goal:** `GOALS.md`
+**Harness prerequisites:** `HARNESS_CHANGE_MAP.md` — model catalog API (Hosted/Registered/More) — L0 only · **Goal:** `GOALS.md`
 
 ## Scope
-Implement FN-FDE-009, FN-FDE-010 in ProvidersModule. model catalog API (Palantir/Registered/More) — L0 only.
+Implement FN-FDE-009, FN-FDE-010 in ProvidersModule. model catalog API (Hosted/Registered/More) — L0 only.
 
 Files: src/llm/client.ts (catalog + tier presets), ProvidersModule detail pane, AgentConsole tier pill, tests.
 Theme: glass tokens only, no new hues. Light+dark parity. `appendTrace` + `appendAudit` on every mutating action.

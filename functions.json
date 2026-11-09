@@ -677,7 +677,7 @@
     {
       "id": "FN-FDE-009",
       "family": "ai-fde",
-      "name": "Model catalog picker: Palantir|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)",
+      "name": "Model catalog picker: Hosted|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)",
       "breadth": 4,
       "depth": 3,
       "reach": 2,

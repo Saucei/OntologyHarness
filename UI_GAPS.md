@@ -66,7 +66,7 @@ Generated 2026-11-08T14:01:08.534Z from vision-verified inventory.
 - **FN-FDE-006 · Tool permission matrix (3-panel): categories 0/8 counts, per-tool checkboxes, If/Else rules "on branches master → Ask / else Allow", Revert/+Add, Allow|Ask**
 - **FN-FDE-007 · Skill set configurations modal (Models | Skills | Tool approvals) with enabled toggles + Apply to current session**
 - **FN-FDE-008 · Documentation attach popover (Custom docs vs Foundry documentation bundles/pages)**
-- **FN-FDE-009 · Model catalog picker: Palantir|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)**
+- **FN-FDE-009 · Model catalog picker: Hosted|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)**
 - **FN-FDE-010 · Reasoning-tier pill ("Balanced • GPT-6.1 Sol (Medium)") + keyboard protocol Enter/Shift+Enter/Ctrl+Enter + "/" and "$" triggers**
 - **FN-FDE-011 · Thinking collapsible card in agent turns**
 - **FN-FDE-012 · Prompt template gallery: Classification/Sentiment/Summarization/Entity extraction/Translation/Empty**

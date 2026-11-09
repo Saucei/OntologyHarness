@@ -19,8 +19,8 @@ import {
 } from './client'
 
 describe('model catalog (FN-FDE-009)', () => {
-  it('exposes Palantir | Registered | More tabs with non-empty groups', () => {
-    expect(CATALOG_TABS.map(t => t.id)).toEqual(['palantir', 'registered', 'more'])
+  it('exposes Hosted | Registered | More tabs with non-empty groups', () => {
+    expect(CATALOG_TABS.map(t => t.id)).toEqual(['hosted', 'registered', 'more'])
     for (const t of CATALOG_TABS) {
       expect(catalogForTab(t.id).length).toBeGreaterThan(0)
     }
@@ -30,7 +30,7 @@ describe('model catalog (FN-FDE-009)', () => {
 
   it('looks up entries by model (+ provider disambiguation) and formats stats', () => {
     expect(catalogEntryForModel('gpt-4o-mini', 'openai')?.tab).toBe('registered')
-    expect(catalogEntryForModel('claude-sonnet-4-5', 'anthropic')?.tab).toBe('palantir')
+    expect(catalogEntryForModel('claude-sonnet-4-5', 'anthropic')?.tab).toBe('hosted')
     expect(catalogEntryForModel('nope')).toBeNull()
     expect(formatContextTokens(128_000)).toBe('128K')
     expect(formatContextTokens(1_000_000)).toBe('1M')

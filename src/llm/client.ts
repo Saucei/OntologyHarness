@@ -250,11 +250,11 @@ async function browserChatStream(payload: any, onToken?: (c: string) => void): P
   return out
 }
 
-/* ── FN-FDE-009 model catalog: Palantir | Registered | More ────────
+/* ── FN-FDE-009 model catalog: Hosted | Registered | More ────────
    L0-only data; no network. Stats are reference values for the
    detail pane (ctx / max-out / TPM / RPM) — glass tokens only. */
 
-export type CatalogTab = 'palantir' | 'registered' | 'more'
+export type CatalogTab = 'hosted' | 'registered' | 'more'
 export type CostTier = 'Free' | 'Low' | 'Medium' | 'High'
 export type SpeedTier = 'Slow' | 'Medium' | 'Fast' | 'Very fast'
 export type ModelClass = TaskClass | 'vision'
@@ -276,18 +276,18 @@ export type ModelCatalogEntry = {
 }
 
 export const CATALOG_TABS: { id: CatalogTab; label: string; hint: string }[] = [
-  { id: 'palantir', label: 'Palantir', hint: 'curated frontier models' },
+  { id: 'hosted', label: 'Hosted', hint: 'curated frontier models' },
   { id: 'registered', label: 'Registered', hint: 'provider-registered defaults' },
   { id: 'more', label: 'More', hint: 'custom, local + open-router slugs' },
 ]
 
 export const MODEL_CATALOG: ModelCatalogEntry[] = [
-  // Palantir — curated
-  { id: 'palantir-claude-sonnet', label: 'Claude Sonnet 4.5', providerId: 'anthropic', model: 'claude-sonnet-4-5', tab: 'palantir', classes: ['reasoning', 'code'], cost: 'High', speed: 'Medium', contextTokens: 200_000, maxOutputTokens: 64_000, tpm: 1_000_000, rpm: 500, supportsReasoning: true },
-  { id: 'palantir-gpt-4o', label: 'GPT-4o', providerId: 'openai', model: 'gpt-4o', tab: 'palantir', classes: ['reasoning', 'vision'], cost: 'High', speed: 'Medium', contextTokens: 128_000, maxOutputTokens: 16_384, tpm: 2_000_000, rpm: 1000, supportsReasoning: true },
-  { id: 'palantir-o4-mini', label: 'o4-mini', providerId: 'openai', model: 'o4-mini', tab: 'palantir', classes: ['reasoning', 'code'], cost: 'Medium', speed: 'Fast', contextTokens: 200_000, maxOutputTokens: 100_000, tpm: 2_000_000, rpm: 1000, supportsReasoning: true },
-  { id: 'palantir-gemini-pro', label: 'Gemini 2.5 Pro', providerId: 'gemini', model: 'gemini-2.5-pro', tab: 'palantir', classes: ['reasoning', 'vision'], cost: 'High', speed: 'Slow', contextTokens: 1_000_000, maxOutputTokens: 65_536, tpm: 4_000_000, rpm: 150, supportsReasoning: true },
-  { id: 'palantir-haiku', label: 'Claude Haiku 4.5', providerId: 'anthropic', model: 'claude-haiku-4-5', tab: 'palantir', classes: ['cheap', 'extraction'], cost: 'Medium', speed: 'Fast', contextTokens: 200_000, maxOutputTokens: 64_000, tpm: 1_000_000, rpm: 2000, supportsReasoning: false },
+  // Hosted — curated
+  { id: 'hosted-claude-sonnet', label: 'Claude Sonnet 4.5', providerId: 'anthropic', model: 'claude-sonnet-4-5', tab: 'hosted', classes: ['reasoning', 'code'], cost: 'High', speed: 'Medium', contextTokens: 200_000, maxOutputTokens: 64_000, tpm: 1_000_000, rpm: 500, supportsReasoning: true },
+  { id: 'hosted-gpt-4o', label: 'GPT-4o', providerId: 'openai', model: 'gpt-4o', tab: 'hosted', classes: ['reasoning', 'vision'], cost: 'High', speed: 'Medium', contextTokens: 128_000, maxOutputTokens: 16_384, tpm: 2_000_000, rpm: 1000, supportsReasoning: true },
+  { id: 'hosted-o4-mini', label: 'o4-mini', providerId: 'openai', model: 'o4-mini', tab: 'hosted', classes: ['reasoning', 'code'], cost: 'Medium', speed: 'Fast', contextTokens: 200_000, maxOutputTokens: 100_000, tpm: 2_000_000, rpm: 1000, supportsReasoning: true },
+  { id: 'hosted-gemini-pro', label: 'Gemini 2.5 Pro', providerId: 'gemini', model: 'gemini-2.5-pro', tab: 'hosted', classes: ['reasoning', 'vision'], cost: 'High', speed: 'Slow', contextTokens: 1_000_000, maxOutputTokens: 65_536, tpm: 4_000_000, rpm: 150, supportsReasoning: true },
+  { id: 'hosted-haiku', label: 'Claude Haiku 4.5', providerId: 'anthropic', model: 'claude-haiku-4-5', tab: 'hosted', classes: ['cheap', 'extraction'], cost: 'Medium', speed: 'Fast', contextTokens: 200_000, maxOutputTokens: 64_000, tpm: 1_000_000, rpm: 2000, supportsReasoning: false },
   // Registered — provider defaults
   { id: 'registered-gpt-4o-mini', label: 'GPT-4o mini', providerId: 'openai', model: 'gpt-4o-mini', tab: 'registered', classes: ['cheap', 'extraction'], cost: 'Low', speed: 'Very fast', contextTokens: 128_000, maxOutputTokens: 16_384, tpm: 2_000_000, rpm: 5000, supportsReasoning: false },
   { id: 'registered-llama-70b', label: 'Llama 3.3 70B', providerId: 'groq', model: 'llama-3.3-70b-versatile', tab: 'registered', classes: ['reasoning', 'cheap'], cost: 'Low', speed: 'Very fast', contextTokens: 128_000, maxOutputTokens: 8192, tpm: 6_000_000, rpm: 1000, supportsReasoning: false },

@@ -23,7 +23,7 @@ const categorize = f => {
 }
 
 // ── pass 2: vision tagging via any OpenAI-compatible endpoint ────
-const VISION_SYSTEM = `You tag screenshots of a Palantir Foundry-style data platform.
+const VISION_SYSTEM = `You tag screenshots of a Hosted Foundry-style data platform.
 Answer in strict JSON only:
 {"app":"<module or screen, e.g. Workshop Module Editor, Vertex Graph, AIP Logic","features":["<short kebab features>"],"uiElements":["<key UI elements visible>"],"textSnippet":"<verbatim readable words OCR'd, max 200 chars>","confidence":0.0-1.0}
 Keep every array ≤ 6 items. confidence reflects how legible the image is.`
