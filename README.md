@@ -1,5 +1,7 @@
 # Ontology Harness
 
+> **⚠️ Development build — debugging & testing phase.** Ontology Harness is an active, in-development project. Features, file formats, APIs, and file layouts may change without notice and without backward-compatibility guarantees. It is **not** production-ready: bugs exist, data-loss scenarios are possible, and security or performance characteristics have not been audited. Use only for development, evaluation, and testing — do not store real production data or rely on it for operational workflows. No warranties are offered, express or implied.
+
 **CI:** [![ci](https://github.com/berry/ontology-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/berry/ontology-harness/actions/workflows/ci.yml) · **Verify:** `npm run verify` (tsc + build + vitest, 24/24) · **Acceptance:** `npm run acceptance` → `ACCEPTANCE_REPORT.md` (11/11)
 
 A Foundry-class **ontology workbench** — desktop app (Tauri + React + TypeScript) inspired by the Palantir Foundry/AIP patterns in the reference corpus at `C:\Users\Berry\Desktop\Ontology Harness`.
