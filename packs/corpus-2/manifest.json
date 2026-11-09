@@ -1,0 +1,661 @@
+{
+  "generatedAt": "2026-11-06T08:36:43.877Z",
+  "source": "C:\\Users\\Berry\\Desktop\\Ontology harness screenshots 2 (via stitch2.mjs) · 12 byte-identical dupes skipped",
+  "totalFiles": 72,
+  "categories": {
+    "reference-misc": {
+      "count": 4,
+      "files": [
+        "C01 09260404c9e0f910.png",
+        "C02 1242be1012789308.png",
+        "C03 1b881dfa1e77c02c.png",
+        "C26 390d7c414fae9abb - Copy.png"
+      ]
+    },
+    "governance": {
+      "count": 1,
+      "files": [
+        "C04 2025-10-30-162030-foundry-branching-image-pn.png"
+      ]
+    },
+    "pipeline-llm": {
+      "count": 4,
+      "files": [
+        "C05 2025-10-31-152215-pipeline-builder-external-compute-pn.png",
+        "C06 2025-10-31-152220-pipeline-builder-build-settings-pn.png",
+        "C23 20d2c76e415f9f1b.png",
+        "C25 31fa40077b1880ff.png"
+      ]
+    },
+    "lineage": {
+      "count": 3,
+      "files": [
+        "C07 2025-11-03-213052-data-lineage-screenshot-2025-10-28-at-2-42-57-pm-pn.png",
+        "C08 2025-11-03-213056-data-lineage-2025-10-30_17-36-04-pn.png",
+        "C14 2025-11-07-195806-workflow-lineage-2025-11-06_20-03-41-pn.png"
+      ]
+    },
+    "workspaces": {
+      "count": 4,
+      "files": [
+        "C09 2025-11-03-213829-code-workspaces---jupyterlab-pasted_image-pn.png",
+        "C16 2025-11-11-163411-code-workspaces-aip-in-juptyer-rstudio-workspaces-pn.jfif",
+        "C17 2025-11-11-163415-code-workspaces-configure-agent-tools-in-jcw-pn - Copy.png",
+        "C18 2025-11-11-163419-code-workspaces-chat-history-agent-in-jcw-pn.png"
+      ]
+    },
+    "marketplace": {
+      "count": 1,
+      "files": [
+        "C10 2025-11-04-155649-custom-widgets-marketplace-custom-widgets-published-pn.png"
+      ]
+    },
+    "peer-manager": {
+      "count": 3,
+      "files": [
+        "C11 2025-11-05-210019-peer-manager-peer-manager_-home-page-pn.png",
+        "C12 2025-11-05-210023-peer-manager-peer-manager-overview-pn.png",
+        "C13 2025-11-05-210030-peer-manager-map-properties-pn.png"
+      ]
+    },
+    "observability": {
+      "count": 4,
+      "files": [
+        "C15 2025-11-11-100633-all-applications-aip-observability-overview-example-pn.png",
+        "C67 session-debugging.png",
+        "C68 session-logs.png",
+        "C69 session-trace.png"
+      ]
+    },
+    "machinery": {
+      "count": 4,
+      "files": [
+        "C19 2025-11-11-163645-machinery-screenshot-2025-11-10-at-15-32-16-pn.png",
+        "C20 2025-11-11-163650-machinery-widget-contextual-zoom-pn.png",
+        "C21 2025-11-11-163654-machinery-widget-path-explorer-pn.png",
+        "C22 2025-11-11-163658-machinery-widget-duration-distribution-pn.png"
+      ]
+    },
+    "agent-apps": {
+      "count": 4,
+      "files": [
+        "C24 2c7aba769b784c97.png",
+        "C27 61762c0b379e5211.png",
+        "C46 e5a01e611f19ec59 - Copy.png",
+        "C48 flight-agent-sample-inputs - Copy.png"
+      ]
+    },
+    "functions-sdk": {
+      "count": 4,
+      "files": [
+        "C28 7e5b82e684ced509.png",
+        "C29 96fbc72721abe8b8 - Copy.png",
+        "C30 a9a7ffa6f06d6815.png",
+        "C45 download.png"
+      ]
+    },
+    "agent-studio": {
+      "count": 13,
+      "files": [
+        "C31 add-tool-options.png",
+        "C32 add-variable-templates.png",
+        "C44 create-repository.png",
+        "C47 enable-scoped-mode.png",
+        "C49 import-model.png",
+        "C62 new-agent-input-settings.png",
+        "C63 open-scope-settings.png",
+        "C64 prompt-input-reference-menu.png",
+        "C65 repository-checks.png",
+        "C66 session-completion-options.png",
+        "C70 system-prompt-editor.png",
+        "C71 tag-and-release.png",
+        "C72 variable-operation-chains.png"
+      ]
+    },
+    "ai-fde": {
+      "count": 11,
+      "files": [
+        "C33 ai-fde-chat-outline.png",
+        "C34 ai-fde-input-field - Copy.png",
+        "C35 ai-fde-mode-selector (1).png",
+        "C36 ai-fde-overview-hero.png",
+        "C37 ai-fde-ribbon-tool-options.png",
+        "C38 ai-fde-session-manager.png",
+        "C39 ai-fde-skill-ribbon.png",
+        "C40 ai-fde-skill-set.png",
+        "C41 ai-fde-tool-approval.png",
+        "C42 ai-fde-tools-menu.png",
+        "C61 model-selector.png"
+      ]
+    },
+    "prompting": {
+      "count": 1,
+      "files": [
+        "C43 b9781d16e9747ea7.png"
+      ]
+    },
+    "scoping": {
+      "count": 11,
+      "files": [
+        "C50 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733749179_example_problem_use_case.1733749179435.png",
+        "C51 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733749753_value_for_users.1733749753555.png",
+        "C52 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733761007_full_workflow.1733761007424.png",
+        "C53 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733761337_wf_data_source.1733761337365 - Copy.png",
+        "C54 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846249_wf_user_needs.1733846248660.png",
+        "C55 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846513_wf_data_asset.1733846513379 - Copy.png",
+        "C56 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846587_wf_automations.1733846587501 - Copy.png",
+        "C57 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846630_wf_model.1733846630145 - Copy.png",
+        "C58 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846675_wf_permissions.1733846675134.png",
+        "C59 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846710_wf_data_controls.1733846710425.png",
+        "C60 instructor_edwj6mfetvohj7wqvtfscik6h_public_1753110084_foundry+and+AIP+blocks.1753110083636 - Copy.png"
+      ]
+    }
+  },
+  "version": 2,
+  "entries": [
+    {
+      "file": "C01 09260404c9e0f910.png",
+      "category": "reference-misc",
+      "note": "",
+      "bytes": 6285224,
+      "vision": null
+    },
+    {
+      "file": "C02 1242be1012789308.png",
+      "category": "reference-misc",
+      "note": "",
+      "bytes": 1108930,
+      "vision": null
+    },
+    {
+      "file": "C03 1b881dfa1e77c02c.png",
+      "category": "reference-misc",
+      "note": "",
+      "bytes": 6537600,
+      "vision": null
+    },
+    {
+      "file": "C04 2025-10-30-162030-foundry-branching-image-pn.png",
+      "category": "governance",
+      "note": "",
+      "bytes": 1539945,
+      "vision": null
+    },
+    {
+      "file": "C05 2025-10-31-152215-pipeline-builder-external-compute-pn.png",
+      "category": "pipeline-llm",
+      "note": "",
+      "bytes": 1369200,
+      "vision": null
+    },
+    {
+      "file": "C06 2025-10-31-152220-pipeline-builder-build-settings-pn.png",
+      "category": "pipeline-llm",
+      "note": "",
+      "bytes": 2636260,
+      "vision": null
+    },
+    {
+      "file": "C07 2025-11-03-213052-data-lineage-screenshot-2025-10-28-at-2-42-57-pm-pn.png",
+      "category": "lineage",
+      "note": "",
+      "bytes": 2502072,
+      "vision": null
+    },
+    {
+      "file": "C08 2025-11-03-213056-data-lineage-2025-10-30_17-36-04-pn.png",
+      "category": "lineage",
+      "note": "",
+      "bytes": 1315800,
+      "vision": null
+    },
+    {
+      "file": "C09 2025-11-03-213829-code-workspaces---jupyterlab-pasted_image-pn.png",
+      "category": "workspaces",
+      "note": "",
+      "bytes": 1945390,
+      "vision": null
+    },
+    {
+      "file": "C10 2025-11-04-155649-custom-widgets-marketplace-custom-widgets-published-pn.png",
+      "category": "marketplace",
+      "note": "",
+      "bytes": 2400020,
+      "vision": null
+    },
+    {
+      "file": "C11 2025-11-05-210019-peer-manager-peer-manager_-home-page-pn.png",
+      "category": "peer-manager",
+      "note": "",
+      "bytes": 1049104,
+      "vision": null
+    },
+    {
+      "file": "C12 2025-11-05-210023-peer-manager-peer-manager-overview-pn.png",
+      "category": "peer-manager",
+      "note": "",
+      "bytes": 995070,
+      "vision": null
+    },
+    {
+      "file": "C13 2025-11-05-210030-peer-manager-map-properties-pn.png",
+      "category": "peer-manager",
+      "note": "",
+      "bytes": 1049916,
+      "vision": null
+    },
+    {
+      "file": "C14 2025-11-07-195806-workflow-lineage-2025-11-06_20-03-41-pn.png",
+      "category": "lineage",
+      "note": "",
+      "bytes": 844176,
+      "vision": null
+    },
+    {
+      "file": "C15 2025-11-11-100633-all-applications-aip-observability-overview-example-pn.png",
+      "category": "observability",
+      "note": "",
+      "bytes": 4062150,
+      "vision": null
+    },
+    {
+      "file": "C16 2025-11-11-163411-code-workspaces-aip-in-juptyer-rstudio-workspaces-pn.jfif",
+      "category": "workspaces",
+      "note": "",
+      "bytes": 1871700,
+      "vision": null
+    },
+    {
+      "file": "C17 2025-11-11-163415-code-workspaces-configure-agent-tools-in-jcw-pn - Copy.png",
+      "category": "workspaces",
+      "note": "",
+      "bytes": 824920,
+      "vision": null
+    },
+    {
+      "file": "C18 2025-11-11-163419-code-workspaces-chat-history-agent-in-jcw-pn.png",
+      "category": "workspaces",
+      "note": "",
+      "bytes": 248832,
+      "vision": null
+    },
+    {
+      "file": "C19 2025-11-11-163645-machinery-screenshot-2025-11-10-at-15-32-16-pn.png",
+      "category": "machinery",
+      "note": "",
+      "bytes": 4184550,
+      "vision": null
+    },
+    {
+      "file": "C20 2025-11-11-163650-machinery-widget-contextual-zoom-pn.png",
+      "category": "machinery",
+      "note": "",
+      "bytes": 3853050,
+      "vision": null
+    },
+    {
+      "file": "C21 2025-11-11-163654-machinery-widget-path-explorer-pn.png",
+      "category": "machinery",
+      "note": "",
+      "bytes": 3840300,
+      "vision": null
+    },
+    {
+      "file": "C22 2025-11-11-163658-machinery-widget-duration-distribution-pn.png",
+      "category": "machinery",
+      "note": "",
+      "bytes": 1858950,
+      "vision": null
+    },
+    {
+      "file": "C23 20d2c76e415f9f1b.png",
+      "category": "pipeline-llm",
+      "note": "",
+      "bytes": 1592528,
+      "vision": null
+    },
+    {
+      "file": "C24 2c7aba769b784c97.png",
+      "category": "agent-apps",
+      "note": "",
+      "bytes": 4595472,
+      "vision": null
+    },
+    {
+      "file": "C25 31fa40077b1880ff.png",
+      "category": "pipeline-llm",
+      "note": "",
+      "bytes": 2651220,
+      "vision": null
+    },
+    {
+      "file": "C26 390d7c414fae9abb - Copy.png",
+      "category": "reference-misc",
+      "note": "",
+      "bytes": 2678280,
+      "vision": null
+    },
+    {
+      "file": "C27 61762c0b379e5211.png",
+      "category": "agent-apps",
+      "note": "",
+      "bytes": 4576200,
+      "vision": null
+    },
+    {
+      "file": "C28 7e5b82e684ced509.png",
+      "category": "functions-sdk",
+      "note": "",
+      "bytes": 2837784,
+      "vision": null
+    },
+    {
+      "file": "C29 96fbc72721abe8b8 - Copy.png",
+      "category": "functions-sdk",
+      "note": "",
+      "bytes": 1832162,
+      "vision": null
+    },
+    {
+      "file": "C30 a9a7ffa6f06d6815.png",
+      "category": "functions-sdk",
+      "note": "",
+      "bytes": 1729228,
+      "vision": null
+    },
+    {
+      "file": "C31 add-tool-options.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 246092,
+      "vision": null
+    },
+    {
+      "file": "C32 add-variable-templates.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 825000,
+      "vision": null
+    },
+    {
+      "file": "C33 ai-fde-chat-outline.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1545084,
+      "vision": null
+    },
+    {
+      "file": "C34 ai-fde-input-field - Copy.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 727168,
+      "vision": null
+    },
+    {
+      "file": "C35 ai-fde-mode-selector (1).png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1978592,
+      "vision": null
+    },
+    {
+      "file": "C36 ai-fde-overview-hero.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 2250000,
+      "vision": null
+    },
+    {
+      "file": "C37 ai-fde-ribbon-tool-options.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1503744,
+      "vision": null
+    },
+    {
+      "file": "C38 ai-fde-session-manager.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1000384,
+      "vision": null
+    },
+    {
+      "file": "C39 ai-fde-skill-ribbon.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 963632,
+      "vision": null
+    },
+    {
+      "file": "C40 ai-fde-skill-set.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 2841328,
+      "vision": null
+    },
+    {
+      "file": "C41 ai-fde-tool-approval.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1543104,
+      "vision": null
+    },
+    {
+      "file": "C42 ai-fde-tools-menu.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1672800,
+      "vision": null
+    },
+    {
+      "file": "C43 b9781d16e9747ea7.png",
+      "category": "prompting",
+      "note": "",
+      "bytes": 2393960,
+      "vision": null
+    },
+    {
+      "file": "C44 create-repository.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 797796,
+      "vision": null
+    },
+    {
+      "file": "C45 download.png",
+      "category": "functions-sdk",
+      "note": "",
+      "bytes": 240000,
+      "vision": null
+    },
+    {
+      "file": "C46 e5a01e611f19ec59 - Copy.png",
+      "category": "agent-apps",
+      "note": "",
+      "bytes": 4576096,
+      "vision": null
+    },
+    {
+      "file": "C47 enable-scoped-mode.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 659460,
+      "vision": null
+    },
+    {
+      "file": "C48 flight-agent-sample-inputs - Copy.png",
+      "category": "agent-apps",
+      "note": "",
+      "bytes": 1373928,
+      "vision": null
+    },
+    {
+      "file": "C49 import-model.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 679972,
+      "vision": null
+    },
+    {
+      "file": "C50 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733749179_example_problem_use_case.1733749179435.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 977562,
+      "vision": null
+    },
+    {
+      "file": "C51 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733749753_value_for_users.1733749753555.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 179547,
+      "vision": null
+    },
+    {
+      "file": "C52 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733761007_full_workflow.1733761007424.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 3318840,
+      "vision": null
+    },
+    {
+      "file": "C53 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733761337_wf_data_source.1733761337365 - Copy.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 1444924,
+      "vision": null
+    },
+    {
+      "file": "C54 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846249_wf_user_needs.1733846248660.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 637776,
+      "vision": null
+    },
+    {
+      "file": "C55 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846513_wf_data_asset.1733846513379 - Copy.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 1556928,
+      "vision": null
+    },
+    {
+      "file": "C56 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846587_wf_automations.1733846587501 - Copy.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 1400600,
+      "vision": null
+    },
+    {
+      "file": "C57 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846630_wf_model.1733846630145 - Copy.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 266064,
+      "vision": null
+    },
+    {
+      "file": "C58 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846675_wf_permissions.1733846675134.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 306936,
+      "vision": null
+    },
+    {
+      "file": "C59 instructor_c5ds0c38gskw6m0onol7y5kkn_public_1733846710_wf_data_controls.1733846710425.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 191360,
+      "vision": null
+    },
+    {
+      "file": "C60 instructor_edwj6mfetvohj7wqvtfscik6h_public_1753110084_foundry+and+AIP+blocks.1753110083636 - Copy.png",
+      "category": "scoping",
+      "note": "",
+      "bytes": 1663456,
+      "vision": null
+    },
+    {
+      "file": "C61 model-selector.png",
+      "category": "ai-fde",
+      "note": "",
+      "bytes": 1680176,
+      "vision": null
+    },
+    {
+      "file": "C62 new-agent-input-settings.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 481516,
+      "vision": null
+    },
+    {
+      "file": "C63 open-scope-settings.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 661440,
+      "vision": null
+    },
+    {
+      "file": "C64 prompt-input-reference-menu.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 2127500,
+      "vision": null
+    },
+    {
+      "file": "C65 repository-checks.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 568968,
+      "vision": null
+    },
+    {
+      "file": "C66 session-completion-options.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 74896,
+      "vision": null
+    },
+    {
+      "file": "C67 session-debugging.png",
+      "category": "observability",
+      "note": "",
+      "bytes": 5398016,
+      "vision": null
+    },
+    {
+      "file": "C68 session-logs.png",
+      "category": "observability",
+      "note": "",
+      "bytes": 3734784,
+      "vision": null
+    },
+    {
+      "file": "C69 session-trace.png",
+      "category": "observability",
+      "note": "",
+      "bytes": 3600840,
+      "vision": null
+    },
+    {
+      "file": "C70 system-prompt-editor.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 540000,
+      "vision": null
+    },
+    {
+      "file": "C71 tag-and-release.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 1129880,
+      "vision": null
+    },
+    {
+      "file": "C72 variable-operation-chains.png",
+      "category": "agent-studio",
+      "note": "",
+      "bytes": 3258272,
+      "vision": null
+    }
+  ]
+}

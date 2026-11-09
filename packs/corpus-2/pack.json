@@ -1,0 +1,10 @@
+{
+  "id": "corpus-2",
+  "name": "Corpus 2 — Operating Foundry",
+  "version": "1.0.0",
+  "kind": "corpus",
+  "api": "^1.0",
+  "author": "Ontology Harness core",
+  "description": "The 72-tile corpus-2 feature-extraction reference (AI FDE, Agent Studio, Machinery, Observability, Geo/COP, Pipeline-LLM, Peer Manager, Governance, Marketplace, Scoping, Functions SDK). Generated from asset/corpus-2/index.json by scripts/build-corpus2-pack.mjs.",
+  "entry": "manifest.json"
+}

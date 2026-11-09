@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install (legacy peer deps for tauri toolchain)
+        run: npm ci --legacy-peer-deps
+
+      - name: Type check
+        run: npx tsc -b
+
+      - name: Unit + integration tests
+        run: npx vitest run
+
+      - name: Production build
+        run: npm run build
+
+      - name: Acceptance runner
+        run: npx tsx scripts/acceptance.mjs
+
+      - name: Upload dist + report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.sha }}
+          path: |
+            dist/
+            ACCEPTANCE_REPORT.md
+          retention-days: 14

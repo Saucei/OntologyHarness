@@ -1,0 +1,977 @@
+{
+  "generatedAt": "2026-11-04T20:22:07.041Z",
+  "source": "C:\\Users\\Berry\\Desktop\\Ontology Harness",
+  "totalFiles": 134,
+  "categories": {
+    "learning-docs": {
+      "count": 99,
+      "files": [
+        "adfg.jpg",
+        "ADFH.jpg",
+        "adhadshdf.jpg",
+        "aetgfsvxdv.jpg",
+        "afdgskfhjhgd.jpg",
+        "afdjgtsyhgd.jpg",
+        "afhdafhbcxvbz.jpg",
+        "agaH.jpg",
+        "agfdgfksjgzbvx.jpg",
+        "asdfjgskjhytr.jpg",
+        "asdfjkejsth.jpg",
+        "asdhdjdgbvc.jpg",
+        "asdhhdfsajffkjg.jpg",
+        "dfgjdfhjds.jpg",
+        "dgfgj.jpg",
+        "dgfhjjsj.jpg",
+        "dghkgfk.jpg",
+        "dgkdgfkh.jpg",
+        "dkdlh.jpg",
+        "etruwtywer.jpg",
+        "ewthryukyjthrg.jpg",
+        "ewtqytrewgfd.jpg",
+        "ewyruwtriyeotykjsghfd.jpg",
+        "fgdkdf.jpg",
+        "fghk.jpg",
+        "fghkgfh.jpg",
+        "fhkd.jpg",
+        "fqewgqeragvqe.jpg",
+        "fsdgfdkfjsghdgd.jpg",
+        "gfh.jpg",
+        "h.jpg",
+        "instructor_5c94cu0kwes1dvz8hn6iyqiv_public_1759877719_Screenshot+2025-10-07+at+5.53.57 PM.1759877719520.png",
+        "instructor_5c94cu0kwes1dvz8hn6iyqiv_public_1759958481_Screenshot+2025-10-08+at+4.19.52 PM.1759958480924.png",
+        "instructor_5c94cu0kwes1dvz8hn6iyqiv_public_1760116709_Screenshot+2025-10-10+at+12.17.35 PM.1760116709672.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753266737_6+-+Rename+variable.1753266737653.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753277831_5.5+Change+to+Multi-Select+Component.1753277831511.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1756895979_2-+Overview.1756895979445.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769013741_8.1+-+Change+Title+Column+name.1769013740932.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018054_Screenshot+2024-11-19+120706.1732018054309.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018218_Screenshot+2024-11-19+120954.1732018218337.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018319_Screenshot+2024-11-19+121115.1732018318951.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018424_Screenshot+2024-11-19+121318.1732018424274.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018479_Screenshot+2024-11-19+121415.1732018478929.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018579_Screenshot+2024-11-19+121556.1732018579155.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018743_Screenshot+2024-11-19+121821.1732018743198.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018815_Screenshot+2024-11-19+121947.1732018815227.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732018949_Screenshot+2024-11-19+122205.1732018949075.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732019030_Screenshot+2024-11-19+122322.1732019030525.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732019090_Screenshot+2024-11-19+122417.1732019090523.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732021216_Screenshot+2024-11-19+125949.1732021216456.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732021375_Screenshot+2024-11-19+130209.1732021375886 (1).png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732021375_Screenshot+2024-11-19+130209.1732021375886.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732021447_Screenshot+2024-11-19+130348.1732021447794.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732021613_Screenshot+2024-11-19+130621.1732021613197.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732021860_Screenshot+2024-11-19+131017.1732021859748.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732022292_Screenshot+2024-11-19+131748.1732022292523.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732023510_Screenshot+2024-11-19+133731.1732023510615.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732023590_Screenshot+2024-11-19+133915.1732023590146.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732023684_Screenshot+2024-11-19+134057.1732023684722.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732023806_Screenshot+2024-11-19+134202.1732023806649.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732023883_Screenshot+2024-11-19+134413.1732023883513.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732024009_Screenshot+2024-11-19+134516.1732024009391.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732024587_Screenshot+2024-11-19+135544.1732024587164.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732024656_Screenshot+2024-11-19+135702.1732024656284.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732024833_Screenshot+2024-11-19+140004.1732024833577.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732024894_Screenshot+2024-11-19+140109.1732024893835.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732025085_Screenshot+2024-11-19+140415.1732025084961.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732025350_Screenshot+2024-11-19+140838.1732025350090.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732025412_Screenshot+2024-11-19+140936.1732025412703.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732025550_Screenshot+2024-11-19+141203.1732025550891.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732025648_Screenshot+2024-11-19+141320.1732025648554.png",
+        "instructor_ab41yi650emw2phw736p0j9rk_public_1732026772_Screenshot+2024-11-19+143239.1732026772486.png",
+        "instructor_cwu7kymx72krlh5aahk7tmqko_public_1717695462_000e+-+Configuring+an+AI+Agent.1717695461919.png",
+        "instructor_cwu7kymx72krlh5aahk7tmqko_public_1717696092_000f+-+Building+an+Interactive+Application.1717696092507.png",
+        "instructor_edwj6mfetvohj7wqvtfscik6h_public_1699554578_Screenshot+2023-11-08+at+13.21.50.1699554577987.png",
+        "instructor_edwj6mfetvohj7wqvtfscik6h_public_1699625952_Screenshot+2023-11-06+at+16.14.36.1699625952081.png",
+        "qwtqeruyart.jpg",
+        "retyuyiijuhtsgr.jpg",
+        "sagsadg.jpg",
+        "sdfjsdh.jpg",
+        "sdfrlkghdjfshg.jpg",
+        "sdhj.jpg",
+        "sfdgkhlfhj;k.jpg",
+        "sfdhjgfhfdg.jpg",
+        "sfdhsdj.jpg",
+        "sfgjsdsf.jpg",
+        "SharedScreenshot.jpg",
+        "SharedScreenshot2.jpg",
+        "SharedScreenshot4.jpg",
+        "SharedScreenshot75.jpg",
+        "SharedScreenshot752.jpg",
+        "SJSFDJ.jpg",
+        "we.jpg",
+        "wqayryeqfc.jpg",
+        "wqeytqeray.jpg",
+        "xcvbn,kydjuthsyrgdrf.jpg",
+        "xcvnxcmgfshjasd.jpg",
+        "zxcbzcxvn .jpg",
+        "zxcncxvbm.jpg"
+      ]
+    },
+    "architecture-lineage": {
+      "count": 3,
+      "files": [
+        "branches-1.png",
+        "pipeline_overview.png",
+        "vertex_overview-system_graph.png"
+      ]
+    },
+    "data-integration": {
+      "count": 11,
+      "files": [
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749655488_Clean+Bureau+Transform.1749655488778.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749821009_Clean+Office+Goods+Transform.1749821009187.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749823347_Union+Datasets+-+1.1749823346778.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749823757_Union+Node.1749823756830.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753276678_1+-+Add+Filter+Widget.1753276678144.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753278376_6+-+Allow+Users+to+Add+Filters.1753278375787.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753278970_8.1+-+Filter+using+Variable.1753278970436.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753282447_9+-+Change+Filter+Colour.1753282447234.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753284008_10+-+Change+Filter+Section+Formatting.1753284008034.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753284314_10.1+-+Change+Filter+Section+Formatting.1753284314426.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769083231_7+-+Rename+Filter+Output.1769083231085.png"
+      ]
+    },
+    "aip-logic": {
+      "count": 1,
+      "files": [
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1750079495_Use+LLM+Block+Overview.1750079495191.png"
+      ]
+    },
+    "application-building": {
+      "count": 19,
+      "files": [
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753264093_1+-+Add+Widget.1753264093409.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753265591_4+-+Add+New+Object+set.1753265591449.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753275160_7+-+Object+Table+Props+Config.1753275160232.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753276825_2+-+Select+Widget.1753276825038.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753277310_3+-+Set+Object+Set.1753277309680.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753278791_8+-+Create+new+Object+Set+Variable.1753278790910.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753347673_1+-+Add+New+Section.1753347673715.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753347742_2.1+-+Section+Formatting.1753347742152.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753347959_2.2+-+Add+OST+Widget.1753347959727.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348110_4+-+Input+Object+Set.1753348110659.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348468_6+-+Fill+space.1753348468467.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348616_6.1+-+Auto+max+height.1753348615758.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348883_9+-+Edit+Input+Active+Object+Set.1753348882856.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753349018_10+-+Add+Value.1753349018172.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753349120_11+-+Add+All+Properties.1753349120287.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1756895761_Rename+Object+Table.1756895761590.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1756904022_Rename+Header.1756904021791.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1760003401_8.3+-+Replace+Object+Table+Variable.1760003401239.png",
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769015410_Step+4.3+-+Layout+Overview.1769015410168.png"
+      ]
+    },
+    "ontology-layer": {
+      "count": 1,
+      "files": [
+        "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769010682_Step+1.2+-+Ont+man.1769010682432.png"
+      ]
+    }
+  },
+  "entries": [
+    {
+      "file": "adfg.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 266980
+    },
+    {
+      "file": "ADFH.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 283752
+    },
+    {
+      "file": "adhadshdf.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 286617
+    },
+    {
+      "file": "aetgfsvxdv.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 202531
+    },
+    {
+      "file": "afdgskfhjhgd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 195358
+    },
+    {
+      "file": "afdjgtsyhgd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 231309
+    },
+    {
+      "file": "afhdafhbcxvbz.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 206548
+    },
+    {
+      "file": "agaH.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 250819
+    },
+    {
+      "file": "agfdgfksjgzbvx.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 214421
+    },
+    {
+      "file": "asdfjgskjhytr.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 186514
+    },
+    {
+      "file": "asdfjkejsth.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 189360
+    },
+    {
+      "file": "asdhdjdgbvc.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 231198
+    },
+    {
+      "file": "asdhhdfsajffkjg.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 184265
+    },
+    {
+      "file": "branches-1.png",
+      "category": "architecture-lineage",
+      "note": "Vertex / pipeline lineage diagrams",
+      "bytes": 77609
+    },
+    {
+      "file": "dfgjdfhjds.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 245141
+    },
+    {
+      "file": "dgfgj.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 246435
+    },
+    {
+      "file": "dgfhjjsj.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 230489
+    },
+    {
+      "file": "dghkgfk.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 244835
+    },
+    {
+      "file": "dgkdgfkh.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 249472
+    },
+    {
+      "file": "dkdlh.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 249151
+    },
+    {
+      "file": "etruwtywer.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 206018
+    },
+    {
+      "file": "ewthryukyjthrg.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 220889
+    },
+    {
+      "file": "ewtqytrewgfd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 231889
+    },
+    {
+      "file": "ewyruwtriyeotykjsghfd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 200224
+    },
+    {
+      "file": "fgdkdf.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 289164
+    },
+    {
+      "file": "fghk.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 251522
+    },
+    {
+      "file": "fghkgfh.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 232254
+    },
+    {
+      "file": "fhkd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 259935
+    },
+    {
+      "file": "fqewgqeragvqe.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 228598
+    },
+    {
+      "file": "fsdgfdkfjsghdgd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 167177
+    },
+    {
+      "file": "gfh.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 200126
+    },
+    {
+      "file": "h.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 234384
+    },
+    {
+      "file": "instructor_5c94cu0kwes1dvz8hn6iyqiv_public_1759877719_Screenshot+2025-10-07+at+5.53.57 PM.1759877719520.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 74660
+    },
+    {
+      "file": "instructor_5c94cu0kwes1dvz8hn6iyqiv_public_1759958481_Screenshot+2025-10-08+at+4.19.52 PM.1759958480924.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 96500
+    },
+    {
+      "file": "instructor_5c94cu0kwes1dvz8hn6iyqiv_public_1760116709_Screenshot+2025-10-10+at+12.17.35 PM.1760116709672.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 18993
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749655488_Clean+Bureau+Transform.1749655488778.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 262082
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749821009_Clean+Office+Goods+Transform.1749821009187.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 337603
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749823347_Union+Datasets+-+1.1749823346778.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 58814
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1749823757_Union+Node.1749823756830.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 645083
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1750079495_Use+LLM+Block+Overview.1750079495191.png",
+      "category": "aip-logic",
+      "note": "AIP Logic / LLM functions",
+      "bytes": 279338
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753264093_1+-+Add+Widget.1753264093409.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 572506
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753265591_4+-+Add+New+Object+set.1753265591449.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 539447
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753266737_6+-+Rename+variable.1753266737653.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 156032
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753275160_7+-+Object+Table+Props+Config.1753275160232.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 957525
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753276678_1+-+Add+Filter+Widget.1753276678144.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 160259
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753276825_2+-+Select+Widget.1753276825038.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 220861
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753277310_3+-+Set+Object+Set.1753277309680.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 281582
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753277831_5.5+Change+to+Multi-Select+Component.1753277831511.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 173366
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753278376_6+-+Allow+Users+to+Add+Filters.1753278375787.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 250472
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753278791_8+-+Create+new+Object+Set+Variable.1753278790910.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 271343
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753278970_8.1+-+Filter+using+Variable.1753278970436.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 199766
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753282447_9+-+Change+Filter+Colour.1753282447234.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 78072
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753284008_10+-+Change+Filter+Section+Formatting.1753284008034.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 194637
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753284314_10.1+-+Change+Filter+Section+Formatting.1753284314426.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 278108
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753347673_1+-+Add+New+Section.1753347673715.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 799333
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753347742_2.1+-+Section+Formatting.1753347742152.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 328432
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753347959_2.2+-+Add+OST+Widget.1753347959727.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 96842
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348110_4+-+Input+Object+Set.1753348110659.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 108858
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348468_6+-+Fill+space.1753348468467.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 137857
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348616_6.1+-+Auto+max+height.1753348615758.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 52944
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753348883_9+-+Edit+Input+Active+Object+Set.1753348882856.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 54560
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753349018_10+-+Add+Value.1753349018172.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 99183
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1753349120_11+-+Add+All+Properties.1753349120287.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 306030
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1756895761_Rename+Object+Table.1756895761590.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 636238
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1756895979_2-+Overview.1756895979445.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 713231
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1756904022_Rename+Header.1756904021791.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 287227
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1760003401_8.3+-+Replace+Object+Table+Variable.1760003401239.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 38007
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769010682_Step+1.2+-+Ont+man.1769010682432.png",
+      "category": "ontology-layer",
+      "note": "Ontology Manager / Object Explorer",
+      "bytes": 229083
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769013741_8.1+-+Change+Title+Column+name.1769013740932.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 145028
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769015410_Step+4.3+-+Layout+Overview.1769015410168.png",
+      "category": "application-building",
+      "note": "Workshop application building",
+      "bytes": 263972
+    },
+    {
+      "file": "instructor_6rv9eqj974u5ivyxlj7ndbkii_public_1769083231_7+-+Rename+Filter+Output.1769083231085.png",
+      "category": "data-integration",
+      "note": "Code Repositories / Pipeline Builder",
+      "bytes": 197155
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018054_Screenshot+2024-11-19+120706.1732018054309.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 221226
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018218_Screenshot+2024-11-19+120954.1732018218337.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 73486
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018319_Screenshot+2024-11-19+121115.1732018318951.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 243935
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018424_Screenshot+2024-11-19+121318.1732018424274.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 120461
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018479_Screenshot+2024-11-19+121415.1732018478929.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 239239
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018579_Screenshot+2024-11-19+121556.1732018579155.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 262669
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018743_Screenshot+2024-11-19+121821.1732018743198.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 67655
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018815_Screenshot+2024-11-19+121947.1732018815227.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 116797
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732018949_Screenshot+2024-11-19+122205.1732018949075.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 110182
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732019030_Screenshot+2024-11-19+122322.1732019030525.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 99607
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732019090_Screenshot+2024-11-19+122417.1732019090523.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 106289
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732021216_Screenshot+2024-11-19+125949.1732021216456.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 31257
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732021375_Screenshot+2024-11-19+130209.1732021375886 (1).png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 252353
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732021375_Screenshot+2024-11-19+130209.1732021375886.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 252353
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732021447_Screenshot+2024-11-19+130348.1732021447794.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 157066
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732021613_Screenshot+2024-11-19+130621.1732021613197.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 354185
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732021860_Screenshot+2024-11-19+131017.1732021859748.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 75912
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732022292_Screenshot+2024-11-19+131748.1732022292523.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 210061
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732023510_Screenshot+2024-11-19+133731.1732023510615.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 244424
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732023590_Screenshot+2024-11-19+133915.1732023590146.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 46489
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732023684_Screenshot+2024-11-19+134057.1732023684722.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 65756
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732023806_Screenshot+2024-11-19+134202.1732023806649.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 127540
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732023883_Screenshot+2024-11-19+134413.1732023883513.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 50051
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732024009_Screenshot+2024-11-19+134516.1732024009391.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 97411
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732024587_Screenshot+2024-11-19+135544.1732024587164.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 23530
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732024656_Screenshot+2024-11-19+135702.1732024656284.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 94192
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732024833_Screenshot+2024-11-19+140004.1732024833577.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 122129
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732024894_Screenshot+2024-11-19+140109.1732024893835.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 185782
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732025085_Screenshot+2024-11-19+140415.1732025084961.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 56083
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732025350_Screenshot+2024-11-19+140838.1732025350090.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 156727
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732025412_Screenshot+2024-11-19+140936.1732025412703.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 165465
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732025550_Screenshot+2024-11-19+141203.1732025550891.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 274596
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732025648_Screenshot+2024-11-19+141320.1732025648554.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 336349
+    },
+    {
+      "file": "instructor_ab41yi650emw2phw736p0j9rk_public_1732026772_Screenshot+2024-11-19+143239.1732026772486.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 291017
+    },
+    {
+      "file": "instructor_cwu7kymx72krlh5aahk7tmqko_public_1717695462_000e+-+Configuring+an+AI+Agent.1717695461919.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 186172
+    },
+    {
+      "file": "instructor_cwu7kymx72krlh5aahk7tmqko_public_1717696092_000f+-+Building+an+Interactive+Application.1717696092507.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 168986
+    },
+    {
+      "file": "instructor_edwj6mfetvohj7wqvtfscik6h_public_1699554578_Screenshot+2023-11-08+at+13.21.50.1699554577987.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 78715
+    },
+    {
+      "file": "instructor_edwj6mfetvohj7wqvtfscik6h_public_1699625952_Screenshot+2023-11-06+at+16.14.36.1699625952081.png",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 805344
+    },
+    {
+      "file": "pipeline_overview.png",
+      "category": "architecture-lineage",
+      "note": "Vertex / pipeline lineage diagrams",
+      "bytes": 1140641
+    },
+    {
+      "file": "qwtqeruyart.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 197564
+    },
+    {
+      "file": "retyuyiijuhtsgr.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 289142
+    },
+    {
+      "file": "sagsadg.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 219000
+    },
+    {
+      "file": "sdfjsdh.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 213855
+    },
+    {
+      "file": "sdfrlkghdjfshg.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 267280
+    },
+    {
+      "file": "sdhj.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 233514
+    },
+    {
+      "file": "sfdgkhlfhj;k.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 244895
+    },
+    {
+      "file": "sfdhjgfhfdg.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 217833
+    },
+    {
+      "file": "sfdhsdj.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 221136
+    },
+    {
+      "file": "sfgjsdsf.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 218881
+    },
+    {
+      "file": "SharedScreenshot.jpg",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 225524
+    },
+    {
+      "file": "SharedScreenshot2.jpg",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 229890
+    },
+    {
+      "file": "SharedScreenshot4.jpg",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 215730
+    },
+    {
+      "file": "SharedScreenshot75.jpg",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 259660
+    },
+    {
+      "file": "SharedScreenshot752.jpg",
+      "category": "learning-docs",
+      "note": "Instructor-led training captures",
+      "bytes": 259660
+    },
+    {
+      "file": "SJSFDJ.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 260536
+    },
+    {
+      "file": "vertex_overview-system_graph.png",
+      "category": "architecture-lineage",
+      "note": "Vertex / pipeline lineage diagrams",
+      "bytes": 302175
+    },
+    {
+      "file": "we.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 241805
+    },
+    {
+      "file": "wqayryeqfc.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 200889
+    },
+    {
+      "file": "wqeytqeray.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 249366
+    },
+    {
+      "file": "xcvbn,kydjuthsyrgdrf.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 226798
+    },
+    {
+      "file": "xcvnxcmgfshjasd.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 247538
+    },
+    {
+      "file": "zxcbzcxvn .jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 196950
+    },
+    {
+      "file": "zxcncxvbm.jpg",
+      "category": "learning-docs",
+      "note": "Browser capture (training context inferred)",
+      "bytes": 206741
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "theme-cream-glass",
+  "name": "Cream Glass Theme Pack",
+  "version": "1.0.0",
+  "kind": "theme-packs",
+  "api": "^1.0",
+  "author": "Ontology Harness core",
+  "description": "Warm cream-forward accent variant of the green-glass theme. Opt-in and fully reversible — overrides accent tokens only, in both light and dark. Theme law: touches CSS custom properties exclusively."
+}

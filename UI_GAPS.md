@@ -1,0 +1,114 @@
+# UI_GAPS.md — Missing / partial / shipped function ledger
+
+Generated 2026-11-08T14:01:08.534Z from vision-verified inventory.
+
+## BLOCKING (MISSING) — must ship before calling Stage 4 done
+- **FN-AIP-006 · Current User/custom context & permission scope** (breadth 1, reach 0)
+- **FN-AIP-007 · Add as test case → test-case list + re-run** (breadth 2, reach 1)
+- **FN-VRT-001 · Vertex graph: create & name graph; graph-type picker in New menu** (breadth 2, reach 1)
+- **FN-VRT-002 · Add objects to graph: select all / invert selection / add selected (Ctrl+A)** (breadth 1, reach 1)
+- **FN-VRT-003 · Search Around menu: relation / function / saved search around** (breadth 1, reach 1)
+- **FN-VRT-004 · Graph layout picker (Radial/Auto/Hierarchy/Grid/Circular)** (breadth 1, reach 0)
+- **FN-VRT-005 · Graph layers: node layer / edge layer / include-as-styling** (breadth 1, reach 1)
+- **FN-VRT-006 · Save as template (5-step wizard: params → search→layers→graph→defaults)** (breadth 1, reach 1)
+- **FN-VRT-007 · Time-series @demand + ale_demand_forecast in side panel** (breadth 1, reach 0)
+- **FN-FNS-001 · Function authoring: LanguageModels GPT_4 createChatCompletion w/ systemPrompt + roles + temperature** (breadth 3, reach 2)
+- **FN-FNS-002 · Ontology completions demo: write AI summary into object property via action + action logs** (breadth 2, reach 2)
+- **FN-FNS-003 · Function-backed Workshop variable: USERPROMPT/SYSTEMPROMPT/TEMPERATURE binds + recompute policy (Only when triggered by an event)** (breadth 2, reach 2)
+
+## PARTIAL — works but incomplete semantics
+- **FN-ONT-002 · Object Explorer / search by property + dependents**
+- **FN-BLD-006 · SECTION HEADER toggle · Style (Subheader/Header) · TITLE use variable · Icon**
+- **FN-BLD-012 · INPUT DATA: clear object set variable (X) + enable filtering**
+- **FN-BLD-015 · Property List widget: Add all properties / Number of columns=1 / wrap**
+- **FN-AIP-001 · Semantic search block: select Embedding property, 10 results, query=userQuestion**
+- **FN-AIP-002 · Use LLM block: Instructions/LLM instructions + task prompt with variable interpolation**
+- **FN-AIP-005 · Publish function (binds to ontology: 1 Object → API name) + documentation + version config**
+
+## INAPP — verified in current build
+- **FN-ARC-001 · Lineage subgraph exploration (pan/zoom/select/group-by)**
+- **FN-ARC-002 · Environment branching & promotion graph (Master/Dev/Feature Y/Feature X/Oct → PROD/UAT)**
+- **FN-ARC-003 · Open in Quiver from graph**
+- **FN-DAT-001 · Clean transform: cast to Timestamp, filter not-null, drop columns, rename, normalize names**
+- **FN-DAT-002 · Union node config + preview (500 rows × 11 cols)**
+- **FN-DAT-003 · Deploy pipeline / select outputs / compute profile**
+- **FN-ONT-001 · Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId regex + ABV range)**
+- **FN-ONT-003 · Link type create + toggle**
+- **FN-BLD-001 · Add widget to section (Add widget / Set layout)**
+- **FN-BLD-002 · Object Set title widget (bind Active Object Set)**
+- **FN-BLD-003 · Add section / split section / new above-below / move**
+- **FN-BLD-004 · DIMENSIONS: Row height Auto(max) / Absolute / Flex + px + resize**
+- **FN-BLD-005 · Fill space / column width (Absolute/Flex)+resize**
+- **FN-BLD-007 · Color / background override per widget (Light gray 4 …)**
+- **FN-BLD-008 · Collapsible section + icon to expand/collapse**
+- **FN-BLD-009 · Object Table: add column / Add all properties / Remove all properties / reorder / default sort**
+- **FN-BLD-010 · Object Table: rename column + use variable toggle**
+- **FN-BLD-011 · Object Table: Enable object table filtering toggle**
+- **FN-BLD-013 · Layout tree: page/section/widget click-to-select + breadcrumb**
+- **FN-BLD-014 · Save and publish / View**
+- **FN-BLD-016 · Edit variable window (rename / type / root object)**
+- **FN-BLD-017 · Enable favoriting (page)**
+- **FN-FLT-001 · Add filter widget to section**
+- **FN-FLT-002 · Configure filters: On property / Using variable / On a link**
+- **FN-FLT-003 · Filter widget output = variable (Order Filters) + rename via Rename variable**
+- **FN-FLT-004 · Toggle "allow users to add and remove filters"**
+- **FN-FLT-005 · Multi-select dropdown (change to Multi-Select Component)**
+- **FN-FLT-006 · Filter list Vertical vs Pills layout**
+- **FN-FLT-007 · Filter default value + unit prefix/suffix + validation**
+- **FN-AIP-003 · Single completion / GPT-4o / Allow corrections output-enforcement toggle**
+- **FN-AIP-004 · Preview run (Ctrl+Shift+D) inside logic editor**
+- **FN-VRT-008 · Open in Quiver from graph (exports)**
+- **FN-FDE-001 · Session manager dropdown (New session / switch / delete)**
+- **FN-FDE-002 · Conversation Outline: tokenized turn tree + nested tool rows + token meter (~33.1K / 200K)**
+- **FN-FDE-003 · Tool approval card: Reject / Allow / Always allow for this session + JSON payload + copy**
+- **FN-FDE-004 · Composer attachment ribbon: Modes/Skills/Documentation/Files/Ontology/Functions + per-type count chips + lit "7" pill**
+- **FN-FDE-005 · Mode selector: tool-carrying modes (Transform data/Modify ontology/Write functions/Exploration/Governance/OSDK React/Platform Q&A) + segmented sub-modes + "Adds 26 tools"**
+- **FN-FDE-006 · Tool permission matrix (3-panel): categories 0/8 counts, per-tool checkboxes, If/Else rules "on branches master → Ask / else Allow", Revert/+Add, Allow|Ask**
+- **FN-FDE-007 · Skill set configurations modal (Models | Skills | Tool approvals) with enabled toggles + Apply to current session**
+- **FN-FDE-008 · Documentation attach popover (Custom docs vs Foundry documentation bundles/pages)**
+- **FN-FDE-009 · Model catalog picker: Palantir|Registered|More tabs + detail pane (Class/Cost/Speed chips, ctx/max-out/TPM/RPM)**
+- **FN-FDE-010 · Reasoning-tier pill ("Balanced • GPT-6.1 Sol (Medium)") + keyboard protocol Enter/Shift+Enter/Ctrl+Enter + "/" and "$" triggers**
+- **FN-FDE-011 · Thinking collapsible card in agent turns**
+- **FN-FDE-012 · Prompt template gallery: Classification/Sentiment/Summarization/Entity extraction/Translation/Empty**
+- **FN-AST-001 · Agent Inputs editor: typed String + Required|Optional segmented + rename/delete**
+- **FN-AST-002 · Pre-computed variables: template cards (Define object set / Compute from function / Apply actions) + operation search + category tiles**
+- **FN-AST-003 · Variable operation chains: start set → Filter object set → Search around (link traversal picker) + typed output chip + Problems bar**
+- **FN-AST-004 · Tools binding: Apply actions / Call function / Ontology SQL / Custom tool (+ Automated no-confirm pills)**
+- **FN-AST-005 · Repo provisioning: Model + Auto-import + agent name/location + Bind to ontology + Agent API name**
+- **FN-AST-006 · Tag and release: semver modal Patch/Minor/Major/Custom + branch|commit selector + "Releasing: x.y.z"**
+- **FN-AST-007 · Repository Checks tab: RUNNING/SUCCEEDED dots + durations + Branches/PRs/Tags/Settings tabs**
+- **FN-AST-008 · Scoped imports console: Ontology SDK|Platform tabs + Add ▾ (Resource Files/Models) + counts + scope settings (Enable scoped mode / Allow default scope / resources.json)**
+- **FN-AST-009 · Session completion policy: Stays open | Ends after first valid output**
+- **FN-AST-010 · System prompt editor: tabs (System prompt | Initial user message) + rich-text toolbar + "/"-insert Inputs/Variables cascading menu**
+- **FN-MCH-001 · State-transition graph: duration-encoded nodes + DAYS edge pills + terminal color coding**
+- **FN-MCH-002 · Metric carousel: Historical count | Current count | Historical duration**
+- **FN-MCH-003 · Contextual zoom: node → stat-card expansion (3 stat rows) + zoom chip**
+- **FN-MCH-004 · Deviations toggle + dotted deviation edges + Deviations|Included segmented**
+- **FN-MCH-005 · Path explorer panel: checked path rows + counts + proportional bars + sort**
+- **FN-MCH-006 · Duration distribution histogram: brushed range brackets filtering graph**
+- **FN-MCH-007 · Subprocess grouping frames + floating zoom chip (Inpatient Encounter [State ])**
+- **FN-MCH-008 · Transition nodes toggle + History count series**
+- **FN-OBS-001 · Session debugging timeline: Agent/Internal event diamonds + click-to-filter + ⌘-click multi + date chip**
+- **FN-OBS-002 · Event table: Time|Type|Updates(↻⚡ badges)|Payload + Type filter + payload search**
+- **FN-OBS-003 · Chat replay panel (Session view) Preview|Raw with tool-call chips**
+- **FN-OBS-004 · Trace waterfall: nested spans (VM workload/exec function/user code/POST /compute/LLM) + zoom + colored LLM spans**
+- **FN-OBS-005 · Logs table: 6 cols + tags/parameters chips + wildcard search + Copy as JSON**
+- **FN-GEO-001 · Map cluster-layer config: Point/Cluster/Choropleth/Line segment + geohash property + aggregation + autoscale**
+- **FN-GEO-002 · COP faceted filter rail: checkbox-count facets (up to 731 k) + histogram date range + typeahead + map-table linkage**
+- **FN-GEO-003 · Metric cards over map with aggregate bubbles + legend**
+- **FN-PLM-001 · Build settings: Batch vs Streaming + compute Standard/Lightweight/External-Databricks**
+- **FN-PLM-002 · Graph canvas: legend color mapping + Add data/Reusables + per-node deploy status**
+- **FN-PLM-003 · Use LLM node template config: business Context + neg/pos steppers + column picker + model + Show configurations**
+- **FN-PEER-001 · Peer connections home: connection table + job health**
+- **FN-PEER-002 · Connection overview: Local/Remote topology + security classification + peering jobs (Start export / Send Ack)**
+- **FN-PEER-003 · Ontology mapping wizard: Map properties → Configure peering → Summary + Do not map property**
+- **FN-GOV-001 · Ontology Manager main-branch updates: review/rebase incoming changes + resource-type nav with counts**
+- **FN-GOV-002 · Dataset transactions history: RIDs + job details + Rollback to transaction + Force snapshot + date-range job metrics**
+- **FN-GOV-003 · Health Checks: data-quality gating (warn support teams / block unsatisfactory assets)**
+- **FN-MKT-001 · Marketplace product version page: outputs + install mode + release channel (base for Plugin Manager)**
+- **FN-MKT-002 · AIP in Code Workspaces: 11-tool toggles + ephemeral chat history + repo chrome (Sync/Propose changes)**
+- **FN-MKT-003 · Tiered agent app templates: Intermediate v16 Object query → Advanced v20 8 tools w/ Ontology Actions + Automated + application-state variables**
+- **FN-SCP-001 · Use-case funnel canvas: card-graph (User Group, External System→Data Connector→Project→Dataset→Object Type, Scenario/Model, Automate→Notifications/Machinery, surfaces)**
+- **FN-SCP-002 · Guidance prompt bank: value-for-users bullets, user-needs, data-asset layering, verbatim deliverable questions**
+- **FN-SCP-003 · Permissions matrix deliverable: user groups × resources access grid**
+- **FN-SCP-004 · Scoping checklist: MVP criteria, steering cadence, beta users, data controls (Health Checks)**

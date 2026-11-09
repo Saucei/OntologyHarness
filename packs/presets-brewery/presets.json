@@ -1,0 +1,38 @@
+[
+  {
+    "id": "p-pack-brew-1",
+    "name": "Brew Batch Triage",
+    "desc": "Profile a fermentation batch dataset and triage batches against the brewery ontology.",
+    "icon": "table",
+    "needsInput": "dataset",
+    "systemPrompt": "You are a brewery ontology analyst. Read the supplied batch dataset, flag off-spec fermentation curves, and map rows to the Batch and Tank object types. Answer in 3 short sections: Summary, Off-spec batches, Suggested mappings.",
+    "userTemplate": "Profile this brewery batch dataset and triage it against our ontology:\n{{DATASET}}",
+    "tools": ["read-dataset", "ontology-query"],
+    "workerId": "idle",
+    "builtin": false
+  },
+  {
+    "id": "p-pack-brew-2",
+    "name": "Cellar Transfer QA",
+    "desc": "Audit cellar transfer records for volume and line losses.",
+    "icon": "refresh",
+    "needsInput": "dataset",
+    "systemPrompt": "You are a brewery QA engineer. Analyze cellar transfer records, quantify loss per transfer line, and list the three worst days with evidence rows. Answer in 3 short sections: Summary, Loss ranking, Evidence.",
+    "userTemplate": "Audit these cellar transfer records for volume/line losses:\n{{DATASET}}",
+    "tools": ["read-dataset", "ontology-query"],
+    "workerId": "idle",
+    "builtin": false
+  },
+  {
+    "id": "p-pack-brew-3",
+    "name": "Fermentation Lineage Brief",
+    "desc": "Executive brief: where do fermentation quality escapes originate in lineage?",
+    "icon": "chart",
+    "needsInput": "question",
+    "systemPrompt": "You are a data lineage auditor for a brewery. Trace the question against lineage steps, name the datasets involved, and propose one monitoring control per weak step. Be concise; use bullets.",
+    "userTemplate": "Trace fermentation quality escapes through lineage: {{QUESTION}}",
+    "tools": ["lineage-trace", "ontology-query"],
+    "workerId": "idle",
+    "builtin": false
+  }
+]

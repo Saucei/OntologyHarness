@@ -1,0 +1,22 @@
+/* Cream Glass theme pack — warm variant. TOKENS ONLY (theme law): every declaration
+   assigns a --custom-property; no element selectors beyond theme roots. */
+:root,
+[data-theme='light'] {
+  --green-400: #6fbf7f;
+  --green-500: #57a86b;
+  --green-600: #4a8a57;
+  --green-700: #3f704a;
+  --glass-border: rgba(150, 140, 80, 0.35);
+  --glass-border-strong: rgba(150, 140, 80, 0.6);
+  --green-glow: 0 0 0 3px rgba(170, 160, 90, 0.25), 0 0 26px rgba(170, 160, 90, 0.32);
+}
+
+[data-theme='dark'] {
+  --green-400: #7fae7f;
+  --green-500: #63966b;
+  --green-600: #55855e;
+  --green-700: #48714f;
+  --glass-border: rgba(150, 140, 80, 0.3);
+  --glass-border-strong: rgba(150, 140, 80, 0.55);
+  --green-glow: 0 0 0 3px rgba(170, 160, 90, 0.2), 0 0 26px rgba(170, 160, 90, 0.26);
+}

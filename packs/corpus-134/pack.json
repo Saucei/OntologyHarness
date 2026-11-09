@@ -1,0 +1,10 @@
+{
+  "id": "corpus-134",
+  "name": "Corpus 134 Reference Library",
+  "version": "1.0.0",
+  "kind": "corpus",
+  "api": "^1.0",
+  "author": "Ontology Harness core",
+  "description": "Snapshot of the full corpus-1 reference manifest (134 images, 36 categories, staged contact sheets 01–09). Pinned snapshot of public/manifest.json at pack time — runs of scripts/parse-manifest.mjs may advance it.",
+  "entry": "manifest.json"
+}
