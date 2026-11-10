@@ -1,9 +1,0 @@
-{
-  "id": "presets-brewery",
-  "name": "Brewery Preset Pack",
-  "version": "1.0.0",
-  "kind": "presets",
-  "api": "^1.0",
-  "author": "Ontology Harness core",
-  "description": "Three ready-to-run analyst presets for a brewery ontology (fermentation batches, transfers, quality). Validates against the Preset schema v2 and appears in the Presets library as community entries."
-}

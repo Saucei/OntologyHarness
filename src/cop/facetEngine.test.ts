@@ -16,8 +16,8 @@ import {
 } from './facetEngine'
 
 const PTS: FacetablePoint[] = [
-  { id: 'a', label: 'A', category: 'Recipe', status: 'Successful', value: 10, date: '2025-10-01T00:00:00Z' },
-  { id: 'b', label: 'B', category: 'Recipe', status: 'Successful', value: 30, date: '2025-10-03T00:00:00Z' },
+  { id: 'a', label: 'A', category: 'Stage', status: 'Successful', value: 10, date: '2025-10-01T00:00:00Z' },
+  { id: 'b', label: 'B', category: 'Stage', status: 'Successful', value: 30, date: '2025-10-03T00:00:00Z' },
   { id: 'c', label: 'C', category: 'Raw Material', status: 'Cancelled', value: 5, date: '2025-10-05T00:00:00Z' },
   { id: 'd', label: 'D', category: 'Customer', status: 'Diverted', value: 8, date: '2025-10-07T00:00:00Z' },
   { id: 'e', label: 'E', category: 'Customer', status: 'Successful', value: 4 }, // undated
@@ -26,9 +26,10 @@ const PTS: FacetablePoint[] = [
 describe('facetEngine — buildFacets', () => {
   it('produces count badges + totalValue per category/status, count-desc sorted', () => {
     const g = buildFacets(PTS)
-    // Recipe and Customer tie at count=2 -> alphabetical tie-break (Customer first)
-    expect(g.categories.map(f => f.value)).toEqual(['Customer', 'Recipe', 'Raw Material'])
-    expect(g.categories.find(f => f.value === 'Recipe')).toMatchObject({ value: 'Recipe', count: 2, totalValue: 40 })
+    // Stage and Customer tie at count=2 -> alphabetical tie-break (Customer first);
+    // Stage(2) sorts ahead of Raw Material(1) by count-desc.
+    expect(g.categories.map(f => f.value)).toEqual(['Customer', 'Stage', 'Raw Material'])
+    expect(g.categories.find(f => f.value === 'Stage')).toMatchObject({ value: 'Stage', count: 2, totalValue: 40 })
     expect(g.categories.find(f => f.value === 'Customer')).toMatchObject({ count: 2, totalValue: 12 })
     expect(g.statuses.find(f => f.value === 'Successful')).toMatchObject({ count: 3, totalValue: 44 })
     expect(g.statuses.find(f => f.value === 'Cancelled')).toMatchObject({ count: 1, totalValue: 5 })
@@ -43,7 +44,7 @@ describe('facetEngine — buildFacets', () => {
 
 describe('facetEngine — filterPoints', () => {
   it('filters by category + status + date range (undated excluded only when a range is set)', () => {
-    const sel = { categories: ['Recipe'], statuses: ['Successful'], dateRange: [Date.parse('2025-10-02T00:00:00Z'), Date.parse('2025-10-07T00:00:00Z')] as [number, number] }
+    const sel = { categories: ['Stage'], statuses: ['Successful'], dateRange: [Date.parse('2025-10-02T00:00:00Z'), Date.parse('2025-10-07T00:00:00Z')] as [number, number] }
     expect(filterPoints(PTS, sel).map(p => p.id)).toEqual(['b'])
     // no date range: undated point e passes category/status filters
     expect(filterPoints(PTS, { categories: ['Customer'], statuses: ['Successful'], dateRange: null }).map(p => p.id)).toEqual(['e'])
@@ -52,10 +53,10 @@ describe('facetEngine — filterPoints', () => {
   })
 
   it('toggleFacetValue adds and removes without mutating input', () => {
-    const start = ['Recipe']
-    expect(toggleFacetValue(start, 'Customer')).toEqual(['Recipe', 'Customer'])
-    expect(toggleFacetValue(start, 'Recipe')).toEqual([])
-    expect(start).toEqual(['Recipe'])
+    const start = ['Stage']
+    expect(toggleFacetValue(start, 'Customer')).toEqual(['Stage', 'Customer'])
+    expect(toggleFacetValue(start, 'Stage')).toEqual([])
+    expect(start).toEqual(['Stage'])
   })
 })
 
@@ -84,7 +85,7 @@ describe('facetEngine — histogram bins + domain + clamp', () => {
   it('selection-aware facets respect the other dimension filter', () => {
     const g = buildSelectionAwareFacets(PTS, { categories: [], statuses: ['Successful'], dateRange: null })
     // categories counted within Successful only: Recipe(2) + Customer(1: undated e)
-    expect(g.categories.find(f => f.value === 'Recipe')).toMatchObject({ count: 2, totalValue: 40 })
+    expect(g.categories.find(f => f.value === 'Stage')).toMatchObject({ count: 2, totalValue: 40 })
     expect(g.categories.find(f => f.value === 'Customer')).toMatchObject({ count: 1, totalValue: 4 })
     expect(g.categories.find(f => f.value === 'Raw Material')).toBeUndefined()
   })
@@ -98,7 +99,7 @@ describe('facetEngine — linkage selection', () => {
     expect(linkedFacetValues(resolveLinkedSelection(filtered, 'c'))).toEqual({ category: 'Raw Material', status: 'Cancelled' })
     expect(highlightedIds(filtered, 'c')).toEqual(['c'])
     // selection filtered out => no highlight (sync-safe)
-    const narrow = filterPoints(PTS, { categories: ['Recipe'], statuses: [], dateRange: null })
+    const narrow = filterPoints(PTS, { categories: ['Stage'], statuses: [], dateRange: null })
     expect(highlightedIds(narrow, 'c')).toEqual([])
     expect(linkedFacetValues(null)).toEqual({ category: null, status: null })
   })

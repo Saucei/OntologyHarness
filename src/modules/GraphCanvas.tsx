@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ReactFlow, Background, Controls, MiniMap, Handle, Position,
   useNodesState, useEdgesState, type Node, type Edge, type ReactFlowInstance, MarkerType,
+  type Connection,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { toPng } from 'html-to-image'
@@ -11,10 +12,15 @@ import { ws, patchMeta, setFocus, appendTrace, appendAudit } from '../store'
 import { createJob } from '../jobs'
 import MachineryGraph from '../machinery/MachineryGraph'
 import { getFixture, type MachineryFixtureId, type MachineryMetric } from '../machinery/mach'
+import {
+  type GraphArea, type GraphAreasState, type PersistNode, type PersistEdge,
+  defaultArea, initAreasState, newArea, nextNodeId, nextEdgeId, edgeExists,
+  NODE_TO_OBJECT_TYPE, DEFAULT_AREA_ID,
+} from './graphAreas'
 
 /* ── FN-ARC-002 — Environment branching & promotion graph (pure helpers) ──
    Master/Dev/Feature Y/Feature X/Oct sources → PROD/UAT promotion targets.
-   Additive overlay; lineage baseNodes/baseEdges unchanged. */
+   Additive overlay; lineage areas are independent user-editable graphs. */
 
 export type BranchNode = {
   id: string
@@ -75,21 +81,7 @@ export function branchGraphStats(): { sources: number; targets: number; edges: n
   }
 }
 
-const baseNodes: Node[] = [
-  { id: 'wh', position: { x: 0, y: 240 }, data: { label: '🏭 Warehouse 1', sub: 'Warehouse · 3 sites' }, type: 'glass' },
-  { id: 'malt', position: { x: 230, y: 60 }, data: { label: '🌾 Malt', sub: 'Raw Material · $1.94/lb' }, type: 'glass' },
-  { id: 'hops', position: { x: 230, y: 200 }, data: { label: '🌿 Hops', sub: 'Raw Material · $11.2/lb' }, type: 'glass' },
-  { id: 'corn', position: { x: 230, y: 340 }, data: { label: '🌽 Corn', sub: 'Raw Material · $0.71/lb' }, type: 'glass' },
-  { id: 'nyc-ale', position: { x: 470, y: -40 }, data: { label: '📜 NYC Ale', sub: 'Recipe · 40 bbl' }, type: 'glass' },
-  { id: 'dc-ale', position: { x: 470, y: 70 }, data: { label: '📜 DC Ale', sub: 'Recipe · 39 bbl' }, type: 'glass' },
-  { id: 'pit-ale', position: { x: 470, y: 180 }, data: { label: '📜 PIT Ale', sub: 'Recipe · 40 bbl' }, type: 'glass' },
-  { id: 'nyc-ipa', position: { x: 470, y: 290 }, data: { label: '📜 NYC IPA', sub: 'Recipe · 36 bbl' }, type: 'glass' },
-  { id: 'pit-ipa', position: { x: 470, y: 400 }, data: { label: '📜 PIT IPA', sub: 'Recipe · 34 bbl' }, type: 'glass' },
-  { id: 'dc-ipa', position: { x: 470, y: 510 }, data: { label: '📜 DC IPA', sub: 'Recipe · 35 bbl' }, type: 'glass' },
-  { id: 'belgian', position: { x: 730, y: 60 }, data: { label: '🍺 Belgian Ale', sub: 'Product · 220.77 bbl demand' }, type: 'glass' },
-  { id: 'ipa', position: { x: 730, y: 330 }, data: { label: '🍺 IPA', sub: 'Product · 211.18 bbl demand' }, type: 'glass' },
-  { id: 'cust', position: { x: 980, y: 180 }, data: { label: '🧑‍💼 30 Customers', sub: 'Customer · IMPRESSIONS segment' }, type: 'glass' },
-]
+/* ── T-33 — persisted ⇄ flow converters (canonical seed lives in agent/graph.ts) ── */
 
 const mkEdge = (id: string, source: string, target: string, label?: string, width = 2): Edge => ({
   id, source, target, label,
@@ -97,23 +89,30 @@ const mkEdge = (id: string, source: string, target: string, label?: string, widt
   markerEnd: { type: MarkerType.ArrowClosed, color: '#15803d' },
 })
 
-const baseEdges: Edge[] = [
-  mkEdge('e1', 'wh', 'malt', '37', 4), mkEdge('e2', 'wh', 'hops', '3 / 39', 3), mkEdge('e3', 'wh', 'corn', '7', 1.5),
-  mkEdge('e4', 'malt', 'nyc-ale', '', 3), mkEdge('e5', 'malt', 'dc-ale', '', 3), mkEdge('e6', 'malt', 'pit-ale', '', 4),
-  mkEdge('e7', 'malt', 'nyc-ipa', '', 3), mkEdge('e8', 'malt', 'dc-ipa', '', 2),
-  mkEdge('e9', 'hops', 'nyc-ale'), mkEdge('e10', 'hops', 'dc-ale'), mkEdge('e11', 'hops', 'pit-ale'),
-  mkEdge('e12', 'hops', 'nyc-ipa'), mkEdge('e13', 'hops', 'pit-ipa'), mkEdge('e14', 'hops', 'dc-ipa'),
-  mkEdge('e15', 'corn', 'nyc-ale', '', 1.5), mkEdge('e16', 'corn', 'pit-ipa', '', 1.5),
-  mkEdge('e17', 'nyc-ale', 'belgian', '2 Recipes'), mkEdge('e18', 'dc-ale', 'belgian', '2 Recipes', 3), mkEdge('e19', 'pit-ale', 'belgian', '2 Recipes', 3),
-  mkEdge('e20', 'nyc-ipa', 'ipa', '2 Recipes'), mkEdge('e21', 'pit-ipa', 'ipa', '2 Recipes'), mkEdge('e22', 'dc-ipa', 'ipa', '2 Recipes'),
-  mkEdge('e23', 'belgian', 'cust', '220.77', 5), mkEdge('e24', 'ipa', 'cust', '211.18', 3),
-]
+const toFlowNodes = (pn: PersistNode[]): Node[] =>
+  pn.map(n => ({ id: n.id, position: { x: n.x, y: n.y }, type: 'glass', data: { label: n.label, sub: n.sub } }))
 
-const NODE_TO_OBJECT_TYPE: Record<string, string> = {
-  wh: 'ot-warehouse', malt: 'ot-raw-material', hops: 'ot-raw-material', corn: 'ot-raw-material',
-  'nyc-ale': 'ot-recipe', 'dc-ale': 'ot-recipe', 'pit-ale': 'ot-recipe', 'nyc-ipa': 'ot-recipe', 'pit-ipa': 'ot-recipe', 'dc-ipa': 'ot-recipe',
-  belgian: 'ot-product', ipa: 'ot-product', cust: 'ot-customer',
-}
+const toFlowEdges = (pe: PersistEdge[]): Edge[] =>
+  pe.map(e => mkEdge(e.id, e.source, e.target, e.label, e.width))
+
+/** Persisted nodes exclude derived dataset children (ds-*) — those re-expand from datasets. */
+const toPersistNodes = (ns: Node[]): PersistNode[] =>
+  ns.filter(n => !n.id.startsWith('ds-')).map(n => ({
+    id: n.id,
+    x: n.position.x,
+    y: n.position.y,
+    label: String((n.data as any).label ?? ''),
+    sub: String((n.data as any).sub ?? ''),
+  }))
+
+const toPersistEdges = (es: Edge[]): PersistEdge[] =>
+  es.map(e => ({
+    id: e.id,
+    source: String(e.source),
+    target: String(e.target),
+    label: typeof e.label === 'string' ? e.label : '',
+    width: Number((e.style?.strokeWidth as number) ?? 2),
+  }))
 
 function GlassNode({ data, selected }: any) {
   const status: string = data.status ?? ''
@@ -135,16 +134,23 @@ const worstNullPct = (ds: any): number => {
 }
 
 export default function GraphCanvas() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(baseNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(baseEdges)
-  const [selected, setSelected] = useState<string | null>('belgian')
+  /* ── T-33 areas: user-editable graphs persisted at ws.meta.graphAreas ── */
+  const [areas, setAreas] = useState<GraphAreasState>(() => initAreasState((ws.meta as any)?.graphAreas))
+  const [activeId, setActiveId] = useState<string>(() => areas.activeId)
+  const activeArea: GraphArea = areas.areas.find(a => a.id === activeId) ?? areas.areas[0]
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(toFlowNodes(activeArea.nodes))
+  const [edges, setEdges, onEdgesChange] = useEdgesState(toFlowEdges(activeArea.edges))
+  const [selected, setSelected] = useState<string | null>(() =>
+    activeArea.nodes.some(n => n.id === 'paint') ? 'paint' : activeArea.nodes[0]?.id ?? null)
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [seriesMode, setSeriesMode] = useState<'demand' | 'forecast'>('demand')
   const [expanded, setExpanded] = useState<boolean>(() => !!(ws.meta?.graph as any)?.expandedWarehouse)
   const [notice, setNotice] = useState<string | null>(null)
   const flowRef = useRef<ReactFlowInstance | null>(null)
 
-  // Machinery mode (FN-MCH-001/002/008) — additive; default lineage preserves existing behavior.
+  // Machinery mode (FN-MCH-001/002/008) — additive; lineage preserves editor behavior.
   type GraphMode = 'lineage' | MachineryFixtureId
   const initMach = (ws.meta?.graph as any)?.machinery as
     | { mode?: GraphMode; metric?: MachineryMetric; showTransitionNodes?: boolean }
@@ -158,70 +164,196 @@ export default function GraphCanvas() {
   const [selectedEnv, setSelectedEnv] = useState<string>(() => (ws.meta?.graph as any)?.selectedEnv ?? 'master')
   const [promotedEnvs, setPromotedEnvs] = useState<string[]>(() => ((ws.meta?.graph as any)?.promotedEnvs as string[]) ?? [])
 
-  const toggleBranches = useCallback(() => {
-    setShowBranches(prev => {
-      const next = !prev
-      patchMeta({ graph: { ...(ws.meta?.graph ?? {}), showBranchOverlay: next } })
-      appendTrace({ kind: 'tool-call', tool: 'graph.branch-overlay.toggle', ok: true, ms: 0, detail: next ? 'shown' : 'hidden' })
-      appendAudit({ event: 'graph.branch-overlay.toggle', shown: next })
+  /* ── area lifecycle ─────────────────────────────────────────────────── */
+
+  /** Load the newly-active area into the flow states (keyed on activeId only). */
+  useEffect(() => {
+    const area = areas.areas.find(a => a.id === activeId) ?? areas.areas[0]
+    setNodes(toFlowNodes(area.nodes))
+    setEdges(toFlowEdges(area.edges))
+    setSelectedEdgeId(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeId])
+
+  /** Write the active area into areas state + meta (patchMeta debounces disk writes). */
+  const persistArea = (nextNodes: PersistNode[], nextEdges: PersistEdge[]) => {
+    setAreas(prev => {
+      const next: GraphAreasState = {
+        ...prev,
+        activeId,
+        areas: prev.areas.map(a => (a.id === activeId ? { ...a, nodes: nextNodes, edges: nextEdges } : a)),
+      }
+      patchMeta({ graphAreas: next })
       return next
     })
-  }, [])
+  }
 
-  const selectEnv = useCallback((id: string) => {
+  /** Commit a mutation: update flow state AND persist the area. */
+  const commit = (nextNodes: Node[], nextEdges: Edge[]) => {
+    setNodes(nextNodes)
+    setEdges(nextEdges)
+    persistArea(toPersistNodes(nextNodes), toPersistEdges(nextEdges))
+  }
+
+  const addStage = () => {
+    const id = nextNodeId()
+    const node: Node = {
+      id,
+      position: { x: 380 + (nodes.length % 5) * 70, y: 560 + Math.floor(nodes.length / 5) * 100 },
+      type: 'glass',
+      data: { label: '🔧 New Stage', sub: 'Process · rename in inspector' },
+    }
+    commit([...nodes, node], edges)
+    setSelected(id)
+    setNotice('Stage added — rename it in the inspector, then drag ○ handles to connect.')
+    appendAudit({ event: 'graph.area.stage-add', area: activeId, id })
+  }
+
+  const deleteStage = (id: string) => {
+    commit(nodes.filter(n => n.id !== id), edges.filter(e => e.source !== id && e.target !== id))
+    if (selected === id) setSelected(null)
+    setNotice('Stage removed.')
+    appendAudit({ event: 'graph.area.stage-delete', area: activeId, id })
+  }
+
+  const onConnect = (conn: Connection) => {
+    if (!conn.source || !conn.target || conn.source === conn.target) return
+    if (edgeExists(toPersistEdges(edges), conn.source, conn.target)) {
+      setNotice('Relation already exists between those two nodes.')
+      return
+    }
+    commit(nodes, [...edges, mkEdge(nextEdgeId(), conn.source, conn.target, '', 2)])
+    setNotice('Relation added.')
+    appendAudit({ event: 'graph.area.edge-add', area: activeId, from: conn.source, to: conn.target })
+  }
+
+  const deleteEdgeById = (id: string) => {
+    commit(nodes, edges.filter(e => e.id !== id))
+    if (selectedEdgeId === id) setSelectedEdgeId(null)
+    setNotice('Relation removed.')
+    appendAudit({ event: 'graph.area.edge-delete', area: activeId, id })
+  }
+
+  const renameNode = (id: string, patch: { label?: string; sub?: string }) => {
+    commit(nodes.map(n => (n.id === id ? { ...n, data: { ...n.data, ...patch } } : n)), edges)
+  }
+
+  const onNodeDragStop = () => persistArea(toPersistNodes(nodes), toPersistEdges(edges))
+  const onEdgeClick = (_: any, edge: Edge) => setSelectedEdgeId(edge.id)
+
+  const switchArea = (id: string) => {
+    setActiveId(id)
+    patchMeta({ graphAreas: { ...areas, activeId: id } })
+    appendTrace({ kind: 'tool-call', tool: 'graph.area.switch', ok: true, ms: 0, detail: id })
+  }
+
+  const createArea = () => {
+    const a = newArea(areas.areas)
+    const next: GraphAreasState = { ...areas, activeId: a.id, areas: [...areas.areas, a] }
+    setAreas(next)
+    setActiveId(a.id)
+    patchMeta({ graphAreas: next })
+    setNotice('Empty area created — use “Add stage”, then drag between ○ handles to connect.')
+    appendAudit({ event: 'graph.area.create', id: a.id })
+  }
+
+  const deleteActiveArea = () => {
+    if (areas.areas.length <= 1) {
+      setNotice('The last area cannot be deleted — reset it instead.')
+      return
+    }
+    const rest = areas.areas.filter(a => a.id !== activeId)
+    const next: GraphAreasState = { rev: areas.rev, activeId: rest[0].id, areas: rest }
+    setAreas(next)
+    setActiveId(rest[0].id)
+    patchMeta({ graphAreas: next })
+    setNotice('Area deleted.')
+    appendAudit({ event: 'graph.area.delete', id: activeId })
+  }
+
+  const renameArea = (title: string) => {
+    const next: GraphAreasState = { ...areas, areas: areas.areas.map(a => (a.id === activeId ? { ...a, title } : a)) }
+    setAreas(next)
+    patchMeta({ graphAreas: next })
+  }
+
+  const resetArea = () => {
+    if (activeId === DEFAULT_AREA_ID) {
+      const seed = defaultArea()
+      const next: GraphAreasState = { ...areas, areas: areas.areas.map(a => (a.id === DEFAULT_AREA_ID ? seed : a)) }
+      setAreas(next)
+      patchMeta({ graphAreas: next })
+      setNodes(toFlowNodes(seed.nodes))
+      setEdges(toFlowEdges(seed.edges))
+      setSelected('paint')
+      setNotice('Assembly Line area reset to the researched seed.')
+    } else {
+      commit([], [])
+      setSelected(null)
+      setNotice('Area cleared — use “Add stage” to start building.')
+    }
+    appendAudit({ event: 'graph.area.reset', id: activeId })
+  }
+
+  /* ── machinery mode persistence (unchanged) ─────────────────────────── */
+
+  const toggleBranches = () => {
+    const next = !showBranches
+    setShowBranches(next)
+    patchMeta({ graph: { ...(ws.meta?.graph ?? {}), showBranchOverlay: next } })
+    appendTrace({ kind: 'tool-call', tool: 'graph.branch-overlay.toggle', ok: true, ms: 0, detail: next ? 'shown' : 'hidden' })
+    appendAudit({ event: 'graph.branch-overlay.toggle', shown: next })
+  }
+
+  const selectEnv = (id: string) => {
     setSelectedEnv(id)
     patchMeta({ graph: { ...(ws.meta?.graph ?? {}), selectedEnv: id } })
     appendTrace({ kind: 'tool-call', tool: 'graph.branch.select', ok: true, ms: 0, detail: id })
     appendAudit({ event: 'graph.branch.select', id })
-  }, [])
+  }
 
-  const promoteEnv = useCallback((targetId: string) => {
+  const promoteEnv = (targetId: string) => {
     const path = promotionPath(selectedEnv, targetId)
     if (!path) {
       appendTrace({ kind: 'tool-call', tool: 'graph.branch.promote', ok: false, ms: 0, detail: `no path ${selectedEnv} -> ${targetId}` })
       appendAudit({ event: 'graph.branch.promote', ok: false, from: selectedEnv, to: targetId })
       return
     }
-    setPromotedEnvs(prev => {
-      const next = prev.includes(targetId) ? prev : [...prev, targetId]
-      patchMeta({ graph: { ...(ws.meta?.graph ?? {}), promotedEnvs: next } })
-      return next
-    })
+    const next = promotedEnvs.includes(targetId) ? promotedEnvs : [...promotedEnvs, targetId]
+    setPromotedEnvs(next)
+    patchMeta({ graph: { ...(ws.meta?.graph ?? {}), promotedEnvs: next } })
     appendTrace({ kind: 'tool-call', tool: 'graph.branch.promote', ok: true, ms: 0, detail: `promoted ${selectedEnv} -> ${targetId} via ${path.join(' -> ')}` })
     appendAudit({ event: 'graph.branch.promote', ok: true, from: selectedEnv, to: targetId, path })
-  }, [selectedEnv])
+  }
 
-  const persistMachinery = useCallback((next: { mode?: GraphMode; metric?: MachineryMetric; showTransitionNodes?: boolean }) => {
-    const prev = ((ws.meta?.graph as any)?.machinery ?? {}) as Record<string, unknown>
-    patchMeta({ graph: { ...(ws.meta?.graph ?? {}), machinery: { ...prev, mode, metric: machMetric, showTransitionNodes, ...next } } })
-  }, [mode, machMetric, showTransitionNodes])
-
-  const switchMode = useCallback((next: GraphMode) => {
+  const switchMode = (next: GraphMode) => {
     appendTrace({ kind: 'tool-call', tool: 'graph.mode-switch', ok: true, ms: 0, detail: `${mode} -> ${next}` })
     appendAudit({ event: 'graph.mode-switch', from: mode, to: next })
     setMode(next)
     patchMeta({ graph: { ...(ws.meta?.graph ?? {}), machinery: { mode: next, metric: machMetric, showTransitionNodes } } })
-  }, [mode, machMetric, showTransitionNodes])
+  }
 
-  const onMachMetricChange = useCallback((m: MachineryMetric) => {
+  const onMachMetricChange = (m: MachineryMetric) => {
     setMachMetric(m)
     patchMeta({ graph: { ...(ws.meta?.graph ?? {}), machinery: { mode, metric: m, showTransitionNodes } } })
-  }, [mode, showTransitionNodes])
+  }
 
-  const onToggleTransitionNodes = useCallback((v: boolean) => {
+  const onToggleTransitionNodes = (v: boolean) => {
     setShowTransitionNodes(v)
     patchMeta({ graph: { ...(ws.meta?.graph ?? {}), machinery: { mode, metric: machMetric, showTransitionNodes: v } } })
-  }, [mode, machMetric])
+  }
 
   const machFixture = mode === 'lineage' ? null : getFixture(mode)
 
+  // Stable identities — ReactFlow calls these from effects keyed on the handler
+  // itself, so fresh closures here would loop renders (Maximum update depth).
   const onNodeClick = useCallback((_: any, node: Node) => setSelected(node.id), [])
   const onSelectionChange = useCallback(({ nodes: sel }: { nodes: Node[] }) => setSelectedIds(sel.map(n => n.id)), [])
 
   const savedDatasets = (ws.datasets as any[]) ?? []
 
-  /** Toggle warehouse expansion: merge saved datasets as children of wh. */
-  const toggleWarehouse = useCallback(() => {
+  /** Toggle Distribution Center expansion: merge saved datasets as children of wh. */
+  const toggleWarehouse = () => {
     if (expanded) {
       setNodes(prev => prev.filter(n => !n.id.startsWith('ds-')))
       setEdges(prev => prev.filter(e => !e.id.startsWith('e-ds-')))
@@ -231,7 +363,7 @@ export default function GraphCanvas() {
     }
     const children: Node[] = savedDatasets.map((d, i) => ({
       id: `ds-${d.id}`,
-      position: { x: -150, y: 480 + i * 90 },
+      position: { x: -260, y: 560 + i * 90 },
       type: 'glass',
       data: {
         label: `🗄 ${d.name}`,
@@ -244,8 +376,8 @@ export default function GraphCanvas() {
     setEdges(prev => [...prev, ...childEdges])
     setExpanded(true)
     patchMeta({ graph: { ...(ws.meta?.graph ?? {}), expandedWarehouse: true } })
-    if (savedDatasets.length === 0) setNotice('No saved datasets yet — import one in Data Hub, then double-click Warehouse 1 again.')
-  }, [expanded, setNodes, setEdges, savedDatasets])
+    if (savedDatasets.length === 0) setNotice('No saved datasets yet — import one in Data Hub, then double-click Distribution Center again.')
+  }
 
   // Re-expand on mount if previously expanded.
   useEffect(() => {
@@ -253,27 +385,27 @@ export default function GraphCanvas() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const onNodeDoubleClick = useCallback((_: any, node: Node) => { if (node.id === 'wh') toggleWarehouse() }, [toggleWarehouse])
+  const onNodeDoubleClick = (_: any, node: Node) => { if (node.id === 'wh') toggleWarehouse() }
 
-  const onMoveEnd = useCallback((_: any, viewport: { x: number; y: number; zoom: number }) => {
+  const onMoveEnd = (_: any, viewport: { x: number; y: number; zoom: number }) => {
     patchMeta({ graph: { ...(ws.meta?.graph ?? {}), camera: viewport } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
-  const onInit = useCallback((instance: ReactFlowInstance) => {
+  const onInit = (instance: ReactFlowInstance) => {
     flowRef.current = instance
     const cam = (ws.meta?.graph as any)?.camera
     if (cam) instance.setViewport(cam, { duration: 0 })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
   const selNode = nodes.find(n => n.id === selected)
   const objectTypes = OBJECT_TYPES
+  const nodeLabel = (id: string) => String(nodes.find(n => n.id === id)?.data?.label ?? id)
 
   const bars = useMemo(() => Array.from({ length: 40 }, (_, i) => {
-    const seasonal = Math.pow(Math.max(0, Math.sin(i / 4.4 - 1.1)), 2.2)
+    const wave = Math.pow(Math.max(0, Math.sin(i / 5 - 1.2)), 1.8)
     const noise = (Math.sin(i * 12.9898) * 43758.5453) % 1
-    return seriesMode === 'demand' ? Math.round(seasonal * 480 + Math.abs(noise) * 60) : Math.round(seasonal * 390 + Math.abs(noise) * 45)
+    return seriesMode === 'demand' ? Math.round(120 + wave * 60 + Math.abs(noise) * 14) : Math.round(118 + wave * 52 + Math.abs(noise) * 10)
   }), [seriesMode])
 
   const download = (filename: string, content: string, mime: string) => {
@@ -332,9 +464,18 @@ export default function GraphCanvas() {
     window.dispatchEvent(new CustomEvent('oh:navigate', { detail: { module: 'swarms' } }))
   }
 
-  // Rollback note: machinery is additive under mode !== 'lineage'; lineage
-  // baseNodes/baseEdges and all lineage handlers are unchanged, so reverting
-  // this slice is a pure deletion of the machinery branch + imports.
+  const modeSwitch = (forLineage: boolean) => (
+    <div className="graph-mode-switch" role="group" aria-label="Graph mode">
+      <button type="button" className="graph-mode-btn" aria-pressed={forLineage && mode === 'lineage'} data-testid="mode-lineage" onClick={() => switchMode('lineage')}>Lineage</button>
+      <button type="button" className="graph-mode-btn" aria-pressed={mode === 'patient-journey'} data-testid="mode-patient-journey" onClick={() => switchMode('patient-journey')}>Patient Journey</button>
+      <button type="button" className="graph-mode-btn" aria-pressed={mode === 'approval-process'} data-testid="mode-approval-process" onClick={() => switchMode('approval-process')}>Approval Process</button>
+      <button type="button" className="graph-mode-btn" aria-pressed={mode === 'assembly-line'} data-testid="mode-assembly-line" onClick={() => switchMode('assembly-line')}>Assembly Line</button>
+    </div>
+  )
+
+  // Rollback note: machinery is additive under mode !== 'lineage'; lineage editing
+  // lives in graphAreas.ts (pure) + ws.meta.graphAreas (persisted), so reverting
+  // this slice is a pure deletion of the areas bar/editor + machinery branch.
   if (mode !== 'lineage' && machFixture) {
     return (
       <div className="module fade-in">
@@ -344,11 +485,7 @@ export default function GraphCanvas() {
             <div className="module-sub">{machFixture.subtitle}</div>
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
-            <div className="graph-mode-switch" role="group" aria-label="Graph mode">
-              <button type="button" className="graph-mode-btn" aria-pressed={false} data-testid="mode-lineage" onClick={() => switchMode('lineage')}>Lineage</button>
-              <button type="button" className="graph-mode-btn" aria-pressed={mode === 'patient-journey'} data-testid="mode-patient-journey" onClick={() => switchMode('patient-journey')}>Patient Journey</button>
-              <button type="button" className="graph-mode-btn" aria-pressed={mode === 'approval-process'} data-testid="mode-approval-process" onClick={() => switchMode('approval-process')}>Approval Process</button>
-            </div>
+            {modeSwitch(false)}
             <span className="chip chip-mono">FN-MCH-001 · 002 · 005 · 006 · 008</span>
           </div>
         </div>
@@ -367,21 +504,30 @@ export default function GraphCanvas() {
     <div className="module fade-in">
       <div className="module-head glass-strong">
         <div>
-          <div className="module-title"><Icon name="graph" size={18} /> Production Line › View sub-graph</div>
-          <div className="module-sub">Vertex-style ontology lineage · {nodes.length} nodes · {edges.length} relations · double-click Warehouse to {expanded ? 'collapse' : 'expand'} datasets</div>
+          <div className="module-title"><Icon name="graph" size={18} /> Production Line › {activeArea.title}</div>
+          <div className="module-sub">{nodes.length} nodes · {edges.length} relations · double-click Distribution Center to {expanded ? 'collapse' : 'expand'} datasets · drag ○ handles to connect</div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
-          <div className="graph-mode-switch" role="group" aria-label="Graph mode">
-            <button type="button" className="graph-mode-btn" aria-pressed={mode === 'lineage'} data-testid="mode-lineage" onClick={() => switchMode('lineage')}>Lineage</button>
-            <button type="button" className="graph-mode-btn" aria-pressed={mode === 'patient-journey'} data-testid="mode-patient-journey" onClick={() => switchMode('patient-journey')}>Patient Journey</button>
-            <button type="button" className="graph-mode-btn" aria-pressed={mode === 'approval-process'} data-testid="mode-approval-process" onClick={() => switchMode('approval-process')}>Approval Process</button>
-          </div>
+          {modeSwitch(true)}
           <span className="chip chip-mono">graph: production-line</span>
           <button className="btn" data-testid="branch-overlay-toggle" aria-expanded={showBranches} aria-label="Toggle branch promotion graph" onClick={toggleBranches}><Icon name="graph" size={13} /> Branch graph</button>
-          <button className="btn" onClick={() => setNodes(baseNodes)}><Icon name="refresh" size={13} /> Reset</button>
+          <button className="btn btn-primary" data-testid="add-stage" onClick={addStage}><Icon name="plus" size={13} /> Add stage</button>
           <button className="btn" onClick={exportSvg}><Icon name="download" size={13} /> SVG</button>
           <button className="btn" onClick={exportPng}><Icon name="download" size={13} /> PNG</button>
         </div>
+      </div>
+
+      {/* T-33 — area switcher / creation / rename / reset / delete */}
+      <div className="glass panel" data-testid="areas-bar" role="toolbar" aria-label="Graph areas" style={{ margin: '0 0 8px', padding: '6px 10px', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+        <span className="module-sub" style={{ margin: 0 }}>Area</span>
+        <select className="input" data-testid="area-select" value={activeId} onChange={e => switchArea(e.target.value)} aria-label="Active graph area" style={{ maxWidth: 220 }}>
+          {areas.areas.map(a => <option key={a.id} value={a.id}>{a.title}{a.id === DEFAULT_AREA_ID ? ' (seed)' : ''}</option>)}
+        </select>
+        <input className="input" data-testid="area-rename" value={activeArea.title} onChange={e => renameArea(e.target.value)} aria-label="Area title" style={{ maxWidth: 170 }} />
+        <button className="btn" data-testid="area-new" onClick={createArea}><Icon name="plus" size={13} /> New area</button>
+        <button className="btn" data-testid="area-reset" onClick={resetArea}><Icon name="refresh" size={13} /> Reset</button>
+        <button className="btn" data-testid="area-delete" onClick={deleteActiveArea} disabled={areas.areas.length <= 1}><Icon name="trash" size={13} /> Delete area</button>
+        <span className="chip chip-mono" style={{ marginLeft: 'auto' }}>{areas.areas.length} area(s) · autosaved</span>
       </div>
 
       {/* FN-ARC-002 — branch & promotion overlay (Master/Dev/Feature Y/Feature X/Oct → PROD/UAT) */}
@@ -424,8 +570,12 @@ export default function GraphCanvas() {
             onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodeClick={onNodeClick}
             onSelectionChange={onSelectionChange}
             onNodeDoubleClick={onNodeDoubleClick}
+            onConnect={onConnect}
+            onNodeDragStop={onNodeDragStop}
+            onEdgeClick={onEdgeClick}
             onInit={onInit} onMoveEnd={onMoveEnd}
-            fitView fitViewOptions={{ padding: 0.12 }} minZoom={0.4} maxZoom={1.6} nodesDraggable nodesConnectable={false}
+            fitView fitViewOptions={{ padding: 0.12 }} minZoom={0.4} maxZoom={1.6} nodesDraggable nodesConnectable
+            deleteKeyCode={null}
             selectionOnDrag multiSelectionKeyCode="Shift"
           >
             <Background color="#bbf7d0" gap={22} size={1.4} />
@@ -446,12 +596,12 @@ export default function GraphCanvas() {
           {/* Legend */}
           <div className="graph-legend glass-faint" aria-hidden>
             <div className="panel-title" style={{ marginBottom: 4 }}>Legend</div>
-            <div className="legend-row"><i style={{ background: '#16a34a' }} /> Warehouse / facility</div>
+            <div className="legend-row"><i style={{ background: '#16a34a' }} /> Distribution / facility</div>
             <div className="legend-row"><i style={{ background: '#22c55e' }} /> Raw materials</div>
-            <div className="legend-row"><i style={{ background: '#15803d' }} /> Recipes</div>
-            <div className="legend-row"><i style={{ background: '#052e16' }} /> Products</div>
+            <div className="legend-row"><i style={{ background: '#15803d' }} /> Process stages</div>
+            <div className="legend-row"><i style={{ background: '#052e16' }} /> Vehicle models</div>
             <div className="legend-row"><i style={{ background: '#fff', border: '2px solid #16a34a' }} /> Imported dataset (ring: green ok / red &gt;50% null)</div>
-            <div className="legend-row" style={{ opacity: .7 }}>edge width ∝ flow volume · Shift-drag to lasso</div>
+            <div className="legend-row" style={{ opacity: .7 }}>edge width ∝ flow volume · drag ○ → ○ to connect · Shift-drag to lasso</div>
           </div>
 
           {notice && <div className="chip" style={{ position: 'absolute', top: 10, right: 10 }}>{notice}</div>}
@@ -464,34 +614,55 @@ export default function GraphCanvas() {
               <>
                 <div style={{ fontSize: 15, fontWeight: 700 }}>{selNode.data.label as string}</div>
                 <div className="module-sub" style={{ marginBottom: 8 }}>{selNode.data.sub as string}</div>
+                <div className="label">Label</div>
+                <input className="input" data-testid="inspector-label" value={String(selNode.data.label ?? '')} onChange={e => renameNode(selNode.id, { label: e.target.value })} aria-label="Node label" />
+                <div className="label">Subtitle</div>
+                <input className="input" data-testid="inspector-sub" value={String(selNode.data.sub ?? '')} onChange={e => renameNode(selNode.id, { sub: e.target.value })} aria-label="Node subtitle" />
                 <div className="label">Object type</div>
-                <div className="chip">{(selNode.data.sub as string).split(' · ')[0]}</div>
-                <div className="label">Downstream links</div>
+                <div className="chip">{NODE_TO_OBJECT_TYPE[selNode.id] ?? 'unlinked (user stage)'}</div>
+                <div className="label" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  Relations
+                  <button className="btn btn-ghost" data-testid="inspector-delete-edge" disabled={!selectedEdgeId} onClick={() => selectedEdgeId && deleteEdgeById(selectedEdgeId)} style={{ padding: '2px 8px', fontSize: 10 }}>
+                    Delete selected relation
+                  </button>
+                </div>
                 <table className="tbl"><tbody>
+                  {edges.filter(e => e.target === selNode.id).slice(0, 6).map(e => (
+                    <tr key={e.id}>
+                      <td style={{ color: 'var(--text-dim)' }}>← {nodeLabel(e.source)}</td>
+                      <td>{String(e.label || '')}</td>
+                      <td style={{ width: 30 }}><button className="btn btn-ghost" data-testid={`del-edge-${e.id}`} aria-label={`Delete relation from ${nodeLabel(e.source)}`} onClick={() => deleteEdgeById(e.id)} style={{ padding: '0 6px' }}><Icon name="x" size={11} /></button></td>
+                    </tr>
+                  ))}
                   {edges.filter(e => e.source === selNode.id).slice(0, 6).map(e => (
-                    <tr key={e.id}><td>{String(e.label || '→')}</td><td style={{ textAlign: 'right', color: 'var(--text-dim)' }}>{e.target}</td></tr>
+                    <tr key={e.id}>
+                      <td>→ {nodeLabel(e.target)}</td>
+                      <td>{String(e.label || '')}</td>
+                      <td style={{ width: 30 }}><button className="btn btn-ghost" data-testid={`del-edge-${e.id}`} aria-label={`Delete relation to ${nodeLabel(e.target)}`} onClick={() => deleteEdgeById(e.id)} style={{ padding: '0 6px' }}><Icon name="x" size={11} /></button></td>
+                    </tr>
                   ))}
                 </tbody></table>
+                <button className="btn" data-testid="inspector-delete-node" style={{ marginTop: 8 }} onClick={() => deleteStage(selNode.id)}><Icon name="trash" size={12} /> Delete stage</button>
               </>
             ) : <div className="module-sub">Click a node to inspect it. Shift-drag to lasso multiple.</div>}
           </div>
 
           <div className="glass panel" style={{ height: 220 }}>
             <div className="panel-title">
-              Series · Belgian Ale
+              Series · Sedan S1
               <span style={{ display: 'flex', gap: 4 }}>
                 {(['demand', 'forecast'] as const).map(m => (
-                  <button key={m} className={`btn btn-ghost`} style={seriesMode === m ? { background: 'rgba(34,197,94,.2)', color: 'var(--green-800)' } : {}} onClick={() => setSeriesMode(m)}>{m === 'demand' ? '@demand' : 'forecast'}</button>
+                  <button key={m} className={`btn btn-ghost`} style={seriesMode === m ? { background: 'rgba(34,197,94,.2)', color: 'var(--green-800)' } : {}} onClick={() => setSeriesMode(m)}>{m === 'demand' ? '@throughput' : 'forecast'}</button>
                 ))}
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 110, padding: '4px 2px' }}>
               {bars.map((v, i) => (
-                <div key={i} title={`${v} bbl`} style={{ flex: 1, height: `${(v / 520) * 100}%`, minHeight: 2, background: i >= bars.length - 7 ? '#f59e0b' : '#052e16', borderRadius: '2px 2px 0 0', opacity: 0.9 }} />
+                <div key={i} title={`${v} units/day`} style={{ flex: 1, height: `${(v / 220) * 100}%`, minHeight: 2, background: i >= bars.length - 7 ? '#f59e0b' : '#052e16', borderRadius: '2px 2px 0 0', opacity: 0.9 }} />
               ))}
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}><span>2021</span><span>April</span><span>July</span></div>
-            <div className="module-sub" style={{ marginTop: 6 }}>{seriesMode === 'demand' ? '@demand BELGIAN ALE · actuals' : 'ale_demand_forecast · model output'}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}><span>W1</span><span>W4</span><span>W8</span></div>
+            <div className="module-sub" style={{ marginTop: 6 }}>{seriesMode === 'demand' ? 'Sedan S1 · units/day actuals' : 'throughput_forecast · model output'}</div>
           </div>
 
           <div className="glass panel">

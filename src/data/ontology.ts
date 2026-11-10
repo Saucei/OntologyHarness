@@ -1,5 +1,5 @@
-// Seed domain: fictional brewery analogy-free ontology — we use a manufacturing /
-// supply-chain domain echoing the reference corpus ("Production Line" Vertex view).
+// Seed domain: automotive assembly production line (T-33) — researched,
+// industry-typical figures from stamping to dealer delivery.
 
 export type ObjectType = {
   id: string
@@ -16,18 +16,18 @@ export type LinkType = { id: string; from: string; to: string; name: string; car
 export type ActionType = { id: string; name: string; objectType: string; params: string[]; requiresAip: boolean }
 
 export const OBJECT_TYPES: ObjectType[] = [
-  { id: 'ot-warehouse', name: 'Warehouse', icon: '🏭', color: '#16a34a',
+  { id: 'ot-warehouse', name: 'Distribution Center', icon: '🏭', color: '#16a34a',
     backing: 'derived/warehouse_dim', objectCount: 3,
-    description: 'Physical storage and distribution facility.',
+    description: 'Regional distribution center feeding the dealer network.',
     properties: [
       { name: 'warehouseId', type: 'ValueType/WarehouseId', indexed: true },
       { name: 'name', type: 'String', indexed: true },
       { name: 'capacity', type: 'Integer', indexed: false },
       { name: 'region', type: 'String', indexed: true },
     ] },
-  { id: 'ot-raw-material', name: 'Raw Material', icon: '🌾', color: '#22c55e',
+  { id: 'ot-raw-material', name: 'Raw Material', icon: '🧱', color: '#22c55e',
     backing: 'derived/raw_materials', objectCount: 15,
-    description: 'Grain, hops, adjuncts and yeast inputs.',
+    description: 'Steel coil, polymer resin, glass and fastener inputs.',
     properties: [
       { name: 'materialId', type: 'ValueType/MaterialId', indexed: true },
       { name: 'name', type: 'String', indexed: true },
@@ -35,57 +35,57 @@ export const OBJECT_TYPES: ObjectType[] = [
       { name: 'unitCost', type: 'Decimal', indexed: false },
       { name: 'reorderPoint', type: 'Integer', indexed: false },
     ] },
-  { id: 'ot-recipe', name: 'Recipe', icon: '📜', color: '#15803d',
-    backing: 'derived/recipes', objectCount: 21,
-    description: 'Brewing recipes referencing raw materials.',
+  { id: 'ot-process', name: 'Process Stage', icon: '🤖', color: '#15803d',
+    backing: 'derived/process_stages', objectCount: 12,
+    description: 'Physical production stages from stamping to inspection.',
     properties: [
-      { name: 'recipeId', type: 'ValueType/RecipeId', indexed: true },
+      { name: 'stageId', type: 'ValueType/StageId', indexed: true },
       { name: 'name', type: 'String', indexed: true },
-      { name: 'style', type: 'String', indexed: true },
-      { name: 'batchSizeBbl', type: 'Decimal', indexed: false },
+      { name: 'taktSeconds', type: 'Integer', indexed: false },
+      { name: 'linePosition', type: 'Integer', indexed: false },
     ] },
-  { id: 'ot-product', name: 'Product', icon: '🍺', color: '#14532d',
+  { id: 'ot-product', name: 'Vehicle Model', icon: '🚗', color: '#14532d',
     backing: 'ontology/product', objectCount: 24,
-    description: 'Finished SKUs shipped to customers.',
+    description: 'Finished vehicle models shipped to dealers.',
     properties: [
       { name: 'productId', type: 'ValueType/ProductId', indexed: true },
       { name: 'name', type: 'String', indexed: true },
-      { name: 'style', type: 'String', indexed: true },
-      { name: 'abv', type: 'Decimal', indexed: false },
+      { name: 'platform', type: 'String', indexed: true },
+      { name: 'basePrice', type: 'Decimal', indexed: false },
     ] },
-  { id: 'ot-customer', name: 'Customer', icon: '🧑‍💼', color: '#166534',
-    backing: 'ontology/customers', objectCount: 30,
-    description: 'Accounts purchasing finished product.',
+  { id: 'ot-customer', name: 'Dealer Network', icon: '🧑‍💼', color: '#166534',
+    backing: 'ontology/customers', objectCount: 60,
+    description: 'Dealer accounts ordering finished vehicles.',
     properties: [
       { name: 'customerId', type: 'ValueType/CustomerId', indexed: true },
       { name: 'name', type: 'String', indexed: true },
       { name: 'segment', type: 'String', indexed: true },
       { name: 'lifetimeValue', type: 'Decimal', indexed: false },
     ] },
-  { id: 'ot-batch', name: 'Production Batch', icon: '🧪', color: '#4ade80',
-    backing: 'derived/production_batches', objectCount: 1842,
-    description: 'A single brewed batch of a recipe.',
+  { id: 'ot-batch', name: 'Production Unit', icon: '🔩', color: '#4ade80',
+    backing: 'derived/production_units', objectCount: 1842,
+    description: 'A single vehicle unit moving through the line.',
     properties: [
       { name: 'batchId', type: 'ValueType/BatchId', indexed: true },
-      { name: 'brewDate', type: 'Timestamp', indexed: true },
-      { name: 'recipeId', type: 'ValueType/RecipeId', indexed: true },
-      { name: 'yieldBbl', type: 'Decimal', indexed: false },
+      { name: 'buildDate', type: 'Timestamp', indexed: true },
+      { name: 'currentStageId', type: 'ValueType/StageId', indexed: true },
+      { name: 'vin', type: 'ValueType/VIN', indexed: false },
     ] },
 ]
 
 export const LINK_TYPES: LinkType[] = [
   { id: 'lt-1', from: 'ot-warehouse', to: 'ot-raw-material', name: 'Stores', cardinality: '1 → N' },
-  { id: 'lt-2', from: 'ot-recipe', to: 'ot-raw-material', name: 'Requires', cardinality: 'N ↔ N' },
-  { id: 'lt-3', from: 'ot-recipe', to: 'ot-product', name: 'Produces', cardinality: '1 → N' },
-  { id: 'lt-4', from: 'ot-batch', to: 'ot-recipe', name: 'Brews', cardinality: 'N → 1' },
-  { id: 'lt-5', from: 'ot-batch', to: 'ot-raw-material', name: 'Consumes', cardinality: 'N ↔ N' },
+  { id: 'lt-2', from: 'ot-process', to: 'ot-raw-material', name: 'Consumes', cardinality: 'N ↔ N' },
+  { id: 'lt-3', from: 'ot-process', to: 'ot-product', name: 'Builds', cardinality: '1 → N' },
+  { id: 'lt-4', from: 'ot-batch', to: 'ot-process', name: 'Moves Through', cardinality: 'N → 1' },
+  { id: 'lt-5', from: 'ot-batch', to: 'ot-raw-material', name: 'Uses', cardinality: 'N ↔ N' },
   { id: 'lt-6', from: 'ot-customer', to: 'ot-product', name: 'Demands', cardinality: 'N ↔ N' },
 ]
 
 export const ACTION_TYPES: ActionType[] = [
   { id: 'at-1', name: 'Flag Reorder', objectType: 'ot-raw-material', params: ['materialId', 'qty'], requiresAip: false },
-  { id: 'at-2', name: 'Approve Batch Release', objectType: 'ot-batch', params: ['batchId', 'qaNotes'], requiresAip: true },
-  { id: 'at-3', name: 'Reassign Customer Segment', objectType: 'ot-customer', params: ['customerId', 'segment'], requiresAip: false },
+  { id: 'at-2', name: 'Release Unit To Carrier', objectType: 'ot-batch', params: ['batchId', 'qaNotes'], requiresAip: true },
+  { id: 'at-3', name: 'Reassign Dealer Tier', objectType: 'ot-customer', params: ['customerId', 'segment'], requiresAip: false },
 ]
 
 export const DATASETS = [

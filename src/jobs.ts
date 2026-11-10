@@ -24,15 +24,15 @@ export type Job = {
 const now = () => new Date().toISOString()
 const stamp = () => new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
 
-const SEED: Job[] = [
-  { id: 'job-001', title: 'Reconcile Bureau CSV against ontology', source: 'Import · bureau_cleaned.csv', status: 'progress', owner: 'Berry', due: 'Fri 07 Nov', priority: 'high', tags: ['ontology', 'data-quality'], createdAt: now(),
-    activity: [{ at: stamp(), text: 'Job created from Data Hub import · 1,204 rows' }], attachments: [{ kind: 'dataset', id: 'seed-bureau', label: 'bureau_cleaned.csv', hash: 'a1b2c3d4e5f6', addedAt: now() }] },
-  { id: 'job-002', title: 'Lineage audit — Belgian Ale product family', source: 'Swarm · Lineage Audit', status: 'review', owner: 'Berry', due: 'Wed 05 Nov', priority: 'urgent', tags: ['lineage'], createdAt: now(),
+export const SEED: Job[] = [
+  { id: 'job-001', title: 'Reconcile supplier CSV against ontology', source: 'Import · supplier_parts.csv', status: 'progress', owner: 'Berry', due: 'Fri 13 Nov', priority: 'high', tags: ['ontology', 'data-quality'], createdAt: now(),
+    activity: [{ at: stamp(), text: 'Job created from Data Hub import · 1,204 rows' }], attachments: [{ kind: 'dataset', id: 'seed-supplier', label: 'supplier_parts.csv', hash: 'a1b2c3d4e5f6', addedAt: now() }] },
+  { id: 'job-002', title: 'Lineage audit — Assembly line process family', source: 'Swarm · Lineage Audit', status: 'review', owner: 'Berry', due: 'Wed 11 Nov', priority: 'urgent', tags: ['lineage'], createdAt: now(),
     activity: [{ at: stamp(), text: 'Swarm completed in 4m 12s · 14/14 relations verified' }], attachments: [{ kind: 'trace', id: 'swarm-seed-1', label: 'Lineage Audit run · 4m 12s', addedAt: now() }] },
-  { id: 'job-003', title: 'Draft AIP Logic — demand forecast summarizer', source: 'Preset · AIP Logic Draft', status: 'backlog', owner: 'Unassigned', due: 'Next sprint', priority: 'normal', tags: ['aip', 'llm'], createdAt: now(),
+  { id: 'job-003', title: 'Draft AIP Logic — throughput forecast summarizer', source: 'Preset · AIP Logic Draft', status: 'backlog', owner: 'Unassigned', due: 'Next sprint', priority: 'normal', tags: ['aip', 'llm'], createdAt: now(),
     activity: [{ at: stamp(), text: 'Preset forked · worker claude-sonnet-4-5 assigned' }], attachments: [] },
   { id: 'job-004', title: 'Workshop module review — Order Overview v1.3', source: 'Preset · Workshop Module Review', status: 'done', owner: 'Berry', due: 'Closed', priority: 'low', tags: ['workshop'], createdAt: now(),
-    activity: [{ at: stamp(), text: 'Review passed · published v1.3 · 0 blockers' }], attachments: [{ kind: 'ontology', id: 'ot-product', label: 'Product object type', addedAt: now() }] },
+    activity: [{ at: stamp(), text: 'Review passed · published v1.3 · 0 blockers' }], attachments: [{ kind: 'ontology', id: 'ot-product', label: 'Vehicle Model object type', addedAt: now() }] },
 ]
 
 /** v1→v2 migration: fill attachments/priority defaults. */

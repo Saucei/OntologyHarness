@@ -1,7 +1,7 @@
 # GOALS — Goals & Tasks Tracking
 
 Single index of every remaining goal/task. Update status as slices land (ledger stays `functions.json`).
-Last regen: 2026-11-08 — **105 functions: 86 INAPP / 7 PARTIAL / 12 MISSING**.
+Last regen: 2026-11-10 — **105 functions: 86 INAPP / 7 PARTIAL / 12 MISSING**.
 
 Layers: L0 Model → L1 Application → L2 Ontology → L3 Foundry → L4 FDEs ([layers doc](ARCHITECTURE_LAYERS.md)).
 Harness prerequisites: [HARNESS_CHANGE_MAP.md](HARNESS_CHANGE_MAP.md). Plugins: [ARCHITECTURE_PLUGINS.md](ARCHITECTURE_PLUGINS.md).
@@ -19,6 +19,7 @@ Harness prerequisites: [HARNESS_CHANGE_MAP.md](HARNESS_CHANGE_MAP.md). Plugins: 
 | GOAL-07 | Governance & Peering | FN-GOV-001..003, FN-PEER-001..003 | T-23..T-24 | T-23/T-24 ✅ |
 | GOAL-08 | Scoping & Platform | FN-SCP-001..004, FN-MKT-002/003 | T-25..T-27 | T-25/T-26/T-27 + FN-MKT-001 (T-32) ✅ |
 | GOAL-09 | Functions SDK & corpus-1 closeout | FN-FNS-001..003, FN-AIP-*, FN-ARC-002, FN-DAT-*, FN-VRT-*, FN-ONT-003, FN-BLD-017, FN-FLT-006/007 | T-28..T-32 | T-31/T-32 ✅ |
+| GOAL-10 | Production Line Editing & Re-Seed (user-directed) | FN-ARC-002 canvas, FN-MCH fixtures, ontology/value-type seeds | T-33 | T-33 ✅ |
 
 ## Task index (each task has its own master prompt in `master-prompts/tasks/`)
 
@@ -56,6 +57,7 @@ Harness prerequisites: [HARNESS_CHANGE_MAP.md](HARNESS_CHANGE_MAP.md). Plugins: 
 | T-30 | Vertex Expansion | L2/L3 | FN-VRT-001..007 | `tasks/T-30-vertex-expansion.md` | TODO |
 | T-31 | Data & Link Closeout | L2/L3 | FN-ARC-002, FN-DAT-001/002/003, FN-ONT-003, FN-BLD-017, FN-FLT-006/007 | `tasks/T-31-data-link-closeout.md` | DONE |
 | T-32 | T1 Folder Install (Tauri `%APPDATA%` scan) | L3 | FN-MKT-001 (finish) | `tasks/T-32-plugin-folder-install.md` | DONE |
+| T-33 | Production Line Editor + Automotive Re-Seed (de-brewery) | L2/L3 | FN-ARC-002, FN-MCH-001/002/008 (substrate) | `tasks/T-33-production-line-editor.md` | DONE |
 
 ## Completed (reference)
 

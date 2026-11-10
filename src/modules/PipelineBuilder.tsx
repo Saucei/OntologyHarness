@@ -29,15 +29,15 @@ const PALETTE = [
 ]
 
 const PREVIEW_ROWS = [
-  '| productId | name          | style | abv  |',
-  '| P-0001    | Belgian Ale   | Ale   | 6.2  |',
-  '| P-0002    | IPA           | IPA   | 6.8  |',
-  '| P-0003    | DC Ale        | Ale   | 5.4  |',
-  '| P-0004    | NYC IPA       | IPA   | 7.1  |',
+  '| productId | name          | platform | price |',
+  '| P-0001    | Sedan S1      | S1       | 24900 |',
+  '| P-0002    | Crossover X2  | X2       | 31500 |',
+  '| P-0003    | Sedan S1 EV   | S1-EV    | 33900 |',
+  '| P-0004    | Pickup P1     | P1       | 38200 |',
 ]
 
 /** Columns in the preview table that the Use-LLM node can score. Exported for tests. */
-export const USE_LLM_COLUMNS = ['productId', 'name', 'style', 'abv'] as const
+export const USE_LLM_COLUMNS = ['productId', 'name', 'platform', 'price'] as const
 
 export type UseLlmConfig = {
   context: string

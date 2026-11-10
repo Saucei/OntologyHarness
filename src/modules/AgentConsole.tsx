@@ -50,7 +50,7 @@ import { loadAgentInputs } from '../agent/variables'
 type PendingApproval = ApprovalRequest & { resolve: (ok: boolean) => void }
 
 const SUGGESTIONS = [
-  'What backs the Belgian Ale product, and does its lineage reach Warehouse 1?',
+  'What backs the Final Assembly stage, and does its lineage reach the Distribution Center?',
   'Which reference screenshots show Workshop widget configuration?',
   'List every object type and its backing dataset',
   'Dry-run workshop.publish for the Order Overview module and report',

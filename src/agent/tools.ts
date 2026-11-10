@@ -14,7 +14,7 @@ const DEFAULT_SECTIONS = [
   { id: 3, name: 'Main panel', widgets: [
     { id: 31, kind: 'object-table', label: 'Object Table 1', binding: 'Active object set · renamed: Orders', icon: null },
     { id: 32, kind: 'property-list', label: 'Property List 2', binding: 'Input: Object table 1 Active object', icon: null },
-    { id: 33, kind: 'bar-chart', label: 'Demand by SKU', binding: 'Group by Style · Sum(abv)', icon: null },
+    { id: 33, kind: 'bar-chart', label: 'Units by model', binding: 'Group by Platform · Sum(basePrice)', icon: null },
   ]},
 ]
 
@@ -33,7 +33,7 @@ export type ToolDef = {
 export const TOOLS: ToolDef[] = [
   {
     name: 'graph.query',
-    description: 'Return a lineage subgraph: nodes + edges around a node id/label (fuzzy) or by kind (warehouse|material|recipe|product|customer).',
+    description: 'Return a lineage subgraph: nodes + edges around a node id/label (fuzzy) or by kind (warehouse|material|stage|product|customer).',
     schema: '{ focus?: string, depth?: 1-3, kind?: string }',
     category: 'graph',
     execute: args => {

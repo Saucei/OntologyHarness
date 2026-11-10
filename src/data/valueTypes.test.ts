@@ -10,10 +10,10 @@ describe('validateValue', () => {
     expect(validateValue('ValueType/ProductId', 'XB-441').ok).toBe(false)
   })
 
-  it('ABV respects 0–15 range', () => {
-    expect(validateValue('ValueType/ABV', '6.2').ok).toBe(true)
-    expect(validateValue('ValueType/ABV', '99').ok).toBe(false)
-    expect(validateValue('ValueType/ABV', '-1').ok).toBe(false)
+  it('VIN is 17 chars excluding I/O/Q', () => {
+    expect(validateValue('ValueType/VIN', '1HGCM82633A004352').ok).toBe(true)
+    expect(validateValue('ValueType/VIN', '1HGCM82633A0O4352').ok).toBe(false)
+    expect(validateValue('ValueType/VIN', 'short').ok).toBe(false)
   })
 
   it('unknown types fail closed', () => {
@@ -32,10 +32,10 @@ describe('validateObjectType', () => {
 
   it('seed fixture validates clean', () => {
     const issues = validateObjectType({
-      id: 'ot-product', name: 'Product', backing: 'ontology/product',
+      id: 'ot-product', name: 'Vehicle Model', backing: 'ontology/product',
       properties: [
         { name: 'productId', type: 'ValueType/ProductId', indexed: true },
-        { name: 'abv', type: 'ValueType/ABV', indexed: false },
+        { name: 'vin', type: 'ValueType/VIN', indexed: false },
       ],
     })
     expect(issues.length).toBe(0)

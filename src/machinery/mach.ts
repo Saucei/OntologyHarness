@@ -5,7 +5,7 @@
 // Duration/count fields are additive: Lineage Graph data structures are
 // untouched; machinery graphs carry duration/count as first-class fields.
 
-export type MachineryFixtureId = 'patient-journey' | 'approval-process'
+export type MachineryFixtureId = 'patient-journey' | 'approval-process' | 'assembly-line'
 export type MachineryMetric = 'historical-count' | 'current-count' | 'historical-duration'
 export type MachineryNodeKind = 'state' | 'transition' | 'terminal-state'
 export type NodeTone = 'terminal-ok' | 'sla-breach' | 'sla-warn' | 'in-progress' | 'neutral'
@@ -113,11 +113,53 @@ const approvalProcess: MachineryFixture = {
   },
 }
 
+/** T-33 — researched production line (industry-typical automotive assembly figures). */
+const assemblyLine: MachineryFixture = {
+  id: 'assembly-line',
+  title: 'Assembly Line',
+  subtitle: 'Automotive assembly · unit flow @ ~950/day · industry-typical durations',
+  nodes: [
+    { id: 'stamped', label: 'Stamped Body', kind: 'state', terminal: false, durationHours: 0.5, historicalCount: 1000, currentCount: 42 },
+    { id: 'welded', label: 'Body Weld', kind: 'state', terminal: false, durationHours: 1, historicalCount: 985, currentCount: 38 },
+    { id: 'painted', label: 'Paint Shop', kind: 'state', terminal: false, durationHours: 9.5, historicalCount: 970, currentCount: 51 },
+    { id: 'trimmed', label: 'Trim & Chassis', kind: 'state', terminal: false, durationHours: 1, historicalCount: 960, currentCount: 29 },
+    { id: 'married', label: 'Final Assembly (Marriage)', kind: 'state', terminal: false, durationHours: 1.2, historicalCount: 955, currentCount: 18 },
+    { id: 'tested', label: 'Test & Inspection', kind: 'state', terminal: false, durationHours: 0.3, historicalCount: 952, currentCount: 12 },
+    { id: 'shipped', label: 'Shipped', kind: 'terminal-state', terminal: true, durationHours: null, historicalCount: 950, currentCount: 950 },
+    { id: 'paint-rework', label: 'Paint Rework', kind: 'state', terminal: false, durationHours: 3.2, historicalCount: 38, currentCount: 5 },
+    { id: 'repair-bay', label: 'Repair Bay', kind: 'state', terminal: false, durationHours: 1.5, historicalCount: 19, currentCount: 2 },
+  ],
+  edges: [
+    { id: 'e-stamp-weld', source: 'stamped', target: 'welded', durationHours: 0.3, count: 985 },
+    { id: 'e-weld-paint', source: 'welded', target: 'painted', durationHours: 0.5, count: 970 },
+    { id: 'e-paint-trim', source: 'painted', target: 'trimmed', durationHours: 9.5, count: 932 },
+    { id: 'e-trim-marry', source: 'trimmed', target: 'married', durationHours: 0.2, count: 955 },
+    { id: 'e-marry-test', source: 'married', target: 'tested', durationHours: 0.25, count: 952 },
+    { id: 'e-test-ship', source: 'tested', target: 'shipped', durationHours: 0.1, count: 950 },
+    { id: 'e-paint-rework', source: 'painted', target: 'paint-rework', durationHours: 3.2, count: 38 },
+    { id: 'e-rework-trim', source: 'paint-rework', target: 'trimmed', durationHours: 1, count: 38 },
+    { id: 'e-test-repair', source: 'tested', target: 'repair-bay', durationHours: 0.5, count: 19 },
+    { id: 'e-repair-trim', source: 'repair-bay', target: 'trimmed', durationHours: 0.5, count: 19 },
+  ],
+  positions: {
+    stamped: { x: 0, y: 140 },
+    welded: { x: 300, y: 140 },
+    painted: { x: 600, y: 140 },
+    trimmed: { x: 900, y: 140 },
+    married: { x: 1200, y: 140 },
+    tested: { x: 1500, y: 140 },
+    shipped: { x: 1800, y: 140 },
+    'paint-rework': { x: 600, y: 400 },
+    'repair-bay': { x: 1350, y: 400 },
+  },
+}
+
 export const FIXTURES: Record<MachineryFixtureId, MachineryFixture> = {
   'patient-journey': patientJourney,
   'approval-process': approvalProcess,
+  'assembly-line': assemblyLine,
 }
-export const FIXTURE_LIST: MachineryFixture[] = [patientJourney, approvalProcess]
+export const FIXTURE_LIST: MachineryFixture[] = [patientJourney, approvalProcess, assemblyLine]
 
 export function getFixture(id: MachineryFixtureId): MachineryFixture {
   return FIXTURES[id]
@@ -136,16 +178,22 @@ export function formatDays(v: number | null | undefined): string {
   return `${d} ${d === 1 ? 'day' : 'days'}`
 }
 
+/** Edge pills. Sub-day durations read as HRS/MIN (T-33 production line) instead of "0 DAYS". */
 export function formatEdgeDays(v: number | null | undefined): string {
   if (v === null || v === undefined || Number.isNaN(v)) return '--'
-  return `${Math.round(v)} DAYS`
+  const hours = v * 24
+  if (hours >= 48) return `${Math.round(v)} DAYS`
+  if (hours >= 1) return `${Math.round(hours * 10) / 10} HRS`
+  return `${Math.max(1, Math.round(hours * 60))} MIN`
 }
 
-/** Approval zoom cards: "1d 19h", "32d 7h"; falls back to days when hours absent. */
+/** Approval zoom cards: "1d 19h", "32d 7h"; sub-hour shows minutes (T-33). */
 export function formatDurationHours(hours: number | null | undefined, days?: number | null): string {
   if (hours !== null && hours !== undefined && !Number.isNaN(hours)) {
-    const d = Math.floor(hours / 24)
-    const h = Math.round(hours - d * 24)
+    if (hours < 1) return `${Math.max(1, Math.round(hours * 60))} min`
+    const hv = Math.round(hours * 10) / 10
+    const d = Math.floor(hv / 24)
+    const h = Math.round((hv - d * 24) * 10) / 10
     if (d === 0) return `${h}h`
     return `${d}d ${h}h`
   }

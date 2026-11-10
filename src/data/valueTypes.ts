@@ -12,7 +12,7 @@ export type ValueType = {
 }
 
 export const VALUE_TYPES: ValueType[] = [
-  { id: 'String', label: 'String', description: 'Free text', kind: 'primitive', sample: 'Belgian Ale' },
+  { id: 'String', label: 'String', description: 'Free text', kind: 'primitive', sample: 'Steel Coil HRC' },
   { id: 'Integer', label: 'Integer', description: 'Whole numbers', kind: 'primitive', pattern: /^-?\d+$/, sample: '40' },
   { id: 'Decimal', label: 'Decimal', description: 'Floating point', kind: 'primitive', pattern: /^-?\d+(\.\d+)?$/, sample: '6.2' },
   { id: 'Boolean', label: 'Boolean', description: 'true / false', kind: 'primitive', pattern: /^(true|false)$/i, sample: 'true' },
@@ -21,11 +21,11 @@ export const VALUE_TYPES: ValueType[] = [
   { id: 'ValueType/Geohash', label: 'Geohash', description: 'geohash · 1–12 chars, base32 excl a/i/l/o', kind: 'constrained', pattern: /^[0-9b-hjkmnp-z]{1,12}$/i, sample: 'dqcjq' },
   { id: 'ValueType/WarehouseId', label: 'WarehouseId', description: 'WH-### · three digits', kind: 'constrained', pattern: /^WH-\d{3}$/, sample: 'WH-001' },
   { id: 'ValueType/MaterialId', label: 'MaterialId', description: 'MAT-#### · four digits', kind: 'constrained', pattern: /^MAT-\d{4}$/, sample: 'MAT-1042' },
-  { id: 'ValueType/RecipeId', label: 'RecipeId', description: 'R-4 alphanumerics', kind: 'constrained', pattern: /^R-[A-Z0-9]{4}$/, sample: 'R-A4F2' },
+  { id: 'ValueType/StageId', label: 'StageId', description: 'STG-### · three digits', kind: 'constrained', pattern: /^STG-\d{3}$/, sample: 'STG-030' },
   { id: 'ValueType/ProductId', label: 'ProductId', description: 'P-#### · four digits', kind: 'constrained', pattern: /^P-\d{4}$/, sample: 'P-0001' },
   { id: 'ValueType/CustomerId', label: 'CustomerId', description: 'C-#### · four digits', kind: 'constrained', pattern: /^C-\d{4}$/, sample: 'C-0030' },
   { id: 'ValueType/BatchId', label: 'BatchId', description: 'B-#### · four digits', kind: 'constrained', pattern: /^B-\d{4}$/, sample: 'B-1842' },
-  { id: 'ValueType/ABV', label: 'ABV', description: 'Alcohol by volume · 0–15', kind: 'constrained', min: 0, max: 15, pattern: /^\d+(\.\d+)?$/, sample: '6.2' },
+  { id: 'ValueType/VIN', label: 'VIN', description: '17 chars, excluding I/O/Q', kind: 'constrained', pattern: /^[A-HJ-NPR-Z0-9]{17}$/, sample: '1HGCM82633A004352' },
 ]
 
 export const PRIMITIVES = VALUE_TYPES.filter(t => t.kind === 'primitive')

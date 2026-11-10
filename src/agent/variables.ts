@@ -758,7 +758,7 @@ export const SEARCH_DIRECTIONS: Array<{ id: SearchDirection; label: string }> = 
 export const GRAPH_NODE_KINDS: Array<{ id: string; label: string }> = [
   { id: 'warehouse', label: 'Warehouse' },
   { id: 'material', label: 'Material' },
-  { id: 'recipe', label: 'Recipe' },
+  { id: 'stage', label: 'Process Stage' },
   { id: 'product', label: 'Product' },
   { id: 'customer', label: 'Customer' },
 ]
@@ -838,7 +838,7 @@ export function defaultFilterConfig(): FilterConfig {
 }
 
 export function defaultSearchAroundConfig(): SearchAroundConfig {
-  return { direction: 'outgoing', depth: 1, targetKind: 'recipe' }
+  return { direction: 'outgoing', depth: 1, targetKind: 'stage' }
 }
 
 export function createChainStep(
@@ -853,7 +853,7 @@ export function createChainStep(
       config: {
         direction: isSearchDirection(cfg.direction) ? cfg.direction! : 'outgoing',
         depth: typeof cfg.depth === 'number' && Number.isFinite(cfg.depth) ? Math.min(MAX_CHAIN_DEPTH, Math.max(MIN_CHAIN_DEPTH, Math.floor(cfg.depth))) : 1,
-        targetKind: typeof cfg.targetKind === 'string' ? cfg.targetKind : 'recipe',
+        targetKind: typeof cfg.targetKind === 'string' ? cfg.targetKind : 'stage',
       },
     }
   }
@@ -878,14 +878,14 @@ export function createVariableChain(partial: Partial<VariableChain> = {}): Varia
   }
 }
 
-/** Seeded chain: materials → linked recipes, so a fresh drawer shows a valid, runnable chain. */
+/** Seeded chain: materials → linked stages, so a fresh drawer shows a valid, runnable chain. */
 export function defaultVariableChain(): VariableChain {
   return {
-    id: 'chain-material-recipes',
-    name: 'materialRecipes',
+    id: 'chain-material-stages',
+    name: 'materialStages',
     steps: [
       { id: 'chain-step-filter-1', type: 'filter', config: { field: 'kind', operator: 'equals', value: 'material' } },
-      { id: 'chain-step-search-1', type: 'searchAround', config: { direction: 'outgoing', depth: 1, targetKind: 'recipe' } },
+      { id: 'chain-step-search-1', type: 'searchAround', config: { direction: 'outgoing', depth: 1, targetKind: 'stage' } },
     ],
   }
 }
@@ -980,7 +980,7 @@ export function deriveChainStepOutputs(chain: VariableChain): string[] {
   return steps.map((_, i) => deriveChainOutput(steps.slice(0, i + 1)))
 }
 
-/** One-line chip text for the chain header, e.g. "materialRecipes → ObjectSet(recipe) · 2 steps". */
+/** One-line chip text for the chain header, e.g. "materialStages → ObjectSet(stage) · 2 steps". */
 export function chainOutputSummary(chain: VariableChain): string {
   const output = deriveChainOutput(chain?.steps ?? [])
   return `${chain?.name ?? 'chain'} → ${output} · ${(chain?.steps ?? []).length} step(s)`
@@ -1205,7 +1205,7 @@ function sanitizeChainStep(raw: any): ChainStep | null {
       config: {
         direction: isSearchDirection(c.direction) ? c.direction : 'outgoing',
         depth,
-        targetKind: typeof c.targetKind === 'string' ? c.targetKind : 'recipe',
+        targetKind: typeof c.targetKind === 'string' ? c.targetKind : 'stage',
       },
     }
   }

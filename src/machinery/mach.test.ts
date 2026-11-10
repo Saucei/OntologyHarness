@@ -86,7 +86,7 @@ describe('metric carousel (FN-MCH-002)', () => {
     expect(formatNodeMetricValue(draft, 'historical-duration')).toBe('1d 19h')
     const edge = f.edges.find(e => e.id === 'e-draft-submitted')!
     expect(formatEdgeMetricValue(edge, 'historical-count')).toBe('175')
-    expect(formatEdgeMetricValue(edge, 'historical-duration')).toBe('2 DAYS')
+    expect(formatEdgeMetricValue(edge, 'historical-duration')).toBe('39 HRS')
     const patientEdge = getFixture('patient-journey').edges.find(e => e.id === 'e-booked-attended')!
     expect(formatEdgeMetricValue(patientEdge, 'historical-duration')).toBe('40 DAYS')
     expect(formatEdgeMetricValue(patientEdge, 'historical-count')).toBe('1,210')

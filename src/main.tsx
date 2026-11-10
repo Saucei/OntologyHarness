@@ -10,9 +10,11 @@ import '@fontsource/ibm-plex-mono/500.css'
 import './tokens.css'
 import './app.css'
 import { initWorkspace } from './store'
+import { runSeedMigration } from './data/seedMigration'
 
 // Hydrate the workspace (SQLite via Rust / localStorage in browser) before first paint.
 initWorkspace().finally(() => {
+  runSeedMigration()
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <App />

@@ -12,26 +12,26 @@ const { validateWorkshop } = await import('../src/workshop/validate.ts')
 const { retrieve } = await import('../src/aip/retrieval.ts')
 
 // 1. Round-trip hash (Stage 2 Slice 1 acceptance)
-const BREWERY = {
-  columns: [{ name: 'sku', type: 'string' }, { name: 'style', type: 'string' }, { name: 'demand_bbl', type: 'number' }],
+const UNITS = {
+  columns: [{ name: 'unit_id', type: 'string' }, { name: 'model_id', type: 'string' }, { name: 'stage_id', type: 'string' }],
   rows: [
-    { sku: 'P-0001', style: 'Belgian Ale', demand_bbl: 220 },
-    { sku: 'P-0002', style: 'IPA', demand_bbl: 211 },
-    { sku: 'P-0003', style: 'DC Ale', demand_bbl: 158 },
+    { unit_id: 'U-0001', model_id: 'P-0001', stage_id: 'STG-060' },
+    { unit_id: 'U-0002', model_id: 'P-0002', stage_id: 'STG-050' },
+    { unit_id: 'U-0003', model_id: 'P-0001', stage_id: 'STG-060' },
   ],
 }
-const before = await datasetHash(BREWERY)
-const after = await datasetHash({ columns: BREWERY.columns, rows: [...BREWERY.rows].reverse() })
+const before = await datasetHash(UNITS)
+const after = await datasetHash({ columns: UNITS.columns, rows: [...UNITS.rows].reverse() })
 check('Round-trip: CSV hash stable across row permutations', before === after, before.slice(0, 12))
-check('Round-trip: diffSummary equal on clone', diffSummary(BREWERY, BREWERY).equal)
-check('Canonical: deterministic string', canonicalize(BREWERY) === canonicalize({ ...BREWERY, rows: [...BREWERY.rows].reverse() }))
+check('Round-trip: diffSummary equal on clone', diffSummary(UNITS, UNITS).equal)
+check('Canonical: deterministic string', canonicalize(UNITS) === canonicalize({ ...UNITS, rows: [...UNITS.rows].reverse() }))
 
 // 2. Ontology validation (Slice 1)
 const issues = validateObjectType({
-  id: 'ot-product', name: 'Product', backing: 'ontology/product',
-  properties: [{ name: 'productId', type: 'ValueType/ProductId', indexed: true }, { name: 'abv', type: 'ValueType/ABV', indexed: false }],
+  id: 'ot-product', name: 'Vehicle Model', backing: 'ontology/product',
+  properties: [{ name: 'productId', type: 'ValueType/ProductId', indexed: true }, { name: 'vin', type: 'ValueType/VIN', indexed: false }],
 })
-check('Ontology: seed product schema validates clean', issues.length === 0, `${issues.length} issues`)
+check('Ontology: seed vehicle-model schema validates clean', issues.length === 0, `${issues.length} issues`)
 const badType = validateObjectType({ id: 'x', name: 'X', backing: 'derived/x', properties: [{ name: 'a', type: 'nope/Foo', indexed: true }] })
 check('Ontology: unknown value type blocked', badType.some(i => /unknown value type/.test(i.message)))
 

@@ -283,43 +283,43 @@ describe('pre-computed variables + templates (FN-AST-002)', () => {
 
 describe('variable operation chains (FN-AST-003)', () => {
   const nodes = [
-    { id: 'wh', label: 'Warehouse 1', kind: 'warehouse' },
-    { id: 'malt', label: 'Malt', kind: 'material' },
-    { id: 'hops', label: 'Hops', kind: 'material' },
-    { id: 'nyc-ale', label: 'NYC Ale', kind: 'recipe' },
-    { id: 'cust', label: '30 Customers', kind: 'customer' },
+    { id: 'wh', label: 'Distribution Center', kind: 'warehouse' },
+    { id: 'steel', label: 'Steel Coil', kind: 'material' },
+    { id: 'resin', label: 'Polymer Resin', kind: 'material' },
+    { id: 'weld', label: 'Body Weld', kind: 'stage' },
+    { id: 'cust', label: '60 Dealers', kind: 'customer' },
   ]
   const edges = [
-    { id: 'e1', source: 'wh', target: 'malt' },
-    { id: 'e2', source: 'wh', target: 'hops' },
-    { id: 'e3', source: 'malt', target: 'nyc-ale' },
-    { id: 'e4', source: 'hops', target: 'nyc-ale' },
-    { id: 'e5', source: 'nyc-ale', target: 'cust' },
+    { id: 'e1', source: 'wh', target: 'steel' },
+    { id: 'e2', source: 'wh', target: 'resin' },
+    { id: 'e3', source: 'steel', target: 'weld' },
+    { id: 'e4', source: 'resin', target: 'weld' },
+    { id: 'e5', source: 'weld', target: 'cust' },
   ]
 
   it('evaluates Filter predicates + SearchAround link traversal (pure)', () => {
     const chain = {
-      name: 'materialRecipes',
+      name: 'materialStages',
       steps: [
         { id: 's1', type: 'filter' as const, config: { field: 'kind', operator: 'equals' as const, value: 'material' } },
-        { id: 's2', type: 'searchAround' as const, config: { direction: 'outgoing' as const, depth: 1, targetKind: 'recipe' } },
+        { id: 's2', type: 'searchAround' as const, config: { direction: 'outgoing' as const, depth: 1, targetKind: 'stage' } },
       ],
     }
     const result = evaluateChain(chain, nodes, nodes, edges)
-    expect(result.map(o => o.id)).toEqual(['nyc-ale'])
-    expect(deriveChainOutput(chain.steps)).toBe('ObjectSet(recipe)')
-    expect(deriveChainStepOutputs(chain)).toEqual(['ObjectSet', 'ObjectSet(recipe)'])
-    expect(chainOutputSummary(chain)).toBe('materialRecipes → ObjectSet(recipe) · 2 step(s)')
+    expect(result.map(o => o.id)).toEqual(['weld'])
+    expect(deriveChainOutput(chain.steps)).toBe('ObjectSet(stage)')
+    expect(deriveChainStepOutputs(chain)).toEqual(['ObjectSet', 'ObjectSet(stage)'])
+    expect(chainOutputSummary(chain)).toBe('materialStages → ObjectSet(stage) · 2 step(s)')
 
     // Label-contains predicate + incoming traversal.
     const labelChain = {
       name: 'warehouseNeighbours',
       steps: [
-        { id: 's1', type: 'filter' as const, config: { field: 'label', operator: 'contains' as const, value: 'warehouse' } },
+        { id: 's1', type: 'filter' as const, config: { field: 'label', operator: 'contains' as const, value: 'distribution' } },
         { id: 's2', type: 'searchAround' as const, config: { direction: 'outgoing' as const, depth: 1, targetKind: '' } },
       ],
     }
-    expect(evaluateChain(labelChain, nodes, nodes, edges).map(o => o.id).sort()).toEqual(['hops', 'malt'])
+    expect(evaluateChain(labelChain, nodes, nodes, edges).map(o => o.id).sort()).toEqual(['resin', 'steel'])
     expect(deriveChainOutput(labelChain.steps)).toBe('ObjectSet')
   })
 
@@ -361,7 +361,7 @@ describe('variable operation chains (FN-AST-003)', () => {
     const removed = removeChainStep(moved, moved.steps[0].id)
     expect(removed.steps).toHaveLength(added.steps.length - 1)
 
-    const renamed = { ...removed, name: 'materialRecipes' }
+    const renamed = { ...removed, name: 'materialStages' }
     const patched = updateChainStepFilter(renamed, removed.steps[0].id, { operator: 'contains' })
     expect(patched.steps[0].type).toBe('filter')
 
@@ -370,7 +370,7 @@ describe('variable operation chains (FN-AST-003)', () => {
 
     saveVariableChains([patched])
     expect(ws.meta[CHAINS_META_KEY]).toEqual([patched])
-    expect(loadVariableChains()[0].name).toBe('materialRecipes')
+    expect(loadVariableChains()[0].name).toBe('materialStages')
     expect(loadVariableChains()[0].steps[0].type).toBe('filter')
 
     // Corrupt persisted rows are sanitised on load.

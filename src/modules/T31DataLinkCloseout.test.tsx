@@ -62,14 +62,14 @@ const sampleDataset: any = {
   provenance: 'csv:sample.csv',
   hash: 'a'.repeat(64),
   columns: [
-    { name: 'Product Name', type: 'string' },
+    { name: 'Model Name', type: 'string' },
     { name: 'qty', type: 'number' },
-    { name: 'brew_date', type: 'string' },
+    { name: 'build_date', type: 'string' },
   ],
   rows: [
-    { 'Product Name': 'Belgian Ale', qty: 3, brew_date: '2026-01-02' },
-    { 'Product Name': '', qty: 0, brew_date: '2026-01-03' },
-    { 'Product Name': 'IPA', qty: 7, brew_date: '2026-01-04' },
+    { 'Model Name': 'Sedan S1', qty: 3, build_date: '2026-01-02' },
+    { 'Model Name': '', qty: 0, build_date: '2026-01-03' },
+    { 'Model Name': 'Crossover X2', qty: 7, build_date: '2026-01-04' },
   ],
 }
 
@@ -81,14 +81,14 @@ describe('DataHub clean/union/deploy helpers (FN-DAT-001/002/003)', () => {
       filterNotNull: true,
       dropColumns: ['qty'],
       renames: {},
-      castTimestampColumns: ['brew_date'],
+      castTimestampColumns: ['build_date'],
     })
-    expect(res.dataset.columns.map(c => c.name)).toEqual(['Product_Name', 'brew_date'])
-    expect(res.dataset.columns.find(c => c.name === 'brew_date')?.type).toBe('date')
+    expect(res.dataset.columns.map(c => c.name)).toEqual(['Model_Name', 'build_date'])
+    expect(res.dataset.columns.find(c => c.name === 'build_date')?.type).toBe('date')
     expect(res.dataset.rows.length).toBe(2)
     expect(res.droppedRows).toBe(1)
     expect(res.droppedCols).toBe(1)
-    expect(res.dataset.rows[0].brew_date).toMatch(/^2026-01-02/)
+    expect(res.dataset.rows[0].build_date).toMatch(/^2026-01-02/)
   })
 
   it('buildUnionPreview merges schema and caps preview rows; deploy validation + profile guard', () => {
@@ -97,7 +97,7 @@ describe('DataHub clean/union/deploy helpers (FN-DAT-001/002/003)', () => {
     expect(preview.colCount).toBe(3)
     expect(preview.previewRows.length).toBe(3)
     expect(validateDeployConfig(null, [], 'standard').length).toBeGreaterThan(0)
-    expect(validateDeployConfig(sampleDataset, ['Product Name'], 'standard')).toEqual([])
+    expect(validateDeployConfig(sampleDataset, ['Model Name'], 'standard')).toEqual([])
     const prof = computeDeployProfile(sampleDataset)
     expect(prof.rowCount).toBe(3)
     expect(prof.colCount).toBe(3)
@@ -152,7 +152,7 @@ describe('OntologyStudio link/favorites/filter helpers (FN-ONT-003, FN-BLD-017, 
     expect(star.getAttribute('aria-pressed')).toBe('true')
     fireEvent.click(screen.getByTestId('star-view-favorites'))
     expect(screen.getByTestId('star-view-favorites').textContent).toContain('Favorites')
-    expect(screen.queryByTestId('star-ot-recipe')).toBeNull()
+    expect(screen.queryByTestId('star-ot-process')).toBeNull()
     expect(ws.traces.some(t => t.tool === 'ontology.favorite.toggle')).toBe(true)
     expect(readAudit().some(a => a.event === 'ontology.favorite.toggle')).toBe(true)
   })

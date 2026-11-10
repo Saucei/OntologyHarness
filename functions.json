@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-11-08T14:01:08.535Z",
+  "generatedAt": "2026-11-10T10:51:29.263Z",
   "registry": [
     {
       "id": "FN-ARC-001",
@@ -77,7 +77,7 @@
     {
       "id": "FN-ONT-001",
       "family": "ontology-layer",
-      "name": "Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId regex + ABV range)",
+      "name": "Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId/StageId regex + VIN pattern)",
       "breadth": 3,
       "depth": 6,
       "reach": 3,

@@ -18,14 +18,14 @@ const validCorpusManifest = {
 describe('T1 pack loader', () => {
   const units = loadPacks()
 
-  it('discovers the 4 proof packs, all valid', () => {
+  it('discovers the 3 proof packs, all valid', () => {
     const ids = units.map(u => u.manifest.id)
     expect(ids).toContain('theme-cream-glass')
-    expect(ids).toContain('presets-brewery')
     expect(ids).toContain('corpus-134')
     expect(ids).toContain('corpus-2')
+    expect(ids).not.toContain('presets-brewery')
     for (const u of units) {
-      if (ids.includes('theme-cream-glass') || ids.includes('presets-brewery') || ids.includes('corpus-134') || ids.includes('corpus-2')) {
+      if (ids.includes('theme-cream-glass') || ids.includes('corpus-134') || ids.includes('corpus-2')) {
         expect(u.valid, `${u.manifest.id} should validate: ${u.issues.join(' | ')}`).toBe(true)
       }
     }
@@ -43,11 +43,22 @@ describe('T1 pack loader', () => {
     expect(packDataEntryCount(c2!)).toBe(72)
   })
 
-  it('presets pack payload passes validatePreset', () => {
-    const brew = units.find(u => u.manifest.id === 'presets-brewery')!
-    const presets = packPresets([brew])
-    expect(presets.length).toBe(3)
-    for (const p of presets) expect(validatePreset(p).ok, validatePreset(p).errors.join(',')).toBe(true)
+  it('registered presets pack payload passes validatePreset', () => {
+    const manifest = {
+      id: 'presets-ops', name: 'Ops Presets', version: '1.0.0', kind: 'presets', api: '^1.0',
+      description: 'synthetic presets pack for loader tests',
+      presets: [{
+        id: 'preset-qa', name: 'QA Reviewer',
+        systemPrompt: 'You are a meticulous QA reviewer for production datasets.',
+        userTemplate: 'Review {{DATASET}} and answer {{QUESTION}} with citations.',
+        tools: ['ontology.query'], workerId: 'w-qa',
+      }],
+    }
+    const ok = registerCustomPack(JSON.stringify(manifest), 'pasted')
+    expect(ok.ok).toBe(true)
+    const presets = packPresets([ok.unit!])
+    expect(presets.length).toBe(1)
+    expect(validatePreset(presets[0]).ok, validatePreset(presets[0]).errors.join(',')).toBe(true)
   })
 
   it('theme pack lint: tokens-only CSS across both modes', () => {

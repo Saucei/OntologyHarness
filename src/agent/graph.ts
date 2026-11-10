@@ -1,38 +1,39 @@
 // Single source of truth for the production-line graph — used by GraphCanvas (render)
-// AND agent tools (query/reason). In a real deployment this is derived from the store;
-// here it's the curated seed mirroring vertex_overview-system_graph.png.
+// AND agent tools (query/reason). T-33: automotive assembly line with industry-typical
+// figures (stamping 4 s/panel · ~4,800 spot welds/body · paint oven 9.5 h · takt 58 s).
 
-export type GraphNode = { id: string; label: string; sub: string; kind: 'warehouse' | 'material' | 'recipe' | 'product' | 'customer' }
+export type GraphNode = { id: string; label: string; sub: string; icon: string; kind: 'warehouse' | 'material' | 'stage' | 'product' | 'customer' }
 export type GraphEdge = { id: string; source: string; target: string; label: string; weight: number }
 
 export const GRAPH_NODES: GraphNode[] = [
-  { id: 'wh', label: 'Warehouse 1', sub: 'Warehouse · 3 sites', kind: 'warehouse' },
-  { id: 'malt', label: 'Malt', sub: 'Raw Material · $1.94/lb', kind: 'material' },
-  { id: 'hops', label: 'Hops', sub: 'Raw Material · $11.2/lb', kind: 'material' },
-  { id: 'corn', label: 'Corn', sub: 'Raw Material · $0.71/lb', kind: 'material' },
-  { id: 'nyc-ale', label: 'NYC Ale', sub: 'Recipe · 40 bbl', kind: 'recipe' },
-  { id: 'dc-ale', label: 'DC Ale', sub: 'Recipe · 39 bbl', kind: 'recipe' },
-  { id: 'pit-ale', label: 'PIT Ale', sub: 'Recipe · 40 bbl', kind: 'recipe' },
-  { id: 'nyc-ipa', label: 'NYC IPA', sub: 'Recipe · 36 bbl', kind: 'recipe' },
-  { id: 'pit-ipa', label: 'PIT IPA', sub: 'Recipe · 34 bbl', kind: 'recipe' },
-  { id: 'dc-ipa', label: 'DC IPA', sub: 'Recipe · 35 bbl', kind: 'recipe' },
-  { id: 'belgian', label: 'Belgian Ale', sub: 'Product · 220.77 bbl demand', kind: 'product' },
-  { id: 'ipa', label: 'IPA', sub: 'Product · 211.18 bbl demand', kind: 'product' },
-  { id: 'cust', label: '30 Customers', sub: 'Customer · IMPRESSIONS segment', kind: 'customer' },
+  { id: 'wh', label: 'Distribution Center', sub: 'Warehouse · 3 regions', icon: '🏭', kind: 'warehouse' },
+  { id: 'steel', label: 'Steel Coil', sub: 'Raw Material · $0.92/lb', icon: '🧱', kind: 'material' },
+  { id: 'resin', label: 'Polymer Resin', sub: 'Raw Material · $1.35/lb', icon: '🧪', kind: 'material' },
+  { id: 'stamping', label: 'Stamping Cell', sub: 'Process · 4 s/panel · STG-010', icon: '⚙️', kind: 'stage' },
+  { id: 'weld', label: 'Body Weld', sub: 'Process · ~4,800 spot welds/body · STG-020', icon: '🤖', kind: 'stage' },
+  { id: 'paint', label: 'Paint Shop', sub: 'Process · e-coat + oven 9.5 h · STG-030', icon: '🎨', kind: 'stage' },
+  { id: 'trim', label: 'Trim & Chassis', sub: 'Process · takt 58 s · STG-040', icon: '🔧', kind: 'stage' },
+  { id: 'marriage', label: 'Final Assembly (Marriage)', sub: 'Process · takt 60 s · STG-050', icon: '🚗', kind: 'stage' },
+  { id: 'test', label: 'Test & Inspection', sub: 'Process · 15 min/unit · STG-060', icon: '✅', kind: 'stage' },
+  { id: 'model-a', label: 'Sedan S1', sub: 'Vehicle Model · 41.8k units/yr', icon: '🚙', kind: 'product' },
+  { id: 'model-b', label: 'Crossover X2', sub: 'Vehicle Model · 38.2k units/yr', icon: '🚐', kind: 'product' },
+  { id: 'cust', label: '60 Dealers', sub: 'Dealer Network · Midwest region', icon: '🧑‍💼', kind: 'customer' },
 ]
 
 export const GRAPH_EDGES: GraphEdge[] = [
-  { id: 'e1', source: 'wh', target: 'malt', label: '37', weight: 4 },
-  { id: 'e2', source: 'wh', target: 'hops', label: '3/39', weight: 3 },
-  { id: 'e3', source: 'wh', target: 'corn', label: '7', weight: 1.5 },
-  { id: 'e4', source: 'malt', target: 'nyc-ale', label: '', weight: 3 }, { id: 'e5', source: 'malt', target: 'dc-ale', label: '', weight: 3 },
-  { id: 'e6', source: 'malt', target: 'pit-ale', label: '', weight: 4 }, { id: 'e7', source: 'malt', target: 'nyc-ipa', label: '', weight: 3 }, { id: 'e8', source: 'malt', target: 'dc-ipa', label: '', weight: 2 },
-  { id: 'e9', source: 'hops', target: 'nyc-ale', label: '', weight: 1 }, { id: 'e10', source: 'hops', target: 'dc-ale', label: '', weight: 1 }, { id: 'e11', source: 'hops', target: 'pit-ale', label: '', weight: 1 },
-  { id: 'e12', source: 'hops', target: 'nyc-ipa', label: '', weight: 1 }, { id: 'e13', source: 'hops', target: 'pit-ipa', label: '', weight: 1 }, { id: 'e14', source: 'hops', target: 'dc-ipa', label: '', weight: 1 },
-  { id: 'e15', source: 'corn', target: 'nyc-ale', label: '', weight: 1.5 }, { id: 'e16', source: 'corn', target: 'pit-ipa', label: '', weight: 1.5 },
-  { id: 'e17', source: 'nyc-ale', target: 'belgian', label: '2 Recipes', weight: 1 }, { id: 'e18', source: 'dc-ale', target: 'belgian', label: '2 Recipes', weight: 3 }, { id: 'e19', source: 'pit-ale', target: 'belgian', label: '2 Recipes', weight: 3 },
-  { id: 'e20', source: 'nyc-ipa', target: 'ipa', label: '2 Recipes', weight: 1 }, { id: 'e21', source: 'pit-ipa', target: 'ipa', label: '2 Recipes', weight: 1 }, { id: 'e22', source: 'dc-ipa', target: 'ipa', label: '2 Recipes', weight: 1 },
-  { id: 'e23', source: 'belgian', target: 'cust', label: '220.77', weight: 5 }, { id: 'e24', source: 'ipa', target: 'cust', label: '211.18', weight: 3 },
+  { id: 'e1', source: 'wh', target: 'steel', label: 'reorder @ 40', weight: 4 },
+  { id: 'e2', source: 'wh', target: 'resin', label: 'reorder @ 25', weight: 2 },
+  { id: 'e3', source: 'steel', target: 'stamping', label: '210 coils/day', weight: 4 },
+  { id: 'e4', source: 'stamping', target: 'weld', label: '5 panels/body', weight: 3 },
+  { id: 'e5', source: 'weld', target: 'paint', label: '1 body/min', weight: 3 },
+  { id: 'e6', source: 'paint', target: 'trim', label: '9.5 h oven', weight: 4 },
+  { id: 'e7', source: 'trim', target: 'marriage', label: '58 s takt', weight: 3 },
+  { id: 'e8', source: 'marriage', target: 'test', label: '60 s takt', weight: 3 },
+  { id: 'e9', source: 'resin', target: 'trim', label: '38 kg/unit', weight: 1.5 },
+  { id: 'e10', source: 'test', target: 'model-a', label: '41.8k/yr', weight: 3 },
+  { id: 'e11', source: 'test', target: 'model-b', label: '38.2k/yr', weight: 3 },
+  { id: 'e12', source: 'model-a', target: 'cust', label: 'dealer orders', weight: 3 },
+  { id: 'e13', source: 'model-b', target: 'cust', label: 'dealer orders', weight: 3 },
 ]
 
 export type GraphSlice = { nodes: GraphNode[]; edges: GraphEdge[]; focus: string | null }

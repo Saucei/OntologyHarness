@@ -43,7 +43,7 @@ describe('computePendingChanges (FN-GOV-001 review)', () => {
     const pending = computePendingChanges(base, cur)
     const kinds = pending.map(p => p.kind).sort()
     expect(kinds).toEqual(['add', 'delete', 'edit', 'rename'])
-    expect(pending.find(p => p.kind === 'rename')?.label).toContain('Warehouse')
+    expect(pending.find(p => p.kind === 'rename')?.label).toContain('Distribution Center')
     expect(pending.find(p => p.kind === 'add')?.id).toBe('ot-new-x')
   })
 })

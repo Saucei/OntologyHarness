@@ -8,7 +8,7 @@ import { EMPTY_SELECTION } from '../cop/facetEngine'
 import type { FacetSelection } from '../cop/facetEngine'
 
 const PTS: MapPoint[] = [
-  { id: 'a', label: 'Alpha Site', point: { lat: 40.7128, lng: -74.006 }, value: 10, category: 'Recipe', status: 'Successful', date: '2025-10-01T00:00:00Z' },
+  { id: 'a', label: 'Alpha Site', point: { lat: 40.7128, lng: -74.006 }, value: 10, category: 'Stage', status: 'Successful', date: '2025-10-01T00:00:00Z' },
   { id: 'b', label: 'Bravo Site', point: { lat: 38.9, lng: -77.03 }, value: 30, category: 'Raw Material', status: 'Cancelled', date: '2025-10-05T00:00:00Z' },
   { id: 'c', label: 'Charlie Site', point: { lat: 41.87, lng: -87.62 }, value: 8, category: 'Customer', status: 'Diverted', date: '2025-10-07T00:00:00Z' },
 ]
@@ -33,8 +33,8 @@ describe('T-20 facet rail + histogram + map-table linkage', () => {
     expect(screen.getByTestId('facet-rail')).toBeTruthy()
     expect(screen.getByTestId('histogram-brush')).toBeTruthy()
     expect(screen.getByTestId('cop-table')).toBeTruthy()
-    // count badges: Recipe=1, Raw Material=1, Customer=1
-    expect(screen.getByTestId('facet-categories-Recipe').textContent).toMatch(/1/)
+    // count badges: Stage=1, Raw Material=1, Customer=1
+    expect(screen.getByTestId('facet-categories-Stage').textContent).toMatch(/1/)
     // table initially shows all rows
     expect(document.querySelectorAll('[data-testid^="cop-table-row-"]').length).toBe(3)
     // click the Raw Material facet checkbox
@@ -73,7 +73,7 @@ describe('T-20 facet rail + histogram + map-table linkage', () => {
     expect(screen.getByTestId('cop-table-row-a').getAttribute('aria-selected')).toBe('true')
     expect(screen.getByTestId('map-canvas').getAttribute('aria-label')).toMatch(/Alpha Site/)
     // linked facet row is highlighted too
-    expect(screen.getByTestId('facet-categories-Recipe').getAttribute('data-linked')).toBe('true')
+    expect(screen.getByTestId('facet-categories-Stage').getAttribute('data-linked')).toBe('true')
   })
 
   it('histogram brush date filter narrows the map to the brushed window', () => {

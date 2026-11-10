@@ -159,7 +159,7 @@ describe('AgentInputsDrawer chain builder (FN-AST-003)', () => {
   it('renders the seeded chain with typed output chip, Problems bar, and Apply', () => {
     render(<AgentInputsDrawer open onClose={vi.fn()} />)
     expect(screen.getByTestId('chain-section')).toBeTruthy()
-    expect(screen.getByTestId('chain-output-chip').textContent).toBe('ObjectSet(recipe)')
+    expect(screen.getByTestId('chain-output-chip').textContent).toBe('ObjectSet(stage)')
     expect(screen.getByTestId('chain-step-count').textContent).toMatch(/2 step/)
     expect(screen.getByTestId('chain-problems').textContent).toMatch(/Problems — none/)
     expect(screen.getByTestId('chain-steps')).toBeTruthy()
@@ -199,7 +199,7 @@ describe('AgentInputsDrawer chain builder (FN-AST-003)', () => {
 
     // Apply evaluates the (reordered but still valid) chain over GRAPH_NODES.
     fireEvent.click(screen.getByTestId('chain-apply'))
-    expect(screen.getByTestId('chain-apply-result').textContent).toMatch(/Apply:.*→ ObjectSet\(recipe\) \(/)
+    expect(screen.getByTestId('chain-apply-result').textContent).toMatch(/Apply:.*→ ObjectSet\(stage\) \(/)
     expect(ws.traces.some(t => t.tool === 'chains.apply' && t.ok)).toBe(true)
     expect(readAudit().some(a => a.event === 'chains-apply')).toBe(true)
   })

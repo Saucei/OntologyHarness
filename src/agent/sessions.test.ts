@@ -56,7 +56,7 @@ describe('session allowlist + titles', () => {
 
   it('derives a short title from the first user turn', () => {
     expect(deriveTitle([])).toBe('New session')
-    expect(deriveTitle([{ id: 1, role: 'user', text: 'What backs IPA?' }])).toBe('What backs IPA?')
+    expect(deriveTitle([{ id: 1, role: 'user', text: 'What backs Crossover X2?' }])).toBe('What backs Crossover X2?')
     expect(deriveTitle([{ id: 1, role: 'user', text: 'a'.repeat(50) }]).length).toBeLessThanOrEqual(37)
   })
 

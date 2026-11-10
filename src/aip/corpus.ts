@@ -34,12 +34,12 @@ export const CORPUS: CorpusChunk[] = [
     body: 'Datasets flow raw → clean → derived → ontology via pipelines. Ontology datasets back object types; derived datasets aggregate clean datasets across projects by Project Reference. Lineage graphs are computed from build metadata: every derived cell traces to raw source rows. Stale or failing builds surface as node health flags.',
   },
   {
-    id: 'chunk-brew-1', title: 'Belgian Ale — brewery reference', source: 'Brewery Ops · Catalog',
-    body: 'Belgian Ale SKUs (P-0001 class) brew from Malt, Hops and Corn bills of material; demand peaks April–July. Recipe IDs use the form R-A4F2 (4 alphanumerics). Batch IDs B-1842. ABV is typically 6.0–6.5% — track above 8 within the constraint (max 15). Reorder point triggers at 40 bbl storage minimum.',
+    id: 'chunk-line-1', title: 'Assembly line — stage specs & takt', source: 'Plant Ops · Production Standard',
+    body: 'Automotive assembly stages use STG-### identifiers (STG-010 stamping through STG-060 inspection). Stamping presses run a 4-second panel cycle with 20-45 minute die changeovers amortized across the run. Body weld places approximately 4,800 spot welds per body at a 60-second takt. Paint shop e-coat and oven dwell totals 9.5 hours; trim and chassis and final assembly run a 58-60 second takt. Test and inspection averages 15 minutes per unit. Line rate is approximately 950 units per day across two shifts.',
   },
   {
-    id: 'chunk-brew-2', title: 'IPA & hop dosing', source: 'Brewery Ops · Production',
-    body: 'IPA recipes (NYC IPA 36 bbl, PIT IPA 34 bbl, DC IPA 35 bbl) demand late hop additions; hop utilization falls above 170°F at knockout. Malt:hops ratio for IPA is roughly 4:1 by weight. IPA demand 211.18 bbl trailing 90 days; Belgian Ale 220.77 bbl — the Belgian SKU governs raw material contracts.',
+    id: 'chunk-line-2', title: 'Quality loops — rework & repair', source: 'Plant Ops · Quality Manual',
+    body: 'Roughly 4 percent of painted bodies require paint rework (3.2 hours average) and about 2 percent of tested units fail final inspection and return to trim via the repair bay (1.5 hours average). Unit identifiers use B-#### form; vehicle VINs are 17 characters excluding I, O and Q. Reorder points trigger at 40 steel coils and 25 resin totes minimum. Dealer orders are sequenced against the 950 units per day line rate.',
   },
   {
     id: 'chunk-ops-1', title: 'Executive briefing — cadence', source: 'Internal · Ops Review',

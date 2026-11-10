@@ -1,6 +1,6 @@
 # FUNCTIONS.md — Capability inventory (Stage 4)
 
-Generated 2026-11-08T14:01:08.517Z · vision-verified against `C:\Users\Berry\Desktop\Ontology Harness`
+Generated 2026-11-10T10:51:29.246Z · vision-verified against `C:\Users\Berry\Desktop\Ontology Harness`
 
 ## Counts
 
@@ -35,7 +35,7 @@ Entry point: DataHub union preview (buildUnionPreview: 500 rows × 11 cols)
 Tier **T1** · depth 3/breadth 1/reach 2 · score 12.6 · **INAPP**
 Entry point: DataHub deploy (validateDeployConfig, compute profile, status badge)
 
-### FN-ONT-001 — Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId regex + ABV range)
+### FN-ONT-001 — Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId/StageId regex + VIN pattern)
 Tier **T1** · depth 6/breadth 3/reach 3 · score 16.2 · **INAPP**
 Entry point: Ontology Studio: Validate → value-type dropdown + inline errors
 

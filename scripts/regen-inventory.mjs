@@ -35,7 +35,7 @@ const REGISTRY = [
   { id: 'FN-DAT-003', family: 'data-integration', name: 'Deploy pipeline / select outputs / compute profile', breadth: 1, depth: 3, reach: 2, status: 'INAPP', entry: 'DataHub deploy (validateDeployConfig, compute profile, status badge)' },
 
   // ── ontology layer ──
-  { id: 'FN-ONT-001', family: 'ontology-layer', name: 'Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId regex + ABV range)', breadth: 3, depth: 6, reach: 3, status: 'INAPP', entry: 'Ontology Studio: Validate → value-type dropdown + inline errors' },
+  { id: 'FN-ONT-001', family: 'ontology-layer', name: 'Object type CRUD + value-type constraints (WarehouseId/ProductId/BatchId/StageId regex + VIN pattern)', breadth: 3, depth: 6, reach: 3, status: 'INAPP', entry: 'Ontology Studio: Validate → value-type dropdown + inline errors' },
   { id: 'FN-ONT-002', family: 'ontology-layer', name: 'Object Explorer / search by property + dependents', breadth: 2, depth: 3, reach: 2, status: 'PARTIAL', entry: 'Dependents list + create Workshop module from dependents panel' },
   { id: 'FN-ONT-003', family: 'ontology-layer', name: 'Link type create + toggle', breadth: 2, depth: 2, reach: 2, status: 'INAPP', entry: 'OntologyStudio link create dialog + enabled toggle (createManagedLink)' },
 

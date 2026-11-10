@@ -2,19 +2,21 @@ import { useMemo, useState } from 'react'
 import { Icon } from './Icon'
 import { PROVIDERS, defaultSettings, loadSettings, saveSettings } from '../llm/client'
 
-const SAMPLE_CSV = `sku,style,demand_bbl,batch_id
-P-0001,Belgian Ale,220,B-0001
-P-0002,IPA,211,B-0002
-P-0003,DC Ale,158,B-0003
-P-0004,NYC IPA,142,B-0004
-P-0005,PIT Ale,133,B-0005
-P-0006,DC IPA,101,B-0006
+const SAMPLE_CSV = `unit_id,model_id,stage_id,vin,built_at
+U-0001,P-0001,STG-060,1HGCM82633A004352,2026-11-09T08:14:00Z
+U-0002,P-0002,STG-060,1HGCM82633A004353,2026-11-09T08:16:00Z
+U-0003,P-0001,STG-050,1HGCM82633A004354,2026-11-09T08:18:00Z
+U-0004,P-0002,STG-040,1HGCM82633A004355,2026-11-09T08:20:00Z
+U-0005,P-0001,STG-060,1HGCM82633A004356,2026-11-09T08:22:00Z
+U-0006,P-0002,STG-030,1HGCM82633A004357,2026-11-09T08:24:00Z
+U-0007,P-0001,STG-060,1HGCM82633A004358,2026-11-09T08:26:00Z
+U-0008,P-0002,STG-060,1HGCM82633A004359,2026-11-09T08:28:00Z
 P-0007,NYC Ale,97,B-0007
 P-0008,PIT IPA,88,B-0008`
 
 export default function Wizard({ onDone, onGo }: { onDone: () => void; onGo: (module: string) => void }) {
   const [step, setStep] = useState(0)
-  const [workspaceName, setWorkspaceName] = useState('Brewery Demo')
+  const [workspaceName, setWorkspaceName] = useState('Assembly Line Demo')
   const [providerId, setProviderId] = useState(loadSettings().providerId || 'openai')
   const [imported, setImported] = useState(false)
   const [presetRan, setPresetRan] = useState(false)
@@ -27,11 +29,11 @@ export default function Wizard({ onDone, onGo }: { onDone: () => void; onGo: (mo
 
   const importSample = async () => {
     const dt = new DataTransfer()
-    dt.items.add(new File([SAMPLE_CSV], 'brewery_demand.csv', { type: 'text/csv' }))
+    dt.items.add(new File([SAMPLE_CSV], 'unit_throughput.csv', { type: 'text/csv' }))
     const input = document.querySelector('input[type=file]') as HTMLInputElement | null
     if (input) { input.files = dt.files; input.dispatchEvent(new Event('change', { bubbles: true })) }
     // also persist the imported dataset list locally for the registry
-    const rows = SAMPLE_CSV.trim().split('\n').slice(1).map(l => { const [sku, style, demand, batch] = l.split(','); return { sku, style, demand_bbl: Number(demand), batch_id: batch } })
+    const rows = SAMPLE_CSV.trim().split('\n').slice(1).map(l => { const [unit, model, stage, vin, built] = l.split(','); return { unit_id: unit, model_id: model, stage_id: stage, vin, built_at: built } })
     const note = `${rows.length} rows`
     void note
     setImported(true)
@@ -41,7 +43,7 @@ export default function Wizard({ onDone, onGo }: { onDone: () => void; onGo: (mo
     {
       title: 'Name your workspace',
       body: 'A workspace holds your jobs, datasets and ontology edits. Stored locally — no account, no cloud.',
-      content: <input className="input" value={workspaceName} onChange={e => setWorkspaceName(e.target.value)} placeholder="e.g. Brewery Demo" autoFocus />,
+      content: <input className="input" value={workspaceName} onChange={e => setWorkspaceName(e.target.value)} placeholder="e.g. Assembly Line Demo" autoFocus />,
       next: () => true,
     },
     {
@@ -56,8 +58,8 @@ export default function Wizard({ onDone, onGo }: { onDone: () => void; onGo: (mo
     },
     {
       title: 'Import your first dataset',
-      body: 'Sample brewery CSV with SKU demand. Parsed locally; provenance hashed.',
-      content: imported ? <div className="chip"><Icon name="check" size={12} /> brewery_demand.csv imported · 8 rows</div> : <button className="btn" onClick={importSample} disabled={imported}>Import brewery_demand.csv (sample)</button>,
+      body: 'Sample production CSV with unit flow. Parsed locally; provenance hashed.',
+      content: imported ? <div className="chip"><Icon name="check" size={12} /> unit_throughput.csv imported · 8 rows</div> : <button className="btn" onClick={importSample} disabled={imported}>Import unit_throughput.csv (sample)</button>,
       next: () => imported,
     },
     {
