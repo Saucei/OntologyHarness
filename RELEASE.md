@@ -25,7 +25,7 @@ Outputs in `src-tauri/target/release/bundle/`:
 
 1. Install → launch → all 12 modules render → dark mode toggles → no CSP console errors.
 2. Providers → save a key → Test connection reaches the allow-listed host through the Rust gateway.
-3. Import `brewery_demand.csv` in Data Hub → dataset appears; round-trip button shows ✓ hash match.
+3. Import `unit_throughput.csv` in Data Hub → dataset appears; round-trip button shows ✓ hash match.
 4. AIP Logic → TB question → cursors + citations render.
 
 ## CI

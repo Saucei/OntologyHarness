@@ -111,7 +111,6 @@ New **INSPECT** module, registry id `plugins`:
 | Pack | Source of truth | Status |
 |---|---|---|
 | `packs/theme-cream-glass` | Design tokens override CSS (tokens-only lint enforced; both `[data-theme]` modes) | ✅ **ships** — toggle verified in browser (warm `#63966b` ↦ core `#22c55e` revert, both directions, persisted in `ws.meta.packState`) |
-| `packs/presets-brewery` | 3 presets validating against `src/data/presets.ts` `validatePreset` | ✅ **ships** — enabled pack feeds the Presets library live |
 | `packs/corpus-134` | Byte snapshot of `public/manifest.json` (134 files) | ✅ **ships** via `scripts/build-corpus2-pack.mjs` |
 | `packs/corpus-2` | `asset/corpus-2/index.json` (72 tiles → 15 categories) | ✅ **ships** via `scripts/build-corpus2-pack.mjs` |
 
