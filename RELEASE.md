@@ -2,6 +2,11 @@
 
 > Self-contained desktop binary via `npm run tauri:build`. CSP is active (see `tauri.conf.json`); fonts + assets are self-hosted (no Google Fonts at runtime). Icons: `src-tauri/icons/` (regen via `src-tauri` PowerShell icon script + `tauri icon` if adding `.icns`).
 
+## 0.0.3 — production line editor + native tool bridge (2026-11-10)
+
+- **T-33** — brewery seed fully removed; researched automotive assembly-line graph (12 nodes / 13 edges, industry-typical figures); user-editable graph areas (add/rename/delete stages, rewire relations, new/switch/reset/delete areas) persisted in `ws.meta.graphAreas`; `seedsRev=2` one-shot re-seed for existing installs; Assembly Line machinery fixture with rework loops.
+- **T-34** — native tool-calling bridge: OpenAI-kind providers send JSON-Schema tool defs (`llm_chat_tools` Rust command + `llmChatTools` client + orchestrator native-first loop); `<tool>` text protocol remains the fallback (anthropic + non-conforming models). Wire LFM2.5 2.6B (local Ollama) into the catalog as `registered-lfm25`; Ollama provider default model updated; keyless providers no longer fail at the gateway (`resolve_key` proceeds without auth header); `think:false` sent for Ollama (thinking models otherwise burn the whole token budget before content). Verified agentic on LFM2.5: multi-hop `ontology.list` → `ontology.get` with id threaded from the result, `graph.query` generalization, grounded answers citing real IDs.
+
 ## Pre-flight (must be green)
 
 ```powershell

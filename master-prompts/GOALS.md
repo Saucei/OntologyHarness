@@ -58,6 +58,7 @@ Harness prerequisites: [HARNESS_CHANGE_MAP.md](HARNESS_CHANGE_MAP.md). Plugins: 
 | T-31 | Data & Link Closeout | L2/L3 | FN-ARC-002, FN-DAT-001/002/003, FN-ONT-003, FN-BLD-017, FN-FLT-006/007 | `tasks/T-31-data-link-closeout.md` | DONE |
 | T-32 | T1 Folder Install (Tauri `%APPDATA%` scan) | L3 | FN-MKT-001 (finish) | `tasks/T-32-plugin-folder-install.md` | DONE |
 | T-33 | Production Line Editor + Automotive Re-Seed (de-brewery) | L2/L3 | FN-ARC-002, FN-MCH-001/002/008 (substrate) | `tasks/T-33-production-line-editor.md` | DONE |
+| T-34 | Native Tool-Calling Bridge + LFM2.5 local model + 0.0.3 installer | L1 | FN-FDE-002/003 (agent loop substrate) | `tasks/T-34-native-tool-bridge.md` | DONE |
 
 ## Completed (reference)
 

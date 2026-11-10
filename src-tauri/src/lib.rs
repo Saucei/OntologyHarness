@@ -68,6 +68,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             llm::llm_chat,
             llm::llm_chat_stream,
+            llm::llm_chat_tools,
             keys::key_save,
             keys::key_has,
             keys::key_delete,

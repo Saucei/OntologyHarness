@@ -1,7 +1,9 @@
 // Agent orchestrator — observe → plan → act → verify → report.
-// Provider-agnostic: uses a compact <tool>...</tool> protocol so it works on any LLM
-// (native tool-calling varies per vendor; this is the lowest-common-denominator contract).
-import { loadSettings, llmChat, isTauriApp, type ProviderSettings } from '../llm/client'
+// Provider-agnostic: OpenAI-kind providers get NATIVE tool-calling (T-34 bridge —
+// small local models like LFM2.5 are hard-trained on their native call template and
+// ignore text protocols); every provider keeps the compact <tool>...</tool> text
+// protocol as fallback, so hosted and anthropic models work unchanged.
+import { loadSettings, llmChat, llmChatTools, providerById, appToolName, isTauriApp, type NativeToolCall, type ProviderSettings } from '../llm/client'
 import { TOOLS, TOOL_PROTOCOL, toolByName } from './tools'
 import { appendTrace, appendAudit } from '../store'
 
@@ -13,19 +15,28 @@ export type ApprovalHandler = (req: ApprovalRequest) => Promise<boolean>
 
 const MAX_HOPS = 8
 
+const SYSTEM_RULES = `Rules:
+- Never invent IDs, backing datasets or paths — if missing, call corpus.search or ontology.list first.
+- dryRun defaults to true; only pass dryRun=false when the user explicitly asked for it (that requires their approval).
+- Cite real identifiers from tool results. End with: Action · Evidence (IDs) · Verification · Next step.
+- When no tool is needed, answer directly.`
+
 const SYSTEM_PREAMBLE = `You are the embedded agent of Ontology Harness. You may call tools to ground answers in real app data.
 
 Protocol: to call a tool, output EXACTLY one block, then STOP and wait:
 <tool>{"name": "tool.name", "args": { ... }}</tool>
 You will then receive <tool_result>{...}</tool_result>. Use it. Repeat until you can answer.
-Rules:
-- Never invent IDs, backing datasets or paths — if missing, call corpus.search or ontology.list first.
-- dryRun defaults to true; only pass dryRun=false when the user explicitly asked for it (that requires their approval).
-- Cite real identifiers from tool results. End with: Action · Evidence (IDs) · Verification · Next step.
-- When no tool is needed, answer directly without <tool> blocks.
+${SYSTEM_RULES}
+- When calling a tool, output no other text.
 
 Available tools:
 ${TOOL_PROTOCOL}`
+
+const SYSTEM_PREAMBLE_NATIVE = `You are the embedded agent of Ontology Harness. Ground answers in real app data by calling the provided tools (native function calling). You will receive results as <tool_result> user messages.
+
+${SYSTEM_RULES}`
+
+type ParsedCall = { name?: string; args?: any }
 
 export async function runAgent(userPrompt: string, opts: {
   settings?: ProviderSettings
@@ -35,33 +46,18 @@ export async function runAgent(userPrompt: string, opts: {
   signal?: AbortSignal
 } = {}): Promise<AgentResult> {
   const settings = opts.settings ?? loadSettings()
+  const useNative = providerById(settings.providerId).kind === 'openai'
   const steps: AgentStep[] = []
   const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
     { role: 'user', content: userPrompt },
   ]
 
-  for (let hop = 0; hop < MAX_HOPS; hop++) {
-    if (opts.signal?.aborted) return { answer: '(aborted by operator)', steps, hops: hop, aborted: true }
-
-    const reply = await llmChat(settings, [{ role: 'system', content: SYSTEM_PREAMBLE }, ...messages], 'reasoning')
-    messages.push({ role: 'assistant', content: reply })
-
-    const match = reply.match(/<tool>([\s\S]*?)<\/tool>/)
-    if (!match) {
-      // Final answer — no more tool calls.
-      return { answer: reply.trim(), steps, hops: hop + 1, aborted: false }
-    }
-
-    let parsed: { name?: string; args?: any } = {}
-    try { parsed = JSON.parse(match[1].trim()) } catch {
-      messages.push({ role: 'user', content: '<tool_result>{"ok":false,"error":"invalid JSON inside <tool> — re-emit the block exactly as {"name":"...","args":{...}}</tool_result>' })
-      continue
-    }
-
+  /** Execute one parsed tool call: approval gate → run → trace → feed result back. */
+  const executeCall = async (parsed: ParsedCall): Promise<void> => {
     const tool = parsed.name ? toolByName(parsed.name) : undefined
     if (!tool) {
       messages.push({ role: 'user', content: `<tool_result>{"ok":false,"error":"unknown tool \"${parsed.name}\". Available: ${TOOLS.map(t => t.name).join(', ')}</tool_result>` })
-      continue
+      return
     }
 
     const args = parsed.args ?? {}
@@ -75,7 +71,7 @@ export async function runAgent(userPrompt: string, opts: {
       if (!approved) {
         messages.push({ role: 'user', content: `<tool_result>{"ok":false,"error":"user declined live execution — rerun with dryRun=true"}</tool_result>` })
         opts.onStep?.({ tool: tool.name, args, result: { ok: false, error: 'declined' }, ok: false, ms: 0 })
-        continue
+        return
       }
     }
 
@@ -91,6 +87,44 @@ export async function runAgent(userPrompt: string, opts: {
     messages.push({ role: 'user', content: `<tool_result>${JSON.stringify(result).slice(0, 4000)}</tool_result>` })
   }
 
+  for (let hop = 0; hop < MAX_HOPS; hop++) {
+    if (opts.signal?.aborted) return { answer: '(aborted by operator)', steps, hops: hop, aborted: true }
+
+    let reply: string
+    let nativeCalls: NativeToolCall[] = []
+    if (useNative) {
+      const r = await llmChatTools(settings, [{ role: 'system', content: SYSTEM_PREAMBLE_NATIVE }, ...messages], TOOLS, 'reasoning')
+      reply = r.content
+      nativeCalls = r.toolCalls
+    } else {
+      reply = await llmChat(settings, [{ role: 'system', content: SYSTEM_PREAMBLE }, ...messages], 'reasoning')
+    }
+    messages.push({ role: 'assistant', content: reply || nativeCalls.map(c => `[called ${appToolName(c.name)}]`).join('; ') })
+
+    // Native tool calls (T-34) — parsed by the provider/Ollama from the model's own template.
+    if (nativeCalls.length > 0) {
+      for (const c of nativeCalls.slice(0, 3)) {
+        await executeCall({ name: appToolName(c.name), args: c.args })
+      }
+      continue
+    }
+
+    // Text-protocol fallback — <tool>{"name": "...", "args": {...}}</tool>
+    const match = reply.match(/<tool>([\s\S]*?)<\/tool>/)
+    if (!match) {
+      // Final answer — no more tool calls.
+      return { answer: reply.trim(), steps, hops: hop + 1, aborted: false }
+    }
+
+    let parsed: ParsedCall = {}
+    try { parsed = JSON.parse(match[1].trim()) } catch {
+      messages.push({ role: 'user', content: '<tool_result>{"ok":false,"error":"invalid JSON inside <tool> — re-emit the block exactly as {"name":"...","args":{...}}</tool_result>' })
+      continue
+    }
+
+    await executeCall(parsed)
+  }
+
   return { answer: '(hop limit reached — see tool trace)', steps, hops: MAX_HOPS, aborted: false }
 }
 
@@ -100,3 +134,7 @@ export function isLiveCapable(): boolean {
   // heuristic: a key is configured (tauri: hasKey flag) or browser key present
   return s.hasKey || (!isTauriApp() && s.apiKey.trim().length > 0) || spec === 'ollama' || spec === 'custom'
 }
+
+// Rollback note: T-34 is additive — set providerId to an anthropic provider (or revert
+// this file) to restore the pure text-protocol loop; the bridge touches only the
+// OpenAI-kind turn function and the new llm_chat_tools Rust command.

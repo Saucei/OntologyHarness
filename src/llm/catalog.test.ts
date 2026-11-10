@@ -39,6 +39,34 @@ describe('model catalog (FN-FDE-009)', () => {
   })
 })
 
+describe('T-34 native tool bridge + LFM2.5 wiring', () => {
+  it('registers the local LFM2.5 model under the Ollama provider', () => {
+    const lfm = catalogEntryForModel('lfm2.5-2.6b-heretic:latest', 'ollama')
+    expect(lfm?.tab).toBe('registered')
+    expect(lfm?.providerId).toBe('ollama')
+    expect(lfm?.cost).toBe('Free')
+    expect(lfm?.supportsReasoning).toBe(true)
+    // Ollama provider default resolves to a locally-pullable tag, not a missing llama3.1.
+    const ollama = catalogEntryForModel('lfm2.5-2.6b-heretic:latest')
+    expect(ollama?.id).toBe('registered-lfm25')
+  })
+
+  it('maps dotted app tool names to OpenAI-safe native names and back', async () => {
+    const { nativeToolName, appToolName, toOpenAiTools, parseNativeToolCalls } = await import('./client')
+    expect(nativeToolName('graph.query')).toBe('graph_query')
+    expect(appToolName('ontology_get')).toBe('ontology.get')
+    expect(appToolName('ontology.get')).toBe('ontology.get')
+    const specs = toOpenAiTools([{ name: 'graph.query', description: 'd', parameters: { type: 'object', properties: {} } }, { name: 'no.schema', description: 'd' }])
+    expect(specs).toHaveLength(1)
+    expect(specs[0].function.name).toBe('graph_query')
+    const parsed = parseNativeToolCalls([{ function: { name: 'ontology_get', arguments: '{"id":"Process Stage"}' } }, { function: { name: 'x', arguments: 'not json' } }, { function: { name: 'y', arguments: { a: 1 } } }])
+    expect(parsed[0]).toEqual({ name: 'ontology_get', args: { id: 'Process Stage' } })
+    expect(parsed[1].args).toEqual({ _raw: 'not json' })
+    expect(parsed[2].args).toEqual({ a: 1 })
+    expect(parseNativeToolCalls(undefined)).toEqual([])
+  })
+})
+
 describe('reasoning tiers (FN-FDE-010)', () => {
   it('defaults to Balanced / Medium and pills as "Balanced • model (Medium)"', () => {
     expect(defaultSettings().reasoningTier).toBe('balanced')

@@ -17,6 +17,9 @@ pub struct LlmRequest {
     pub messages: Vec<ChatMessage>,
     pub temperature: Option<f32>,
     pub max_tokens: Option<u32>,
+    /// OpenAI `tools` array (T-34 native tool-calling bridge) — passed through verbatim.
+    #[serde(default)]
+    pub tools: Option<Value>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -30,8 +33,10 @@ fn resolve_key(req: &LlmRequest) -> Result<String, String> {
     if !k.is_empty() && k != "__keyring__" {
         return Ok(k.to_string());
     }
+    // Keyless providers (Ollama, custom) store no credential — proceed without an
+    // Authorization header; hosted providers then surface the provider's own 401.
     let id = req.provider_id.clone().unwrap_or_else(|| "openai".into());
-    crate::keys::load_api_key(&id).ok_or_else(|| format!("no credential for provider '{id}' — set it in LLM Providers"))
+    Ok(crate::keys::load_api_key(&id).unwrap_or_default())
 }
 
 fn build_client() -> Result<reqwest::Client, String> {
@@ -130,12 +135,14 @@ async fn openai_stream_req(client: &reqwest::Client, req: &LlmRequest, key: &str
     for m in &req.messages {
         messages.push(json!({ "role": m.role, "content": m.content }));
     }
-    let body = json!({
+    let mut body = json!({
         "model": req.model, "messages": messages,
         "temperature": req.temperature.unwrap_or(0.2),
         "max_tokens": req.max_tokens.unwrap_or(1024),
         "stream": true, "stream_options": { "include_usage": true },
     });
+    // Ollama thinking models otherwise burn the whole budget before content (T-34).
+    if req.provider_id.as_deref() == Some("ollama") { body["think"] = json!(false); }
     let mut b = client.post(&url).json(&body);
     if !key.is_empty() { b = b.bearer_auth(key); }
     b.send().await.map_err(|e| format!("request failed: {e}"))
@@ -160,6 +167,68 @@ async fn anthropic_stream_req(client: &reqwest::Client, req: &LlmRequest, key: &
 }
 
 /* ── non-streaming internals ──────────────────────────────────── */
+/* ── T-34 native tool-calling — returns the full assistant message ── */
+#[tauri::command]
+pub async fn llm_chat_tools(req: LlmRequest) -> Result<Value, String> {
+    let key = resolve_key(&req)?;
+    let client = build_client()?;
+    let mut last_err = String::new();
+    for attempt in 1..=3u32 {
+        match chat_tools_once(&client, &req, &key).await {
+            Ok(v) => return Ok(v),
+            Err(e) => {
+                last_err = e;
+                if last_err.contains("401") || last_err.contains("403") { break; }
+                tokio::time::sleep(std::time::Duration::from_millis(400 * (1 << attempt))).await;
+            }
+        }
+    }
+    Err(last_err)
+}
+
+async fn chat_tools_once(client: &reqwest::Client, req: &LlmRequest, key: &str) -> Result<Value, String> {
+    let url = format!("{}/chat/completions", req.base_url.trim_end_matches('/'));
+    let mut messages: Vec<Value> = Vec::new();
+    if let Some(system) = &req.system {
+        messages.push(json!({ "role": "system", "content": system }));
+    }
+    for m in &req.messages {
+        messages.push(json!({ "role": m.role, "content": m.content }));
+    }
+    let mut body = json!({
+        "model": req.model, "messages": messages,
+        "temperature": req.temperature.unwrap_or(0.2),
+        "max_tokens": req.max_tokens.unwrap_or(1024),
+        "tool_choice": "auto",
+    });
+    if let Some(tools) = &req.tools {
+        body["tools"] = tools.clone();
+    }
+    // Ollama thinking models otherwise burn the whole budget before content (T-34).
+    if req.provider_id.as_deref() == Some("ollama") { body["think"] = json!(false); }
+    let mut builder = client.post(&url).json(&body);
+    if !key.is_empty() { builder = builder.bearer_auth(key); }
+    let res = builder.send().await.map_err(|e| format!("request failed: {e}"))?;
+    let status = res.status();
+    let text = res.text().await.map_err(|e| format!("read body failed: {e}"))?;
+    if !status.is_success() {
+        return Err(format!("provider returned {status}: {}", truncate(&text, 600)));
+    }
+    let v: Value = serde_json::from_str(&text).map_err(|e| format!("invalid JSON: {e}"))?;
+    let msg = v.pointer("/choices/0/message")
+        .cloned()
+        .ok_or_else(|| format!("unexpected response shape: {}", truncate(&text, 400)))?;
+    let content = msg.get("content").and_then(|c| c.as_str()).unwrap_or("").to_string();
+    let tool_calls: Vec<Value> = msg.get("tool_calls").and_then(|t| t.as_array()).map(|arr| {
+        arr.iter().filter_map(|tc| {
+            let f = tc.get("function")?;
+            let name = f.get("name")?.as_str()?;
+            Some(json!({ "name": name, "arguments": f.get("arguments").cloned().unwrap_or(json!("{}")) }))
+        }).collect()
+    }).unwrap_or_default();
+    Ok(json!({ "content": content, "toolCalls": tool_calls }))
+}
+
 async fn openai_compatible_chat(client: &reqwest::Client, req: &LlmRequest, key: &str) -> Result<String, String> {
     let url = format!("{}/chat/completions", req.base_url.trim_end_matches('/'));
     let mut messages: Vec<Value> = Vec::new();
@@ -169,11 +238,13 @@ async fn openai_compatible_chat(client: &reqwest::Client, req: &LlmRequest, key:
     for m in &req.messages {
         messages.push(json!({ "role": m.role, "content": m.content }));
     }
-    let body = json!({
+    let mut body = json!({
         "model": req.model, "messages": messages,
         "temperature": req.temperature.unwrap_or(0.2),
         "max_tokens": req.max_tokens.unwrap_or(1024),
     });
+    // Ollama thinking models otherwise burn the whole budget before content (T-34).
+    if req.provider_id.as_deref() == Some("ollama") { body["think"] = json!(false); }
     let mut builder = client.post(&url).json(&body);
     if !key.is_empty() { builder = builder.bearer_auth(key); }
     let res = builder.send().await.map_err(|e| format!("request failed: {e}"))?;

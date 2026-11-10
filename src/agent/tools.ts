@@ -23,6 +23,8 @@ export type ToolDef = {
   name: string
   description: string
   schema: string // compact arg spec for the prompt
+  /** OpenAI JSON-Schema parameters — enables native tool-calling bridges (T-34). */
+  parameters?: Record<string, unknown>
   /** true when the tool mutates workspace state — requires approval unless dryRun */
   destructive?: boolean
   /** Permission-matrix category id — canonical list lives in ./permissions (TOOL_CATEGORIES) */
@@ -30,11 +32,14 @@ export type ToolDef = {
   execute: (args: any) => Promise<ToolResult> | ToolResult
 }
 
+const DRY_RUN_PARAMS = { type: 'object', properties: { dryRun: { type: 'boolean', description: 'Defaults to true. false = live execution, requires user approval.' } } }
+
 export const TOOLS: ToolDef[] = [
   {
     name: 'graph.query',
     description: 'Return a lineage subgraph: nodes + edges around a node id/label (fuzzy) or by kind (warehouse|material|stage|product|customer).',
     schema: '{ focus?: string, depth?: 1-3, kind?: string }',
+    parameters: { type: 'object', properties: { focus: { type: 'string', description: 'Node id or label (fuzzy)' }, depth: { type: 'integer', minimum: 1, maximum: 3 }, kind: { type: 'string', enum: ['warehouse', 'material', 'stage', 'product', 'customer'] } } },
     category: 'graph',
     execute: args => {
       const slice = queryGraph({ focus: args?.focus, depth: args?.depth, kind: args?.kind })
@@ -45,6 +50,7 @@ export const TOOLS: ToolDef[] = [
     name: 'ontology.list',
     description: 'List all object types (id, name, backing, count), link types and action types.',
     schema: '{}',
+    parameters: { type: 'object', properties: {} },
     category: 'ontology',
     execute: () => ({
       ok: true,
@@ -59,6 +65,7 @@ export const TOOLS: ToolDef[] = [
     name: 'ontology.get',
     description: 'Fetch one object type by id or name, including full property list.',
     schema: '{ id: string }',
+    parameters: { type: 'object', properties: { id: { type: 'string', description: 'Object type id (e.g. ot-process) or name fragment' } }, required: ['id'] },
     category: 'ontology',
     execute: args => {
       const q = String(args?.id ?? '').toLowerCase()
@@ -70,6 +77,7 @@ export const TOOLS: ToolDef[] = [
     name: 'corpus.search',
     description: 'Search the 134-file reference corpus manifest by keyword (filename + category). Returns up to `limit` matching entries.',
     schema: '{ query: string, limit?: number }',
+    parameters: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 25 } }, required: ['query'] },
     category: 'corpus',
     execute: async args => {
       try {
@@ -89,6 +97,7 @@ export const TOOLS: ToolDef[] = [
     name: 'pipeline.run',
     description: 'Dry-run validation of the Datasource→Transform→Ontology DAG (7 seeded nodes). With dryRun=false it would execute the build — REAL execution requires user approval.',
     schema: '{ dryRun?: boolean }',
+    parameters: DRY_RUN_PARAMS,
     destructive: true,
     category: 'pipeline',
     execute: args => {
@@ -107,6 +116,7 @@ export const TOOLS: ToolDef[] = [
     name: 'workshop.publish',
     description: 'Dry-run validation of the Order Overview Workshop module (bindings resolve, object-set types match). dryRun=false would publish — requires user approval.',
     schema: '{ dryRun?: boolean }',
+    parameters: DRY_RUN_PARAMS,
     destructive: true,
     category: 'workshop',
     execute: args => {

@@ -29,7 +29,7 @@ export const PROVIDERS: ProviderSpec[] = [
     defaultModel: 'gemini-2.0-flash', modelHint: 'gemini-2.0-flash, gemini-2.5-pro…',
     keyLabel: 'GEMINI_API_KEY', keyPlaceholder: 'AIza…', docsUrl: 'https://aistudio.google.com/apikey', requiresKey: true },
   { id: 'ollama', label: 'Ollama (local)', kind: 'openai', baseUrl: 'http://localhost:11434/v1',
-    defaultModel: 'llama3.1', modelHint: 'llama3.1, qwen2.5-coder, mistral…',
+    defaultModel: 'lfm2.5-2.6b-heretic:latest', modelHint: 'lfm2.5-2.6b-heretic, qwen3.5, gemma4… (ollama list)',
     keyLabel: 'OLLAMA_API_KEY (unused)', keyPlaceholder: 'leave blank', docsUrl: 'https://ollama.com', requiresKey: false, local: true },
   { id: 'azure-openai', label: 'Azure OpenAI', kind: 'openai', baseUrl: 'https://YOUR-RESOURCE.openai.azure.com/openai/deployments/YOUR-DEPLOYMENT',
     defaultModel: 'gpt-4o-mini', modelHint: 'deployment name goes in base URL',
@@ -127,6 +127,88 @@ export function routeModel(settings: ProviderSettings, taskClass: TaskClass): st
 
 export type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string }
 
+/* ── T-34 native tool-calling bridge (OpenAI-compatible providers) ──
+   Small local models (e.g. LFM2.5) are hard-trained on their native tool-call
+   template and ignore text protocols; hosted OpenAI-kind models also speak
+   native `tools` natively. This bridge sends JSON-Schema tool defs and returns
+   parsed tool calls; the <tool> text protocol stays as the fallback path. */
+
+export type NativeToolCall = { name: string; args: any }
+export type NativeChatResult = { content: string; toolCalls: NativeToolCall[] }
+
+export type OpenAiToolSpec = { type: 'function'; function: { name: string; description: string; parameters: Record<string, unknown> } }
+
+/** OpenAI function names must be ^[a-zA-Z0-9_-]{1,64}$ — dots are not allowed. */
+export const nativeToolName = (name: string): string => name.replace(/\./g, '_')
+
+/** Reverse of nativeToolName — 'ontology_get' → 'ontology.get' (exact dotted names pass through). */
+export const appToolName = (native: string): string => (native.includes('.') ? native : native.replace('_', '.'))
+
+/** Build OpenAI `tools` payloads from the app's ToolDef registry. */
+export function toOpenAiTools(defs: Array<{ name: string; description: string; parameters?: Record<string, unknown> }>): OpenAiToolSpec[] {
+  return defs
+    .filter(d => !!d.parameters)
+    .map(d => ({ type: 'function' as const, function: { name: nativeToolName(d.name), description: d.description, parameters: d.parameters! } }))
+}
+
+/** Parse a raw OpenAI tool_calls array into app-space calls (underscore → dot on lookup). */
+export function parseNativeToolCalls(raw: any): NativeToolCall[] {
+  if (!Array.isArray(raw)) return []
+  return raw.map((tc: any) => {
+    const native = String(tc?.function?.name ?? '')
+    const argsRaw = tc?.function?.arguments
+    let args: any = {}
+    if (typeof argsRaw === 'string') {
+      try { args = JSON.parse(argsRaw) } catch { args = { _raw: argsRaw } }
+    } else if (argsRaw && typeof argsRaw === 'object') {
+      args = argsRaw
+    }
+    return { name: native, args }
+  })
+}
+
+function buildToolsPayload(settings: ProviderSettings, messages: ChatMessage[], toolDefs: Array<{ name: string; description: string; parameters?: Record<string, unknown> }>, taskClass: TaskClass = 'reasoning') {
+  const spec = providerById(settings.providerId)
+  return {
+    ...buildPayload(settings, messages, taskClass),
+    tools: toOpenAiTools(toolDefs),
+    toolChoice: 'auto',
+  }
+}
+
+/** Non-streaming chat with native tool-calling. Returns content + parsed tool calls. */
+export async function llmChatTools(settings: ProviderSettings, messages: ChatMessage[], toolDefs: Array<{ name: string; description: string; parameters?: Record<string, unknown> }>, taskClass: TaskClass = 'reasoning'): Promise<NativeChatResult> {
+  const payload = buildToolsPayload(settings, messages, toolDefs, taskClass)
+  const t0 = performance.now()
+  try {
+    let out: NativeChatResult
+    if (isTauri()) {
+      const { invoke } = await import('@tauri-apps/api/core')
+      out = await invoke<NativeChatResult>('llm_chat_tools', { req: payload })
+    } else {
+      out = await browserChatTools(payload)
+    }
+    appendTrace({ kind: 'llm-call', provider: payload.providerId, model: payload.model, taskClass, ok: true, ms: Math.round(performance.now() - t0), tokensOut: (out.content ?? '').length, detail: out.toolCalls.length ? `native tool calls: ${out.toolCalls.map(c => c.name).join(', ')}` : undefined })
+    return { content: out.content ?? '', toolCalls: out.toolCalls ?? [] }
+  } catch (e) {
+    appendTrace({ kind: 'llm-call', provider: payload.providerId, model: payload.model, taskClass, ok: false, ms: Math.round(performance.now() - t0), detail: String(e).slice(0, 200) })
+    throw e
+  }
+}
+
+async function browserChatTools(payload: any): Promise<NativeChatResult> {
+  const msgs = payload.system ? [{ role: 'system', content: payload.system }, ...payload.messages] : payload.messages
+  const res = await fetch(`${payload.baseUrl.replace(/\/$/, '')}/chat/completions`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...(payload.apiKey?.trim() ? { authorization: `Bearer ${payload.apiKey.trim()}` } : {}) },
+    body: JSON.stringify({ model: payload.model, messages: msgs, temperature: payload.temperature, max_tokens: payload.maxTokens, tools: payload.tools, tool_choice: payload.toolChoice ?? 'auto', ...(payload.providerId === 'ollama' ? { think: false } : {}) }),
+  })
+  if (!res.ok) throw new Error(`Provider ${res.status}: ${(await res.text()).slice(0, 300)}`)
+  const j = await res.json()
+  const msg = j?.choices?.[0]?.message
+  return { content: typeof msg?.content === 'string' ? msg.content : '', toolCalls: parseNativeToolCalls(msg?.tool_calls) }
+}
+
 function buildPayload(settings: ProviderSettings, messages: ChatMessage[], taskClass: TaskClass = 'reasoning') {
   const spec = providerById(settings.providerId)
   return {
@@ -207,7 +289,8 @@ async function browserChat(payload: any): Promise<string> {
   const res = await fetch(`${payload.baseUrl.replace(/\/$/, '')}/chat/completions`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...(payload.apiKey.trim() ? { authorization: `Bearer ${payload.apiKey.trim()}` } : {}) },
-    body: JSON.stringify({ model: payload.model, messages: msgs, temperature: payload.temperature, max_tokens: payload.maxTokens }),
+    // Ollama thinking models otherwise burn the whole budget before content (T-34 finding).
+    body: JSON.stringify({ model: payload.model, messages: msgs, temperature: payload.temperature, max_tokens: payload.maxTokens, ...(payload.providerId === 'ollama' ? { think: false } : {}) }),
   })
   if (!res.ok) throw new Error(`Provider ${res.status}: ${(await res.text()).slice(0, 300)}`)
   const j = await res.json()
@@ -222,7 +305,7 @@ async function browserChatStream(payload: any, onToken?: (c: string) => void): P
     : { 'content-type': 'application/json', ...(payload.apiKey.trim() ? { authorization: `Bearer ${payload.apiKey.trim()}` } : {}) }
   const body = payload.provider === 'anthropic'
     ? { model: payload.model, max_tokens: payload.maxTokens, temperature: payload.temperature, system: payload.system, messages: payload.messages, stream: true }
-    : { model: payload.model, messages: msgs, temperature: payload.temperature, max_tokens: payload.maxTokens, stream: true }
+    : { model: payload.model, messages: msgs, temperature: payload.temperature, max_tokens: payload.maxTokens, stream: true, ...(payload.providerId === 'ollama' ? { think: false } : {}) }
 
   const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) })
   if (!res.ok || !res.body) throw new Error(`Provider ${res.status}: ${(await res.text()).slice(0, 300)}`)
@@ -293,6 +376,7 @@ export const MODEL_CATALOG: ModelCatalogEntry[] = [
   { id: 'registered-llama-70b', label: 'Llama 3.3 70B', providerId: 'groq', model: 'llama-3.3-70b-versatile', tab: 'registered', classes: ['reasoning', 'cheap'], cost: 'Low', speed: 'Very fast', contextTokens: 128_000, maxOutputTokens: 8192, tpm: 6_000_000, rpm: 1000, supportsReasoning: false },
   { id: 'registered-gemini-flash', label: 'Gemini 2.0 Flash', providerId: 'gemini', model: 'gemini-2.0-flash', tab: 'registered', classes: ['cheap', 'extraction', 'vision'], cost: 'Low', speed: 'Very fast', contextTokens: 1_000_000, maxOutputTokens: 8192, tpm: 4_000_000, rpm: 1500, supportsReasoning: false },
   { id: 'registered-llama31', label: 'Llama 3.1 (local)', providerId: 'ollama', model: 'llama3.1', tab: 'registered', classes: ['cheap', 'code'], cost: 'Free', speed: 'Fast', contextTokens: 128_000, maxOutputTokens: 4096, tpm: 0, rpm: 0, supportsReasoning: false },
+  { id: 'registered-lfm25', label: 'LFM2.5 2.6B Heretic (local)', providerId: 'ollama', model: 'lfm2.5-2.6b-heretic:latest', tab: 'registered', classes: ['cheap', 'reasoning'], cost: 'Free', speed: 'Very fast', contextTokens: 128_000, maxOutputTokens: 4096, tpm: 0, rpm: 0, supportsReasoning: true },
   { id: 'registered-gpt4o-mini-azure', label: 'GPT-4o mini (Azure)', providerId: 'azure-openai', model: 'gpt-4o-mini', tab: 'registered', classes: ['cheap', 'extraction'], cost: 'Low', speed: 'Very fast', contextTokens: 128_000, maxOutputTokens: 16_384, tpm: 2_000_000, rpm: 5000, supportsReasoning: false },
   // More — custom / local / router slugs
   { id: 'more-openrouter-claude', label: 'Claude Sonnet 4.5 (OpenRouter)', providerId: 'openrouter', model: 'anthropic/claude-sonnet-4.5', tab: 'more', classes: ['reasoning', 'code'], cost: 'High', speed: 'Medium', contextTokens: 200_000, maxOutputTokens: 64_000, tpm: 1_000_000, rpm: 500, supportsReasoning: true },
