@@ -60,6 +60,7 @@ Harness prerequisites: [HARNESS_CHANGE_MAP.md](HARNESS_CHANGE_MAP.md). Plugins: 
 | T-33 | Production Line Editor + Automotive Re-Seed (de-brewery) | L2/L3 | FN-ARC-002, FN-MCH-001/002/008 (substrate) | `tasks/T-33-production-line-editor.md` | DONE |
 | T-34 | Native Tool-Calling Bridge + LFM2.5 local model + 0.0.3 installer | L1 | FN-FDE-002/003 (agent loop substrate) | `tasks/T-34-native-tool-bridge.md` | DONE |
 | T-35 | Agent tool-usage benchmark — LFM2.5 as main + reference model | L1 | FN-FDE-002/003 (agent loop substrate) | `tasks/T-35-agent-benchmark.md` | DONE |
+| T-36 | Plugin consumption + GeoMap 360° traversable globe | L3 | FN-GEO-001/002/003 (real map + pack effects) | `tasks/T-36-plugins-globe.md` | DONE |
 
 ## Completed (reference)
 

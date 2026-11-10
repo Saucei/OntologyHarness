@@ -3,6 +3,7 @@ import { queryGraph } from './graph'
 import { OBJECT_TYPES, LINK_TYPES, ACTION_TYPES } from '../data/ontology'
 import { ws } from '../store'
 import { validateWorkshop } from '../workshop/validate'
+import { mergeCorpus, packEntries, enabledPackUnits } from '../packs/consume'
 
 const DEFAULT_SECTIONS = [
   { id: 1, name: 'Header · Order Overview', widgets: [
@@ -75,19 +76,26 @@ export const TOOLS: ToolDef[] = [
   },
   {
     name: 'corpus.search',
-    description: 'Search the 134-file reference corpus manifest by keyword (filename + category). Returns up to `limit` matching entries.',
+    description: 'Search the reference corpus by keyword (filename + category + notes). Includes the base 134-file manifest PLUS every enabled corpus pack from the Plugin Manager. Returns up to `limit` matching entries.',
     schema: '{ query: string, limit?: number }',
     parameters: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 25 } }, required: ['query'] },
     category: 'corpus',
     execute: async args => {
       try {
         const res = await fetch('/manifest.json')
-        if (!res.ok) throw new Error(`manifest HTTP ${res.status}`)
-        const m = await res.json()
+        const base = res.ok ? await res.json() : null
+        // T-36: enabled corpus packs extend the searchable corpus.
+        const merged = mergeCorpus(base, enabledPackUnits())
         const q = String(args?.query ?? '').toLowerCase()
         const limit = Math.min(Number(args?.limit ?? 8) || 8, 25)
-        const hits = (m.entries ?? []).filter((e: any) => (e.file + ' ' + e.category + ' ' + e.note).toLowerCase().includes(q)).slice(0, limit)
-        return { ok: true, data: { query: args?.query, total: hits.length, hits } }
+        const all = [
+          ...(base?.entries ?? []),
+          ...packEntries(merged).map(e => ({ ...e, bytes: 0, vision: null })),
+        ]
+        const hits = all
+          .filter((e: any) => (e.file + ' ' + e.category + ' ' + (e.note ?? '')).toLowerCase().includes(q))
+          .slice(0, limit)
+        return { ok: true, data: { query: args?.query, total: hits.length, sources: ['base manifest', ...merged.packNames], hits } }
       } catch (e) {
         return { ok: false, error: String(e) }
       }

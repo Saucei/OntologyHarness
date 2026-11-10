@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Icon } from '../components/Icon'
 import { loadPacks, registerCustomPack, registerFolderPack, listLocalFolderPacks, extractFolderPack, applyThemePack, packCorpus, packDataEntryCount, auditPackAction, type PackUnit, type FolderPackScanResult } from '../packs/loader'
+import { PACK_LANDING } from '../packs/consume'
 import { ws, patchMeta, appendTrace, appendAudit } from '../store'
 
 type CustomPackRecord = { json: string; source: 'url' | 'pasted' | 'folder'; sourceUrl?: string; jwt: number; files?: Record<string, string> }
@@ -309,6 +310,7 @@ function Detail({ u }: { u: PackUnit }) {
         <span> kind</span><span>{u.manifest.kind}</span>
         <span>API</span><span>{u.manifest.api} <span style={{ color: 'var(--green-700)' }}>✓ compatible (MODULE_API 1.0)</span></span>
         <span>Source</span><span>{u.source === 'bundled' ? 'bundled in-project pack folder' : u.source === 'url' ? (u.sourceUrl ?? 'URL') : u.source === 'folder' ? `local folder (${u.sourceUrl ?? ''})` : 'pasted JSON (session)'}</span>
+        <span>Lands in</span><span>{PACK_LANDING[u.manifest.kind] ?? '—'}</span>
       </div>
       {corpus && (
         <div style={{ marginTop: 10 }}>

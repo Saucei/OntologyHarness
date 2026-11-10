@@ -22,6 +22,9 @@ import {
   EMPTY_SELECTION,
 } from '../cop/facetEngine'
 import type { DateRange, FacetSelection } from '../cop/facetEngine'
+import GlobeCanvas from './GlobeCanvas'
+import type { GlobeMarker } from './GlobeCanvas'
+import type { GlobeRotation } from './globe'
 
 export type MapPointInput = GeoPoint | string
 
@@ -702,6 +705,8 @@ export type MapCanvasProps = {
   onFacetChange?: (next: FacetSelection) => void
   showFacetRail?: boolean
   showTable?: boolean
+  /** T-36: open on the fully-traversable globe instead of the flat map. */
+  initialView?: 'flat' | 'globe'
 }
 
 // Memoized so fixture renders stay stable; heavy projection lives in the SVG below.
@@ -718,11 +723,17 @@ export const MapCanvasBase = memo(function MapCanvasBase({
   onFacetChange,
   showFacetRail = false,
   showTable = false,
+  initialView = 'flat',
 }: MapCanvasProps) {
   const [internalId, setInternalId] = useState<string | null>(null)
   const [internalConfig, setInternalConfig] = useState<ClusterLayerConfig>(DEFAULT_CLUSTER_CONFIG)
   const [internalFacet, setInternalFacet] = useState<FacetSelection>(() => ({ ...EMPTY_SELECTION }))
   const [viewport, setViewport] = useState<MapViewport>({ zoom: 1 })
+  // T-36 globe view: 'flat' keeps the classic equirectangular canvas; 'globe' is the
+  // fully traversable 360° orthographic view (drag / arrow keys / auto-spin / wheel zoom).
+  const [view, setView] = useState<'flat' | 'globe'>(initialView)
+  const [globeRot, setGlobeRot] = useState<GlobeRotation | null>(null)
+  const [spin, setSpin] = useState(false)
   const selectedId = controlledId !== undefined ? controlledId : internalId
   const config = controlledConfig ?? internalConfig
   const facetSelection: FacetSelection = controlledFacet ?? internalFacet
@@ -747,6 +758,8 @@ export const MapCanvasBase = memo(function MapCanvasBase({
   )
 
   const bounds = useMemo(() => computeBounds(resolved.map(r => r._p)), [resolved])
+  // Data centroid — default globe rotation center so the data faces the viewer.
+  const dataCentroid = useMemo(() => centroid(resolved.map(r => r._p)), [resolved])
   const maxValue = useMemo(() => Math.max(1, ...resolved.map(r => Math.max(0, Number(r.value) || 1))), [resolved])
   const selected = useMemo(() => (selectedId ? resolved.find(r => r.id === selectedId) ?? null : null), [resolved, selectedId])
 
@@ -788,9 +801,33 @@ export const MapCanvasBase = memo(function MapCanvasBase({
 
   const reset = useCallback(() => {
     setViewport({ zoom: 1 })
+    // Globe mode: re-center on the data and stop the spin (fully resets traversal).
+    setGlobeRot({ lat: dataCentroid.lat, lng: dataCentroid.lng })
+    setSpin(false)
     appendTrace({ kind: 'tool-call', tool: 'map.canvas.reset', ok: true, ms: 0, detail: 'reset' })
     appendAudit({ event: 'map.reset' })
+  }, [dataCentroid])
+
+  const toggleView = useCallback(() => {
+    const next = view === 'flat' ? 'globe' : 'flat'
+    if (next === 'globe' && !globeRot) setGlobeRot({ lat: dataCentroid.lat, lng: dataCentroid.lng })
+    if (next === 'flat') setSpin(false)
+    setView(next)
+    appendTrace({ kind: 'tool-call', tool: 'map.view.toggle', ok: true, ms: 0, detail: next })
+    appendAudit({ event: 'map.view.toggle', view: next })
+  }, [view, globeRot, dataCentroid])
+
+  const commitGlobeRotation = useCallback((next: GlobeRotation) => {
+    setGlobeRot(next)
+    appendTrace({ kind: 'tool-call', tool: 'map.globe.rotate', ok: true, ms: 0, detail: `lat=${Math.round(next.lat)} lng=${Math.round(next.lng)}` })
   }, [])
+
+  const toggleSpin = useCallback(() => {
+    const next = !spin
+    setSpin(next)
+    appendTrace({ kind: 'tool-call', tool: 'map.globe.spin', ok: true, ms: 0, detail: next ? 'on' : 'off' })
+    appendAudit({ event: 'map.spin', on: next })
+  }, [spin])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -818,6 +855,46 @@ export const MapCanvasBase = memo(function MapCanvasBase({
       return `${pos.x},${pos.y}`
     }).join(' ')
   }, [isLine, resolved, bounds])
+
+  // T-36 globe markers — same testids/styles as flat so tests + linked COP
+  // behavior carry over. Choropleth falls back to centroid bubbles on the
+  // sphere (rect cells can't wrap a globe); titles keep the cell detail.
+  const globeMarkers = useMemo<GlobeMarker[]>(() => {
+    if (isAggregated) {
+      return bubbles.map(b => ({
+        id: b.id,
+        label: `${b.cell} · ${b.count}`,
+        point: b.point,
+        r: scaledBubbleRadius(b.totalValue, bubbleMax, config.autoscale),
+        isSel: false,
+        title: `cell ${b.cell} · ${b.count} pts · ${b.totalValue}`,
+        testid: `map-bubble-${b.cell}`,
+      }))
+    }
+    return resolved.map(m => {
+      const r = bubbleRadius(Number(m.value) || 1, maxValue)
+      const isSel = m.id === selectedId
+      return {
+        id: m.id,
+        label: m.label,
+        point: m._p,
+        r: isSel ? r * 1.25 : r,
+        isSel,
+        title: `${m.label} · ${m._p.lat.toFixed(4)},${m._p.lng.toFixed(4)} · ${m.value ?? 0}`,
+        testid: `map-point-${m.id}`,
+      }
+    })
+  }, [isAggregated, bubbles, bubbleMax, config.autoscale, resolved, maxValue, selectedId])
+
+  const globeLinePoints = useMemo(
+    () => (isLine ? resolved.map(r => ({ id: r.id, p: r._p })) : null),
+    [isLine, resolved],
+  )
+
+  const selectOnGlobe = useCallback((id: string) => {
+    const mp = resolved.find(r => r.id === id)
+    if (mp) select(mp)
+  }, [resolved, select])
 
   const mapEl = (
       <div
@@ -869,22 +946,24 @@ export const MapCanvasBase = memo(function MapCanvasBase({
           </div>
         )}
 
-        <div
-          aria-hidden
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage:
-              'linear-gradient(var(--glass-border) 1px, transparent 1px), linear-gradient(90deg, var(--glass-border) 1px, transparent 1px)',
-            backgroundSize: '10% 10%',
-            opacity: 0.35,
-            pointerEvents: 'none',
-          }}
-        />
+        {view === 'flat' && (
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage:
+                'linear-gradient(var(--glass-border) 1px, transparent 1px), linear-gradient(90deg, var(--glass-border) 1px, transparent 1px)',
+              backgroundSize: '10% 10%',
+              opacity: 0.35,
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+        {view === 'flat' ? (
         <svg
           viewBox={`0 0 ${MAP_W} ${MAP_H}`}
           width="100%"
-          height="auto"
           preserveAspectRatio="xMidYMid meet"
           style={{ display: 'block', aspectRatio: '100 / 62.5' }}
           aria-hidden={false}
@@ -999,6 +1078,20 @@ export const MapCanvasBase = memo(function MapCanvasBase({
             })}
           </g>
         </svg>
+        ) : (
+          <GlobeCanvas
+            center={dataCentroid}
+            rotation={globeRot}
+            onRotateCommit={commitGlobeRotation}
+            zoom={viewport.zoom}
+            onZoomDelta={f => applyZoom(z => z * f)}
+            spin={spin}
+            markers={globeMarkers}
+            linePoints={globeLinePoints}
+            onSelect={selectOnGlobe}
+            onSpinToggle={toggleSpin}
+          />
+        )}
 
         {/* controls */}
         <div
@@ -1006,6 +1099,16 @@ export const MapCanvasBase = memo(function MapCanvasBase({
           role="toolbar"
           aria-label="Map controls"
         >
+          <button
+            className="btn"
+            aria-label={view === 'flat' ? 'Switch to globe view' : 'Switch to flat view'}
+            data-testid="map-view-toggle"
+            onClick={toggleView}
+            style={{ padding: '4px 10px', fontSize: 11 }}
+            title={view === 'flat' ? '360° traversable globe' : 'Flat equirectangular map'}
+          >
+            {view === 'flat' ? '◍ Globe' : '▭ Flat'}
+          </button>
           <span className="chip chip-mono" aria-live="polite" style={{ background: 'var(--glass-bg-strong)' }}>{viewport.zoom.toFixed(2)}×</span>
           <button className="btn" aria-label="Zoom in" onClick={() => applyZoom(z => z + 0.25)} style={{ padding: '4px 10px', fontSize: 12 }}>+</button>
           <button className="btn" aria-label="Zoom out" onClick={() => applyZoom(z => z - 0.25)} style={{ padding: '4px 10px', fontSize: 12 }}>−</button>
@@ -1043,7 +1146,7 @@ export const MapCanvasBase = memo(function MapCanvasBase({
             })}
           </div>
           <div style={{ color: 'var(--text-dim)' }}>
-            bubble ∝ √value · {resolved.length} pts · {String(config.layerType)} · {config.aggregation} · p{config.precision}{config.autoscale ? ' · autoscale' : ''} · Escape clears selection
+            bubble ∝ √value · {resolved.length} pts · {view === 'globe' ? 'globe · drag 360° · scroll to zoom' : String(config.layerType)} · {config.aggregation} · p{config.precision}{config.autoscale ? ' · autoscale' : ''} · Escape clears selection
           </div>
           <div data-testid="map-legend-status" style={{ marginTop: 4, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             {(['Successful', 'Cancelled', 'Diverted'] as DispatchStatus[]).map(s => (

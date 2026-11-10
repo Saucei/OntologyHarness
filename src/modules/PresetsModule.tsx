@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Icon, type IconName } from '../components/Icon'
 import { PRESET_SEED, validatePreset, composePrompt, applyPromptTemplate, findPromptTemplate, readPromptGalleryState, PROMPT_GALLERY_META_KEY, PROMPT_TEMPLATES, type Preset, type PromptTemplate } from '../data/presets'
 import { ws, patchMeta, appendTrace, appendAudit } from '../store'
-import { loadPacks, packPresets } from '../packs/loader'
+import { enabledPackPresets } from '../packs/consume'
 import { loadSettings } from '../llm/client'
 import { runAgent, type AgentStep } from '../agent/orchestrator'
 import { createJob } from '../jobs'
@@ -30,9 +30,8 @@ export default function PresetsModule() {
   const settings = useMemo(() => loadSettings(), [])
 
   const presets = useMemo(() => {
-    const packState = (ws.meta?.packState as Record<string, boolean>) ?? {}
-    const packs = loadPacks().filter(p => packState[p.manifest.id] === true)
-    return [...PRESET_SEED, ...forks, ...packPresets(packs)]
+    // T-36: enabled packs (bundled AND custom-installed) contribute presets.
+    return [...PRESET_SEED, ...forks, ...enabledPackPresets()]
   }, [forks])
 
   /** Live stats aggregated from the trace ledger, grouped by preset. */

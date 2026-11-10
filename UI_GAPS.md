@@ -1,6 +1,6 @@
 # UI_GAPS.md — Missing / partial / shipped function ledger
 
-Generated 2026-11-10T11:47:52.285Z from vision-verified inventory.
+Generated 2026-11-10T14:05:53.203Z from vision-verified inventory.
 
 ## BLOCKING (MISSING) — must ship before calling Stage 4 done
 - **FN-AIP-006 · Current User/custom context & permission scope** (breadth 1, reach 0)

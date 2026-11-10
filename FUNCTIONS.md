@@ -1,6 +1,6 @@
 # FUNCTIONS.md — Capability inventory (Stage 4)
 
-Generated 2026-11-10T11:47:52.179Z · vision-verified against `C:\Users\Berry\Desktop\Ontology Harness`
+Generated 2026-11-10T14:05:53.069Z · vision-verified against `C:\Users\Berry\Desktop\Ontology Harness`
 
 ## Counts
 

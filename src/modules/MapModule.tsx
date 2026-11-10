@@ -45,8 +45,8 @@ export default function MapModule() {
     <div className="module fade-in">
       <div className="module-head glass-strong">
         <div>
-          <div className="module-title">Geo map · cluster + bubbles</div>
-          <div className="module-sub">{filteredCount}/{DISPATCH_FIXTURES.length} points · {config.layerType} · {config.aggregation} · p{config.precision} · {facetSelection.categories.length + facetSelection.statuses.length + (facetSelection.dateRange ? 1 : 0)} filters</div>
+          <div className="module-title">Geo map · 360° globe + cluster layers</div>
+          <div className="module-sub">{filteredCount}/{DISPATCH_FIXTURES.length} points · {config.layerType} · {config.aggregation} · p{config.precision} · {facetSelection.categories.length + facetSelection.statuses.length + (facetSelection.dateRange ? 1 : 0)} filters · drag the globe to traverse</div>
         </div>
       </div>
       <div style={{ marginBottom: 10 }}>
@@ -61,6 +61,7 @@ export default function MapModule() {
         onFacetChange={setFacetSelection}
         showFacetRail
         showTable
+        initialView="globe"
       />
     </div>
   )
