@@ -3,6 +3,7 @@ import { MODULES, moduleById } from './modules/registry'
 import type { HarnessModule } from './modules/contract'
 import CommandPalette, { type PaletteItem } from './components/CommandPalette'
 import { ws, estimateSpend, patchMeta } from './store'
+import { moveVisibleOrder } from './lib/navOrder'
 import Wizard from './components/Wizard'
 import { Icon, type IconName } from './components/Icon'
 
@@ -92,14 +93,11 @@ export default function App() {
   }, [navOrderLocal, favIds])
   const currentModule = NAV.find(n => n.id === module)
 
+  // Tier-4 fix: move in VISIBLE (favourites-partitioned) order — raw hidden-array
+  // swaps that crossed the partition boundary used to look like silent no-ops.
   const moveNav = (target: ModuleId, dir: 1 | -1) => {
-    setNavOrderLocal(prev => {
-      const i = prev.indexOf(target)
-      const j = Math.min(prev.length - 1, Math.max(0, i + dir))
-      if (i === j || i === -1) return prev
-      const next = [...prev]; const [item] = next.splice(i, 1); next.splice(j, 0, item)
-      return next
-    })
+    const next = moveVisibleOrder(orderedNav.map(n => n.id), favIds, target, dir)
+    if (next) setNavOrderLocal(next)
   }
   const resetNav = () => { setNavOrderLocal(NAV.map(n => n.id)) }
 

@@ -67,6 +67,7 @@ export async function initWorkspace(): Promise<WsCache> {
     cache.objectTypes = OBJECT_TYPES
   }
   cache.hydrated = true
+  hookUnloadFlush()
   return cache
 }
 
@@ -75,6 +76,23 @@ let persistTimer: number | null = null
 function schedulePersist() {
   if (persistTimer) window.clearTimeout(persistTimer)
   persistTimer = window.setTimeout(() => { persistNow().catch(e => console.warn('[workspace] persist failed', e)) }, 400)
+}
+
+// Tier-4 fix: a change made within the 400ms autosave window (e.g. a nav reorder,
+// a permission toggle) used to be lost if the window closed or the tab was hidden
+// before the debounce fired. Flush pending writes on those transitions instead.
+let unloadHooked = false
+function hookUnloadFlush() {
+  if (unloadHooked || typeof window === 'undefined' || typeof document === 'undefined') return
+  unloadHooked = true
+  const flush = () => {
+    if (!persistTimer) return
+    window.clearTimeout(persistTimer)
+    persistTimer = null
+    persistNow().catch(() => {})
+  }
+  window.addEventListener('beforeunload', flush)
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush() })
 }
 
 export async function persistNow() {

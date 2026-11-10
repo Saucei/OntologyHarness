@@ -718,7 +718,12 @@ export default function AgentConsole() {
       }
       patchActiveSession(s => ({ ...s, messages: [...s.messages, assistantMsg], updatedAt: new Date().toISOString() }))
     } catch (e) {
-      const msg = String(e instanceof Error ? e.message : e)
+      const raw = String(e instanceof Error ? e.message : e)
+      // Tier-4 fix: raw transport errors read like stack traces. Map the common
+      // "provider unreachable" case to an actionable message with the endpoint.
+      const msg = /failed to fetch/i.test(raw)
+        ? `Couldn't reach ${settings.providerId} at ${settings.baseUrl} — is the provider running? (Browser dev calls go direct and need CORS; the desktop app routes through the Rust core.)`
+        : raw
       setError(msg)
       const assistantMsg: SessionMessage = {
         id: nextId(),
