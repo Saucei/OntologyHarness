@@ -13,6 +13,11 @@ export type ProviderSpec = {
 }
 
 export const PROVIDERS: ProviderSpec[] = [
+  // T-35: Ollama is first — the local LFM2.5 2.6B is the app's main/reference model
+  // and the tool-usage benchmark baseline; factory defaults derive from PROVIDERS[0].
+  { id: 'ollama', label: 'Ollama (local)', kind: 'openai', baseUrl: 'http://localhost:11434/v1',
+    defaultModel: 'lfm2.5-2.6b-heretic:latest', modelHint: 'lfm2.5-2.6b-heretic, qwen3.5, gemma4… (ollama list)',
+    keyLabel: 'OLLAMA_API_KEY (unused)', keyPlaceholder: 'leave blank', docsUrl: 'https://ollama.com', requiresKey: false, local: true },
   { id: 'openai', label: 'OpenAI', kind: 'openai', baseUrl: 'https://api.openai.com/v1',
     defaultModel: 'gpt-4o-mini', modelHint: 'gpt-4o, gpt-4o-mini, o4-mini…',
     keyLabel: 'OPENAI_API_KEY', keyPlaceholder: 'sk-…', docsUrl: 'https://platform.openai.com/api-keys', requiresKey: true },
@@ -28,9 +33,6 @@ export const PROVIDERS: ProviderSpec[] = [
   { id: 'gemini', label: 'Google Gemini', kind: 'openai', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
     defaultModel: 'gemini-2.0-flash', modelHint: 'gemini-2.0-flash, gemini-2.5-pro…',
     keyLabel: 'GEMINI_API_KEY', keyPlaceholder: 'AIza…', docsUrl: 'https://aistudio.google.com/apikey', requiresKey: true },
-  { id: 'ollama', label: 'Ollama (local)', kind: 'openai', baseUrl: 'http://localhost:11434/v1',
-    defaultModel: 'lfm2.5-2.6b-heretic:latest', modelHint: 'lfm2.5-2.6b-heretic, qwen3.5, gemma4… (ollama list)',
-    keyLabel: 'OLLAMA_API_KEY (unused)', keyPlaceholder: 'leave blank', docsUrl: 'https://ollama.com', requiresKey: false, local: true },
   { id: 'azure-openai', label: 'Azure OpenAI', kind: 'openai', baseUrl: 'https://YOUR-RESOURCE.openai.azure.com/openai/deployments/YOUR-DEPLOYMENT',
     defaultModel: 'gpt-4o-mini', modelHint: 'deployment name goes in base URL',
     keyLabel: 'AZURE_OPENAI_API_KEY', keyPlaceholder: 'azure key…', docsUrl: 'https://learn.microsoft.com/azure/ai-services/openai/', requiresKey: true },

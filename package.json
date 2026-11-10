@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "bench:agent": "vitest run src/agent/benchmark.live.test.ts",
     "verify": "npx tsc -b && npm run build && vitest run",
     "acceptance": "npx tsx scripts/acceptance.mjs",
     "version:sync": "node scripts/version-sync.mjs",
