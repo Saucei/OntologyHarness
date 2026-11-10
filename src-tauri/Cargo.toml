@@ -1,6 +1,6 @@
 [package]
 name = "ontology-harness"
-version = "0.0.3"
+version = "0.0.4"
 description = "Foundry-class ontology workbench"
 edition = "2021"
 

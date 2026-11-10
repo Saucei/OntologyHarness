@@ -2,6 +2,10 @@
 
 > Self-contained desktop binary via `npm run tauri:build`. CSP is active (see `tauri.conf.json`); fonts + assets are self-hosted (no Google Fonts at runtime). Icons: `src-tauri/icons/` (regen via `src-tauri` PowerShell icon script + `tauri icon` if adding `.icns`).
 
+## 0.0.4 — agent tool-usage benchmark + LFM2.5 as main model (2026-11-10)
+
+- **T-35** — LFM2.5 2.6B (local Ollama) is now the app's main/reference model: first in the provider registry, factory default for settings, wizard, AI Workers and Pipeline Builder fallback. New repeatable agent tool-usage benchmark (`npm run bench:agent`, live-guarded, CI-safe) covering all six tools across all six established areas — first run **6/6 PASS** with zero approval requests (report: `master-prompts/benchmarks/agent-tool-bench.md`). Registry-contract test always runs.
+
 ## 0.0.3 — production line editor + native tool bridge (2026-11-10)
 
 - **T-33** — brewery seed fully removed; researched automotive assembly-line graph (12 nodes / 13 edges, industry-typical figures); user-editable graph areas (add/rename/delete stages, rewire relations, new/switch/reset/delete areas) persisted in `ws.meta.graphAreas`; `seedsRev=2` one-shot re-seed for existing installs; Assembly Line machinery fixture with rework loops.
